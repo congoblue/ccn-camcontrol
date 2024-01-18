@@ -1,0 +1,13 @@
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.MainForm.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Form2.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Form4.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Resources.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbproj.GenerateResource.Cache
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.exe
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.pdb
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.xml
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\Microsoft.VisualBasic.PowerPacks.dll
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.exe
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.xml
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.pdb

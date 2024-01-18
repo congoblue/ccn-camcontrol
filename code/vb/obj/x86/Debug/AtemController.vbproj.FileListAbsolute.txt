@@ -1,0 +1,44 @@
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.exe
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.pdb
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.xml
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.dll
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\WebSocket4Net.dll
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.MainForm.resources
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form2.resources
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form4.resources
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Resources.resources
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.vbproj.GenerateResource.Cache
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.exe
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.xml
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.pdb
+C:\Users\User\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.exe
+C:\Users\User\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.xml
+C:\Users\User\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.pdb
+F:\My Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.exe
+F:\My Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.xml
+F:\My Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.pdb
+F:\My Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.exe
+F:\My Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.pdb
+F:\My Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.xml
+F:\My Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\WebSocket4Net.dll
+F:\My Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+F:\My Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.vbprojResolveAssemblyReference.cache
+F:\My Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.MainForm.resources
+F:\My Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form2.resources
+F:\My Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form4.resources
+F:\My Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Resources.resources
+F:\My Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.vbproj.GenerateResource.Cache
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\AtemController.exe
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\AtemController.xml
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\AtemController.pdb
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\AtemController.vbprojResolveAssemblyReference.cache
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCN.MainForm.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCN.Form2.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCN.Form4.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCN.Resources.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\AtemController.vbproj.GenerateResource.Cache
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.MainForm.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Form2.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Form4.resources
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Resources.resources

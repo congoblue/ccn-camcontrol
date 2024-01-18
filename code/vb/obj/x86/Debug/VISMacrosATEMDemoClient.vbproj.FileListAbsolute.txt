@@ -1,0 +1,497 @@
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\obj\x86\Debug\VISMacrosClientApp.frmDemoMain.resources
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\bin\Debug\VISMacros_Client_VBSampleApp.exe
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\bin\Debug\VISMacros_Client_VBSampleApp.pdb
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\bin\Debug\VISMacros_Client_VBSampleApp.xml
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\obj\x86\Debug\VISMacrosClientApp.Resources.resources
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\obj\x86\Debug\VISMacros_Client_VBSampleApp.exe
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\obj\x86\Debug\VISMacros_Client_VBSampleApp.xml
+C:\Users\John Bengston\Desktop\JustMacrosWithTCP\VBClientSample\obj\x86\Debug\VISMacros_Client_VBSampleApp.pdb
+C:\Proj\atemcontrol\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Proj\atemcontrol\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Proj\atemcontrol\obj\x86\Debug\GenerateResource.write.1.tlog
+H:\atem\bin\Debug\VISMacros_Client_VBSampleApp.exe
+H:\atem\bin\Debug\VISMacros_Client_VBSampleApp.pdb
+H:\atem\bin\Debug\VISMacros_Client_VBSampleApp.xml
+H:\atem\obj\x86\Debug\ResolveAssemblyReference.cache
+H:\atem\obj\x86\Debug\VISMacrosClientApp.frmDemoMain.resources
+H:\atem\obj\x86\Debug\VISMacrosClientApp.Resources.resources
+H:\atem\obj\x86\Debug\GenerateResource.read.1.tlog
+H:\atem\obj\x86\Debug\GenerateResource.write.1.tlog
+H:\atem\obj\x86\Debug\VISMacros_Client_VBSampleApp.exe
+H:\atem\obj\x86\Debug\VISMacros_Client_VBSampleApp.xml
+H:\atem\obj\x86\Debug\VISMacros_Client_VBSampleApp.pdb
+C:\Users\Jono21\Desktop\atem_vb\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Jono21\Desktop\atem_vb\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Jono21\Desktop\atem_vb\obj\x86\Debug\GenerateResource.write.1.tlog
+F:\atem\obj\x86\Debug\VISMacros_Client_VBSampleApp.exe
+F:\atem\obj\x86\Debug\VISMacros_Client_VBSampleApp.xml
+F:\atem\obj\x86\Debug\VISMacros_Client_VBSampleApp.pdb
+F:\atem\bin\Debug\VISMacros_Client_VBSampleApp.exe
+F:\atem\bin\Debug\VISMacros_Client_VBSampleApp.pdb
+F:\atem\bin\Debug\VISMacros_Client_VBSampleApp.xml
+F:\atem\obj\x86\Debug\ResolveAssemblyReference.cache
+F:\atem\obj\x86\Debug\VISMacrosClientApp.frmDemoMain.resources
+F:\atem\obj\x86\Debug\VISMacrosClientApp.Resources.resources
+F:\atem\obj\x86\Debug\GenerateResource.read.1.tlog
+F:\atem\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Proj\atemcontrol\bin\Debug\AtemController.exe
+C:\Proj\atemcontrol\bin\Debug\AtemController.pdb
+C:\Proj\atemcontrol\bin\Debug\AtemController.xml
+C:\Proj\atemcontrol\obj\x86\Debug\AtemController.frmDemoMain.resources
+C:\Proj\atemcontrol\obj\x86\Debug\AtemController.Resources.resources
+C:\Proj\atemcontrol\obj\x86\Debug\AtemController.exe
+C:\Proj\atemcontrol\obj\x86\Debug\AtemController.xml
+C:\Proj\atemcontrol\obj\x86\Debug\AtemController.pdb
+C:\Users\Jono21\Desktop\atem_vb\bin\Debug\AtemController.exe
+C:\Users\Jono21\Desktop\atem_vb\bin\Debug\AtemController.pdb
+C:\Users\Jono21\Desktop\atem_vb\bin\Debug\AtemController.xml
+C:\Users\Jono21\Desktop\atem_vb\obj\x86\Debug\AtemController.frmDemoMain.resources
+C:\Users\Jono21\Desktop\atem_vb\obj\x86\Debug\AtemController.Resources.resources
+C:\Users\Jono21\Desktop\atem_vb\obj\x86\Debug\AtemController.exe
+C:\Users\Jono21\Desktop\atem_vb\obj\x86\Debug\AtemController.xml
+C:\Users\Jono21\Desktop\atem_vb\obj\x86\Debug\AtemController.pdb
+S:\VB\atem\v7\bin\Debug\AtemController.exe
+S:\VB\atem\v7\bin\Debug\AtemController.pdb
+S:\VB\atem\v7\bin\Debug\AtemController.xml
+S:\VB\atem\v7\obj\x86\Debug\ResolveAssemblyReference.cache
+S:\VB\atem\v7\obj\x86\Debug\AtemController.Resources.resources
+S:\VB\atem\v7\obj\x86\Debug\GenerateResource.read.1.tlog
+S:\VB\atem\v7\obj\x86\Debug\GenerateResource.write.1.tlog
+S:\VB\atem\v7\obj\x86\Debug\AtemController.exe
+S:\VB\atem\v7\obj\x86\Debug\AtemController.xml
+S:\VB\atem\v7\obj\x86\Debug\AtemController.pdb
+S:\VB\atem\v7\obj\x86\Debug\AtemController.frmDemoMain.resources
+C:\Proj\atemcontrol\v8\obj\x86\Debug\AtemController.exe
+C:\Proj\atemcontrol\v8\obj\x86\Debug\AtemController.xml
+C:\Proj\atemcontrol\v8\obj\x86\Debug\AtemController.pdb
+C:\Proj\atemcontrol\v8\bin\Debug\AtemController.exe
+C:\Proj\atemcontrol\v8\bin\Debug\AtemController.pdb
+C:\Proj\atemcontrol\v8\bin\Debug\AtemController.xml
+C:\Proj\atemcontrol\v8\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Proj\atemcontrol\v8\obj\x86\Debug\AtemController.Resources.resources
+C:\Proj\atemcontrol\v8\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Proj\atemcontrol\v8\obj\x86\Debug\GenerateResource.write.1.tlog
+S:\VB\atem\v8\obj\x86\Debug\AtemController.exe
+S:\VB\atem\v8\obj\x86\Debug\AtemController.xml
+S:\VB\atem\v8\obj\x86\Debug\AtemController.pdb
+S:\VB\atem\v8\bin\Debug\AtemController.exe
+S:\VB\atem\v8\bin\Debug\AtemController.pdb
+S:\VB\atem\v8\bin\Debug\AtemController.xml
+S:\VB\atem\v8\obj\x86\Debug\ResolveAssemblyReference.cache
+S:\VB\atem\v8\obj\x86\Debug\AtemController.Resources.resources
+S:\VB\atem\v8\obj\x86\Debug\GenerateResource.read.1.tlog
+S:\VB\atem\v8\obj\x86\Debug\GenerateResource.write.1.tlog
+S:\VB\atem\v8\obj\x86\Debug\AtemController.Form2.resources
+S:\VB\atem\v8\obj\x86\Debug\AtemController.MainForm.resources
+C:\Proj\atemcontrol\v8\obj\x86\Debug\AtemController.MainForm.resources
+C:\Proj\atemcontrol\v8\obj\x86\Debug\AtemController.Form2.resources
+C:\Users\Jono21\Desktop\atem_vb\v8\obj\x86\Debug\AtemController.exe
+C:\Users\Jono21\Desktop\atem_vb\v8\obj\x86\Debug\AtemController.xml
+C:\Users\Jono21\Desktop\atem_vb\v8\obj\x86\Debug\AtemController.pdb
+C:\Users\Jono21\Desktop\atem_vb\v8\bin\Debug\AtemController.exe
+C:\Users\Jono21\Desktop\atem_vb\v8\bin\Debug\AtemController.pdb
+C:\Users\Jono21\Desktop\atem_vb\v8\bin\Debug\AtemController.xml
+C:\Users\Jono21\Desktop\atem_vb\v8\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Jono21\Desktop\atem_vb\v8\obj\x86\Debug\AtemController.MainForm.resources
+C:\Users\Jono21\Desktop\atem_vb\v8\obj\x86\Debug\AtemController.Form2.resources
+C:\Users\Jono21\Desktop\atem_vb\v8\obj\x86\Debug\AtemController.Resources.resources
+C:\Users\Jono21\Desktop\atem_vb\v8\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Jono21\Desktop\atem_vb\v8\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Proj\atemcontrol\v9\bin\Debug\AtemController.exe
+C:\Proj\atemcontrol\v9\bin\Debug\AtemController.pdb
+C:\Proj\atemcontrol\v9\bin\Debug\AtemController.xml
+C:\Proj\atemcontrol\v9\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Proj\atemcontrol\v9\obj\x86\Debug\AtemController.MainForm.resources
+C:\Proj\atemcontrol\v9\obj\x86\Debug\AtemController.Form2.resources
+C:\Proj\atemcontrol\v9\obj\x86\Debug\AtemController.Resources.resources
+C:\Proj\atemcontrol\v9\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Proj\atemcontrol\v9\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Proj\atemcontrol\v9\obj\x86\Debug\AtemController.exe
+C:\Proj\atemcontrol\v9\obj\x86\Debug\AtemController.xml
+C:\Proj\atemcontrol\v9\obj\x86\Debug\AtemController.pdb
+C:\Users\Jono21\Desktop\atem_vb\v9\obj\x86\Debug\AtemController.exe
+C:\Users\Jono21\Desktop\atem_vb\v9\obj\x86\Debug\AtemController.xml
+C:\Users\Jono21\Desktop\atem_vb\v9\obj\x86\Debug\AtemController.pdb
+C:\Users\Jono21\Desktop\atem_vb\v9\bin\Debug\AtemController.exe
+C:\Users\Jono21\Desktop\atem_vb\v9\bin\Debug\AtemController.pdb
+C:\Users\Jono21\Desktop\atem_vb\v9\bin\Debug\AtemController.xml
+C:\Users\Jono21\Desktop\atem_vb\v9\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Jono21\Desktop\atem_vb\v9\obj\x86\Debug\AtemController.MainForm.resources
+C:\Users\Jono21\Desktop\atem_vb\v9\obj\x86\Debug\AtemController.Form2.resources
+C:\Users\Jono21\Desktop\atem_vb\v9\obj\x86\Debug\AtemController.Resources.resources
+C:\Users\Jono21\Desktop\atem_vb\v9\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Jono21\Desktop\atem_vb\v9\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Jono21\Desktop\atem_vb\v10\obj\x86\Debug\AtemController.exe
+C:\Users\Jono21\Desktop\atem_vb\v10\obj\x86\Debug\AtemController.xml
+C:\Users\Jono21\Desktop\atem_vb\v10\obj\x86\Debug\AtemController.pdb
+C:\Users\Jono21\Desktop\atem_vb\v10\bin\Debug\AtemController.exe
+C:\Users\Jono21\Desktop\atem_vb\v10\bin\Debug\AtemController.pdb
+C:\Users\Jono21\Desktop\atem_vb\v10\bin\Debug\AtemController.xml
+C:\Users\Jono21\Desktop\atem_vb\v10\obj\x86\Debug\AtemController.MainForm.resources
+C:\Users\Jono21\Desktop\atem_vb\v10\obj\x86\Debug\AtemController.Form2.resources
+C:\Users\Jono21\Desktop\atem_vb\v10\obj\x86\Debug\AtemController.Resources.resources
+C:\Users\Jono21\Desktop\atem_vb\v10\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\Proj\atem_vb\v11\bin\Debug\AtemController.exe
+C:\Proj\atem_vb\v11\bin\Debug\AtemController.pdb
+C:\Proj\atem_vb\v11\bin\Debug\AtemController.xml
+C:\Proj\atem_vb\v11\obj\x86\Debug\AtemController.MainForm.resources
+C:\Proj\atem_vb\v11\obj\x86\Debug\AtemController.Form2.resources
+C:\Proj\atem_vb\v11\obj\x86\Debug\AtemController.Resources.resources
+C:\Proj\atem_vb\v11\obj\x86\Debug\AtemController.exe
+C:\Proj\atem_vb\v11\obj\x86\Debug\AtemController.xml
+C:\Proj\atem_vb\v11\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v11\obj\x86\Debug\AtemController.exe
+C:\atem_vb\v11\obj\x86\Debug\AtemController.xml
+C:\atem_vb\v11\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v11\bin\Debug\AtemController.exe
+C:\atem_vb\v11\bin\Debug\AtemController.pdb
+C:\atem_vb\v11\bin\Debug\AtemController.xml
+C:\atem_vb\v11\obj\x86\Debug\AtemController.MainForm.resources
+C:\atem_vb\v11\obj\x86\Debug\AtemController.Form2.resources
+C:\atem_vb\v11\obj\x86\Debug\AtemController.Resources.resources
+C:\atem_vb\v11\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\proj\atem_vb\v11\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+S:\Proj\ST Products\atem_vb\v11\obj\x86\Debug\AtemController.exe
+S:\Proj\ST Products\atem_vb\v11\obj\x86\Debug\AtemController.xml
+S:\Proj\ST Products\atem_vb\v11\obj\x86\Debug\AtemController.pdb
+S:\Proj\ST Products\atem_vb\v11\bin\Debug\AtemController.exe
+S:\Proj\ST Products\atem_vb\v11\bin\Debug\AtemController.pdb
+S:\Proj\ST Products\atem_vb\v11\bin\Debug\AtemController.xml
+S:\Proj\ST Products\atem_vb\v11\obj\x86\Debug\AtemController.MainForm.resources
+S:\Proj\ST Products\atem_vb\v11\obj\x86\Debug\AtemController.Form2.resources
+S:\Proj\ST Products\atem_vb\v11\obj\x86\Debug\AtemController.Resources.resources
+S:\Proj\ST Products\atem_vb\v11\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\proj\atem_vb\v11\obj\x86\Debug\AtemController.Form3.resources
+C:\atem_vb\v11_3\obj\x86\Debug\AtemController.exe
+C:\atem_vb\v11_3\obj\x86\Debug\AtemController.xml
+C:\atem_vb\v11_3\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v11_3\bin\Debug\AtemController.exe
+C:\atem_vb\v11_3\bin\Debug\AtemController.pdb
+C:\atem_vb\v11_3\bin\Debug\AtemController.xml
+C:\atem_vb\v11_3\obj\x86\Debug\AtemController.MainForm.resources
+C:\atem_vb\v11_3\obj\x86\Debug\AtemController.Form2.resources
+C:\atem_vb\v11_3\obj\x86\Debug\AtemController.Form3.resources
+C:\atem_vb\v11_3\obj\x86\Debug\AtemController.Resources.resources
+C:\atem_vb\v11_3\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\proj\atem_vb\v11_3\obj\x86\Debug\AtemController.exe
+C:\proj\atem_vb\v11_3\obj\x86\Debug\AtemController.xml
+C:\proj\atem_vb\v11_3\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v11_4\bin\Debug\AtemController.exe
+C:\atem_vb\v11_4\bin\Debug\AtemController.pdb
+C:\atem_vb\v11_4\bin\Debug\AtemController.xml
+C:\atem_vb\v11_4\obj\x86\Debug\AtemController.MainForm.resources
+C:\atem_vb\v11_4\obj\x86\Debug\AtemController.Form2.resources
+C:\atem_vb\v11_4\obj\x86\Debug\AtemController.Form3.resources
+C:\atem_vb\v11_4\obj\x86\Debug\AtemController.Resources.resources
+C:\atem_vb\v11_4\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\atem_vb\v11_4\obj\x86\Debug\AtemController.exe
+C:\atem_vb\v11_4\obj\x86\Debug\AtemController.xml
+C:\atem_vb\v11_4\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v11_5\obj\x86\Debug\AtemController.MainForm.resources
+C:\atem_vb\v11_5\obj\x86\Debug\AtemController.Form2.resources
+C:\atem_vb\v11_5\obj\x86\Debug\AtemController.Form3.resources
+C:\atem_vb\v11_5\obj\x86\Debug\AtemController.Resources.resources
+C:\atem_vb\v11_5\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\atem_vb\v11_5\bin\Debug\AtemController.exe
+C:\atem_vb\v11_5\bin\Debug\AtemController.pdb
+C:\atem_vb\v11_5\bin\Debug\AtemController.xml
+C:\atem_vb\v11_5\obj\x86\Debug\AtemController.exe
+C:\atem_vb\v11_5\obj\x86\Debug\AtemController.xml
+C:\atem_vb\v11_5\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v11_6\obj\x86\Debug\AtemController.exe
+C:\atem_vb\v11_6\obj\x86\Debug\AtemController.xml
+C:\atem_vb\v11_6\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v11_6\bin\Debug\AtemController.exe
+C:\atem_vb\v11_6\bin\Debug\AtemController.pdb
+C:\atem_vb\v11_6\bin\Debug\AtemController.xml
+C:\atem_vb\v11_6\obj\x86\Debug\AtemController.MainForm.resources
+C:\atem_vb\v11_6\obj\x86\Debug\AtemController.Form2.resources
+C:\atem_vb\v11_6\obj\x86\Debug\AtemController.Form3.resources
+C:\atem_vb\v11_6\obj\x86\Debug\AtemController.Resources.resources
+C:\atem_vb\v11_6\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\Proj\atem_vb\v12_0\obj\x86\Debug\AtemController.exe
+C:\Proj\atem_vb\v12_0\obj\x86\Debug\AtemController.xml
+C:\Proj\atem_vb\v12_0\obj\x86\Debug\AtemController.pdb
+C:\Proj\atem_vb\v12_0\bin\Debug\AtemController.exe
+C:\Proj\atem_vb\v12_0\bin\Debug\AtemController.pdb
+C:\Proj\atem_vb\v12_0\bin\Debug\AtemController.xml
+C:\Proj\atem_vb\v12_0\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Proj\atem_vb\v12_0\obj\x86\Debug\AtemController.MainForm.resources
+C:\Proj\atem_vb\v12_0\obj\x86\Debug\AtemController.Form2.resources
+C:\Proj\atem_vb\v12_0\obj\x86\Debug\AtemController.Form3.resources
+C:\Proj\atem_vb\v12_0\obj\x86\Debug\AtemController.Resources.resources
+C:\Proj\atem_vb\v12_0\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Proj\atem_vb\v12_0\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\atem_vb\v12_0\obj\x86\Debug\AtemController.exe
+C:\atem_vb\v12_0\obj\x86\Debug\AtemController.xml
+C:\atem_vb\v12_0\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v12_0\bin\Debug\AtemController.exe
+C:\atem_vb\v12_0\bin\Debug\AtemController.pdb
+C:\atem_vb\v12_0\bin\Debug\AtemController.xml
+C:\atem_vb\v12_0\obj\x86\Debug\AtemController.MainForm.resources
+C:\atem_vb\v12_0\obj\x86\Debug\AtemController.Form2.resources
+C:\atem_vb\v12_0\obj\x86\Debug\AtemController.Form3.resources
+C:\atem_vb\v12_0\obj\x86\Debug\AtemController.Resources.resources
+C:\atem_vb\v12_0\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\AtemController.exe
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\AtemController.xml
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\AtemController.pdb
+C:\Proj\atem_vb\v12_1\bin\Debug\AtemController.exe
+C:\Proj\atem_vb\v12_1\bin\Debug\AtemController.pdb
+C:\Proj\atem_vb\v12_1\bin\Debug\AtemController.xml
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\AtemController.MainForm.resources
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\AtemController.Form2.resources
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\AtemController.Form3.resources
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\AtemController.Resources.resources
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Proj\atem_vb\v12_1\obj\x86\Debug\AtemController.Form4.resources
+C:\atem_vb\v12_1\obj\x86\Debug\AtemController.xml
+C:\atem_vb\v12_1\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v12_1\bin\Debug\AtemController.exe
+C:\atem_vb\v12_1\bin\Debug\AtemController.pdb
+C:\atem_vb\v12_1\bin\Debug\AtemController.xml
+C:\atem_vb\v12_1\obj\x86\Debug\AtemController.MainForm.resources
+C:\atem_vb\v12_1\obj\x86\Debug\AtemController.Form2.resources
+C:\atem_vb\v12_1\obj\x86\Debug\AtemController.Form3.resources
+C:\atem_vb\v12_1\obj\x86\Debug\AtemController.Form4.resources
+C:\atem_vb\v12_1\obj\x86\Debug\AtemController.Resources.resources
+C:\atem_vb\v12_1\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\atem_vb\v12_1\obj\x86\Debug\AtemController.exe
+C:\atem_vb\v12_1\bin\Debug\WebSocket4Net.dll
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\AtemController.exe
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\AtemController.xml
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\AtemController.pdb
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\AtemController.MainForm.resources
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\AtemController.Form2.resources
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\AtemController.Form3.resources
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\AtemController.Form4.resources
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\AtemController.Resources.resources
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Proj\atem_vb\v12_2\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Proj\atem_vb\v12_2\bin\Debug\AtemController.exe
+C:\Proj\atem_vb\v12_2\bin\Debug\AtemController.pdb
+C:\Proj\atem_vb\v12_2\bin\Debug\AtemController.xml
+C:\Proj\atem_vb\v12_2\bin\Debug\WebSocket4Net.dll
+C:\atem_vb\v12_2\obj\x86\Debug\AtemController.exe
+C:\atem_vb\v12_2\obj\x86\Debug\AtemController.xml
+C:\atem_vb\v12_2\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v12_2\bin\Debug\AtemController.exe
+C:\atem_vb\v12_2\bin\Debug\AtemController.pdb
+C:\atem_vb\v12_2\bin\Debug\AtemController.xml
+C:\atem_vb\v12_2\bin\Debug\WebSocket4Net.dll
+C:\atem_vb\v12_2\obj\x86\Debug\AtemController.MainForm.resources
+C:\atem_vb\v12_2\obj\x86\Debug\AtemController.Form2.resources
+C:\atem_vb\v12_2\obj\x86\Debug\AtemController.Form3.resources
+C:\atem_vb\v12_2\obj\x86\Debug\AtemController.Form4.resources
+C:\atem_vb\v12_2\obj\x86\Debug\AtemController.Resources.resources
+C:\atem_vb\v12_2\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\atem_vb\v12_2\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+C:\atem_vb\v12_3\obj\x86\Debug\AtemController.exe
+C:\atem_vb\v12_3\obj\x86\Debug\AtemController.xml
+C:\atem_vb\v12_3\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v12_3\obj\x86\Debug\AtemController.MainForm.resources
+C:\atem_vb\v12_3\obj\x86\Debug\AtemController.Form2.resources
+C:\atem_vb\v12_3\obj\x86\Debug\AtemController.Form3.resources
+C:\atem_vb\v12_3\obj\x86\Debug\AtemController.Form4.resources
+C:\atem_vb\v12_3\obj\x86\Debug\AtemController.Resources.resources
+C:\atem_vb\v12_3\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\atem_vb\v12_3\bin\Debug\AtemController.exe
+C:\atem_vb\v12_3\bin\Debug\AtemController.pdb
+C:\atem_vb\v12_3\bin\Debug\AtemController.xml
+C:\atem_vb\v12_3\bin\Debug\WebSocket4Net.dll
+C:\atem_vb\v12_3\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\obj\x86\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\obj\x86\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\obj\x86\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\bin\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\bin\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\bin\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\bin\Debug\WebSocket4Net.dll
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\obj\x86\Debug\AtemController.MainForm.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\obj\x86\Debug\AtemController.Form2.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\obj\x86\Debug\AtemController.Form3.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\obj\x86\Debug\AtemController.Form4.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\obj\x86\Debug\AtemController.Resources.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_3\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\obj\x86\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\obj\x86\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\obj\x86\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\obj\x86\Debug\AtemController.MainForm.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\obj\x86\Debug\AtemController.Form2.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\obj\x86\Debug\AtemController.Form3.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\obj\x86\Debug\AtemController.Form4.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\obj\x86\Debug\AtemController.Resources.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\bin\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\bin\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\bin\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_4\bin\Debug\WebSocket4Net.dll
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\obj\x86\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\obj\x86\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\obj\x86\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\bin\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\bin\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\bin\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\bin\Debug\WebSocket4Net.dll
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\obj\x86\Debug\AtemController.MainForm.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\obj\x86\Debug\AtemController.Form2.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\obj\x86\Debug\AtemController.Form3.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\obj\x86\Debug\AtemController.Form4.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\obj\x86\Debug\AtemController.Resources.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\obj\x86\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\obj\x86\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\obj\x86\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\bin\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\bin\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\bin\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\bin\Debug\WebSocket4Net.dll
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\obj\x86\Debug\AtemController.MainForm.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\obj\x86\Debug\AtemController.Form2.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\obj\x86\Debug\AtemController.Form3.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\obj\x86\Debug\AtemController.Form4.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\obj\x86\Debug\AtemController.Resources.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_5 - Copy\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\obj\x86\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\obj\x86\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\obj\x86\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\bin\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\bin\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\bin\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\bin\Debug\WebSocket4Net.dll
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\obj\x86\Debug\AtemController.MainForm.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\obj\x86\Debug\AtemController.Form2.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\obj\x86\Debug\AtemController.Form3.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\obj\x86\Debug\AtemController.Form4.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\obj\x86\Debug\AtemController.Resources.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v12_6\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\obj\x86\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\obj\x86\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\obj\x86\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\bin\Debug\AtemController.exe
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\bin\Debug\AtemController.pdb
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\bin\Debug\AtemController.xml
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\bin\Debug\WebSocket4Net.dll
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\obj\x86\Debug\AtemController.MainForm.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\obj\x86\Debug\AtemController.Form2.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\obj\x86\Debug\AtemController.Form3.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\obj\x86\Debug\AtemController.Form4.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\obj\x86\Debug\AtemController.Resources.resources
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+Z:\Technical\Internal IT etc\Software\atem_vb\v13\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\obj\x86\Debug\AtemController.exe
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\obj\x86\Debug\AtemController.xml
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\obj\x86\Debug\AtemController.pdb
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\obj\x86\Debug\AtemController.MainForm.resources
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\obj\x86\Debug\AtemController.Form2.resources
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\obj\x86\Debug\AtemController.Form3.resources
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\obj\x86\Debug\AtemController.Form4.resources
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\obj\x86\Debug\AtemController.Resources.resources
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\bin\Debug\AtemController.exe
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\bin\Debug\AtemController.pdb
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\bin\Debug\AtemController.xml
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\bin\Debug\Microsoft.VisualBasic.PowerPacks.dll
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\bin\Debug\WebSocket4Net.dll
+C:\Users\Boardroom\Documents\localproj\atemvb\v13\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\obj\x86\Debug\AtemController.exe
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\obj\x86\Debug\AtemController.xml
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\obj\x86\Debug\AtemController.pdb
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\bin\Debug\AtemController.exe
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\bin\Debug\AtemController.pdb
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\bin\Debug\AtemController.xml
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.dll
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\bin\Debug\WebSocket4Net.dll
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\obj\x86\Debug\AtemController.MainForm.resources
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\obj\x86\Debug\AtemController.Form2.resources
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\obj\x86\Debug\AtemController.Form3.resources
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\obj\x86\Debug\AtemController.Form4.resources
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\obj\x86\Debug\AtemController.Resources.resources
+C:\Users\Boardroom\Documents\localproj\atemvb\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\atem_vb\v14_obs\obj\x86\Debug\AtemController.exe
+C:\atem_vb\v14_obs\obj\x86\Debug\AtemController.xml
+C:\atem_vb\v14_obs\obj\x86\Debug\AtemController.pdb
+C:\atem_vb\v14_obs\bin\Debug\AtemController.exe
+C:\atem_vb\v14_obs\bin\Debug\AtemController.pdb
+C:\atem_vb\v14_obs\bin\Debug\AtemController.xml
+C:\atem_vb\v14_obs\bin\Debug\WebSocket4Net.dll
+C:\atem_vb\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+C:\atem_vb\v14_obs\obj\x86\Debug\AtemController.MainForm.resources
+C:\atem_vb\v14_obs\obj\x86\Debug\AtemController.Form2.resources
+C:\atem_vb\v14_obs\obj\x86\Debug\AtemController.Form3.resources
+C:\atem_vb\v14_obs\obj\x86\Debug\AtemController.Form4.resources
+C:\atem_vb\v14_obs\obj\x86\Debug\AtemController.Resources.resources
+C:\atem_vb\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+N:\documents\church\atem_vb\v14_obs\obj\x86\Debug\AtemController.exe
+N:\documents\church\atem_vb\v14_obs\obj\x86\Debug\AtemController.xml
+N:\documents\church\atem_vb\v14_obs\obj\x86\Debug\AtemController.pdb
+N:\documents\church\atem_vb\v14_obs\bin\Debug\AtemController.exe
+N:\documents\church\atem_vb\v14_obs\bin\Debug\AtemController.pdb
+N:\documents\church\atem_vb\v14_obs\bin\Debug\AtemController.xml
+N:\documents\church\atem_vb\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.dll
+N:\documents\church\atem_vb\v14_obs\bin\Debug\WebSocket4Net.dll
+N:\documents\church\atem_vb\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+N:\documents\church\atem_vb\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+N:\documents\church\atem_vb\v14_obs\obj\x86\Debug\AtemController.MainForm.resources
+N:\documents\church\atem_vb\v14_obs\obj\x86\Debug\AtemController.Form2.resources
+N:\documents\church\atem_vb\v14_obs\obj\x86\Debug\AtemController.Form3.resources
+N:\documents\church\atem_vb\v14_obs\obj\x86\Debug\AtemController.Form4.resources
+N:\documents\church\atem_vb\v14_obs\obj\x86\Debug\AtemController.Resources.resources
+N:\documents\church\atem_vb\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\atem_vb\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.exe
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.xml
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.pdb
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.exe
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.pdb
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.xml
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.dll
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\WebSocket4Net.dll
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form2.resources
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form4.resources
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Resources.resources
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.exe
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.xml
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.pdb
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.exe
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.pdb
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.xml
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\WebSocket4Net.dll
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.MainForm.resources
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form2.resources
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form3.resources
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form4.resources
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Resources.resources
+C:\Users\Tim.SABRE\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache
+C:\Users\Boardroom\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.MainForm.resources
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.exe
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.xml
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.pdb
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.exe
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.pdb
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\AtemController.xml
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\bin\Debug\WebSocket4Net.dll
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbprojResolveAssemblyReference.cache
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.MainForm.resources
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form2.resources
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form3.resources
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Form4.resources
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\AtemController.Resources.resources
+C:\Users\timsk\Documents\GitHub\atem-vb\code\v14_obs\obj\x86\Debug\VISMacrosATEMDemoClient.vbproj.GenerateResource.Cache

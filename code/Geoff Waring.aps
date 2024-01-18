@@ -1,0 +1,64 @@
+﻿Lectern      Tall,7F82,80A7,CBA,1,2,-1,0,False
+Lectern  Med,7F80,814E,CB7,1,3,-1,0,True
+Lectern  Short,7F7A,8197,CB7,0,0,0,0,True
+Stage,8036,8283,80E,1,6,-1,0,True
+Singer L,8D0C,8132,EED,5,1,-1,0,False
+Singer M,8B42,80A5,ECA,5,1,-1,0,True
+Singer R,892A,8085,E7E,5,1,-1,0,True
+Singers,8B1B,8102,C5F,5,3,-1,0,True
+Whole  Band,918E,82D0,768,2,5,-1,0,False
+Strings,916A,8342,CC6,2,1,-1,0,True
+Singers LM,8C7A,8128,D73,0,0,0,0,False
+Singers MR,89F6,80B2,D73,0,0,0,0,True
+Comm-  union   Table,7C41,8132,CC0,0,0,0,0,False
+14,8A75,85C9,555,0,0,0,0,True
+Tree,864D,82FF,897,1,4,-1,0,True
+random,8F90,83B5,736,0,0,0,0,True
+Singer L,8D9E,8107,F67,5,1,-1,0,False
+Singer M,8C2D,80A2,FBF,5,1,-1,0,True
+Singer R,8AF8,8088,FBE,5,1,-1,0,True
+Singers,8C42,8161,CE9,5,2,-1,0,True
+Lectern Short,84D4,8110,E67,0,0,0,0,True
+Lectern,84C9,80E3,E26,1,2,-1,0,True
+Lectern Wide,8512,8142,D41,0,0,0,0,False
+Full Wide,8794,83A8,555,4,6,-1,0,True
+Singers L M,8D0E,80F3,E76,0,0,0,0,True
+Singer M R,8BA0,80C7,EAC,0,5,0,0,True
+Solo,8BA6,82E1,E27,2,2,-1,0,True
+Stage Wide,84F5,81F3,B99,1,5,-1,0,False
+Keyboard,959D,83D8,FEE,0,0,0,0,True
+Guitars,9045,8290,FCC,0,0,0,0,True
+Brass + Singers,8B96,8319,DE2,0,0,0,0,True
+Band,8D16,824A,B7B,0,0,0,0,True
+Drums,996E,876A,99F,2,3,-1,0,True
+Piano,8C7A,897F,880,2,3,-1,0,True
+Singers,9604,7F94,D93,5,2,-1,0,True
+Congas,9B5B,8D19,555,2,2,-1,0,True
+Drums Close,98E4,895D,B69,2,1,-1,0,True
+Piano Shoulder,8E0D,89ED,A62,5,1,-1,0,True
+Bass,96DB,845B,B5F,0,0,0,0,True
+Guitar Close,95C0,849A,E4E,2,2,0,0,True
+Lectern,93AF,7F9C,E15,0,0,0,0,True
+Band,92AF,88A9,592,2,3,-1,0,True
+Cong    Wide,859F,8547,557,0,0,0,0,True
+Bible,7A85,850D,F99,0,0,0,0,True
+Guit,9590,84C4,D1D,0,0,0,0,True
+Altar   Close,4843,7F4A,DC3,0,0,0,0,True
+Window Close,47CF,78CF,FB2,0,0,0,0,True
+Window Wide,47CF,796F,B2A,3,6,0,0,True
+Cong    Wide,7EC3,89F2,555,4,0,-1,0,True
+Cong Middle,7ED5,88BB,7CE,3,5,-1,0,True
+Cong        Low,7EC5,8E38,555,3,5,-1,0,True
+Cong     High,7F21,84BB,555,2,4,-1,0,True
+Band,796C,8424,CBB,1,2,0,0,False
+Piano,7AF3,83A0,F02,2,2,0,0,True
+Guitar,78D0,84F2,E2D,2,2,-1,0,True
+Brass,7943,8462,E7C,2,2,0,0,True
+Band    Close,79BE,8426,DAA,0,2,-1,0,True
+Cello,794B,8541,E07,2,0,-1,0,True
+Flute,799F,84A9,ED0,0,0,0,0,True
+Singers,76E6,837F,EA1,5,2,-1,0,True
+Window,7F50,7F30,D40,0,0,0,0,True
+Chancle Table,7EA6,8127,DDD,0,0,0,0,True
+Communion Shot,76C1,85E8,E12,0,0,0,0,True
+Stage wide,79EF,8790,8C7,0,0,0,0,True
