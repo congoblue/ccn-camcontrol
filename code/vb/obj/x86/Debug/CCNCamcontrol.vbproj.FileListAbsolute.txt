@@ -11,3 +11,4 @@ C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\Microsoft.V
 C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.exe
 C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.xml
 C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.pdb
+C:\Users\Boardroom\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbprojResolveAssemblyReference.cache

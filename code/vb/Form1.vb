@@ -27,7 +27,6 @@ Public Class MainForm
     Dim addr As Integer
     Dim inpaddr As Integer
     Dim liveaddr As Integer
-    Dim gotrx As Integer
     Dim kc As Integer
     Dim cdir As Integer
     Dim savemode As Boolean
@@ -40,11 +39,11 @@ Public Class MainForm
     Dim VISMacrosConnection As New System.Net.Sockets.TcpClient()
     Dim ServerNetworkStream As NetworkStream
     Dim websocket As WebSocket4Net.WebSocket
-    Dim OBSResponse As String
-    Dim OBSRecState As Boolean
-    Dim OBSStreamState As Boolean
-    Dim OBSRecTime As String
-    Dim OBSStreamTime As String
+    Dim VmixResponse As String
+    Dim VmixRecState As Boolean
+    Dim VmixStreamState As Boolean
+    Dim VmixRecTime As String
+    Dim VmixStreamTime As String
     Dim gain(8) As Integer
     Dim wblock(8) As Integer
     Dim DelayStop As Integer
@@ -220,8 +219,6 @@ Public Class MainForm
             Me.FormBorderStyle = FormBorderStyle.Sizable 'if no 2nd monitor, open sizeable on main monitor
         End If
 
-        OpenWebSocket()
-
         gain(1) = 4 : gain(2) = 4 : gain(3) = 4 : gain(4) = 4
         wblock(1) = 0 : wblock(2) = 0 : wblock(3) = 0 : wblock(4) = 0
         addr = 2 : liveaddr = 1 : nextpreview = 2
@@ -241,34 +238,34 @@ Public Class MainForm
         'Debug.Print(joyconvert(i) & ",")
         'Next
 
-        Globals.TallyMode = GetSetting("Atemswitcher", "Set", "Tally", False)
-        Globals.AutoSwap = GetSetting("Atemswitcher", "Set", "Autoswap", True)
-        Globals.PresetFilePath = GetSetting("Atemswitcher", "Set", "PresetsPath", Mid(Application.ExecutablePath, 1, InStrRev(Application.ExecutablePath, "\")))
+        Globals.TallyMode = GetSetting("CCNCamControl", "Set", "Tally", False)
+        Globals.AutoSwap = GetSetting("CCNCamControl", "Set", "Autoswap", True)
+        Globals.PresetFilePath = GetSetting("CCNCamControl", "Set", "PresetsPath", Mid(Application.ExecutablePath, 1, InStrRev(Application.ExecutablePath, "\")))
         If Globals.PresetFilePath = "" Then Globals.PresetFilePath = Mid(Application.ExecutablePath, 1, InStrRev(Application.ExecutablePath, "\"))
-        Globals.PresetFileName = GetSetting("Atemswitcher", "Set", "PresetsFile", "default.aps")
+        Globals.PresetFileName = GetSetting("CCNCamControl", "Set", "PresetsFile", "default.aps")
         If InStr(Globals.PresetFileName, "\") Then Globals.PresetFileName = Mid(Globals.PresetFileName, InStrRev(Globals.PresetFileName, "\") + 1)
         If Globals.PresetFileName = "" Then Globals.PresetFileName = "default.aps"
-        Globals.CamInvert(1) = GetSetting("Atemswitcher", "Set", "Caminvert1", False)
-        Globals.CamInvert(2) = GetSetting("Atemswitcher", "Set", "Caminvert2", False)
-        Globals.CamInvert(3) = GetSetting("Atemswitcher", "Set", "Caminvert3", False)
-        Globals.CamInvert(4) = GetSetting("Atemswitcher", "Set", "Caminvert4", False)
+        Globals.CamInvert(1) = GetSetting("CCNCamControl", "Set", "Caminvert1", False)
+        Globals.CamInvert(2) = GetSetting("CCNCamControl", "Set", "Caminvert2", False)
+        Globals.CamInvert(3) = GetSetting("CCNCamControl", "Set", "Caminvert3", False)
+        Globals.CamInvert(4) = GetSetting("CCNCamControl", "Set", "Caminvert4", False)
 
-        Globals.Cam1Dis = GetSetting("Atemswitcher", "Set", "Cam1Dis", False)
-        Globals.Cam2Dis = GetSetting("Atemswitcher", "Set", "Cam2Dis", False)
-        Globals.Cam3Dis = GetSetting("Atemswitcher", "Set", "Cam3Dis", False)
-        Globals.Cam4Dis = GetSetting("Atemswitcher", "Set", "Cam4Dis", False)
-        Globals.Cam5Dis = GetSetting("Atemswitcher", "Set", "Cam5Dis", False)
+        Globals.Cam1Dis = GetSetting("CCNCamControl", "Set", "Cam1Dis", False)
+        Globals.Cam2Dis = GetSetting("CCNCamControl", "Set", "Cam2Dis", False)
+        Globals.Cam3Dis = GetSetting("CCNCamControl", "Set", "Cam3Dis", False)
+        Globals.Cam4Dis = GetSetting("CCNCamControl", "Set", "Cam4Dis", False)
+        Globals.Cam5Dis = GetSetting("CCNCamControl", "Set", "Cam5Dis", False)
 
-        Globals.CamIP(1) = (GetSetting("Atemswitcher", "CamIP", "1", "192.168.1.91"))
-        Globals.CamIP(2) = (GetSetting("Atemswitcher", "CamIP", "2", "192.168.1.92"))
-        Globals.CamIP(3) = (GetSetting("Atemswitcher", "CamIP", "3", "192.168.1.93"))
-        Globals.CamIP(4) = (GetSetting("Atemswitcher", "CamIP", "4", "192.168.1.94"))
-        Globals.CamIP(5) = (GetSetting("Atemswitcher", "CamIP", "5", "192.168.1.95"))
+        Globals.CamIP(1) = (GetSetting("CCNCamControl", "CamIP", "1", "192.168.1.91"))
+        Globals.CamIP(2) = (GetSetting("CCNCamControl", "CamIP", "2", "192.168.1.92"))
+        Globals.CamIP(3) = (GetSetting("CCNCamControl", "CamIP", "3", "192.168.1.93"))
+        Globals.CamIP(4) = (GetSetting("CCNCamControl", "CamIP", "4", "192.168.1.94"))
+        Globals.CamIP(5) = (GetSetting("CCNCamControl", "CamIP", "5", "192.168.1.95"))
 
-        Globals.Cliptime(1) = (GetSetting("Atemswitcher", "Cliptime", "1", "60"))
-        Globals.Cliptime(2) = (GetSetting("Atemswitcher", "Cliptime", "2", "60"))
-        Globals.Cliptime(3) = (GetSetting("Atemswitcher", "Cliptime", "3", "60"))
-        Globals.Cliptime(4) = (GetSetting("Atemswitcher", "Cliptime", "4", "60"))
+        Globals.Cliptime(1) = (GetSetting("CCNCamControl", "Cliptime", "1", "60"))
+        Globals.Cliptime(2) = (GetSetting("CCNCamControl", "Cliptime", "2", "60"))
+        Globals.Cliptime(3) = (GetSetting("CCNCamControl", "Cliptime", "3", "60"))
+        Globals.Cliptime(4) = (GetSetting("CCNCamControl", "Cliptime", "4", "60"))
 
         BtnFast.BackColor = Color.Green
         BtnLiveSlow.BackColor = Color.Green
@@ -280,8 +277,6 @@ Public Class MainForm
         ShowEncoderAllocations()
         SetCaptionText()
 
-        'Process.Start("C:\atem_vb\VideoMessage\VideoMessage\bin\Debug\videomessage.exe")
-
     End Sub
 
     Private Sub MainForm_Disposed(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Disposed
@@ -289,8 +284,9 @@ Public Class MainForm
         If SerialPort1.IsOpen Then SerialPort1.Close()
         'BackgroundWorker1.CancelAsync()
     End Sub
-
-    '---Select preset file to load (touch friendly)
+    '--------------------------------------------------------------------------------------------------------------
+    ' Select preset file to load (touch friendly)
+    '--------------------------------------------------------------------------------------------------------------
     Sub SelectPresetFile()
         'Exit Sub
         Dim aryFi As IO.FileInfo()
@@ -355,6 +351,7 @@ Public Class MainForm
 
         PresetLoadRedraw() 'arrange the buttons
     End Sub
+    '-- draw the preset select buttons
     Sub PresetLoadRedraw()
         'only 12 will fit on a screen.
         If PresetLoadFileCount > 12 Then
@@ -387,9 +384,11 @@ Public Class MainForm
         End If
         PresetLoadPanel.Refresh()
     End Sub
+    '-- close the preset select panel
     Private Sub PresetLoadClose_Click(ByVal sender As Object, ByVal e As EventArgs) Handles PresetLoadClose.Click
         PresetLoadPanel.Visible = False
     End Sub
+    '-- handle click of preset
     Sub PresetLoadHandler_Click(ByVal sender As Object, ByVal e As EventArgs)
         If TypeOf sender Is Button Then
             Dim myButton As Button = CType(sender, Button)
@@ -403,7 +402,7 @@ Public Class MainForm
                 PresetLoadRedraw()
             Else
                 Globals.PresetFileName = pfname
-                SaveSetting("Atemswitcher", "Set", "PresetsFile", Globals.PresetFileName)
+                SaveSetting("CCNCamControl", "Set", "PresetsFile", Globals.PresetFileName)
                 ReadPresetFile()
 
                 For i = 0 To PresetLoadFileCount - 1
@@ -414,8 +413,9 @@ Public Class MainForm
             End If
         End If
     End Sub
-
-    '---my message box
+    '--------------------------------------------------------------------------------------------------------------
+    ' My message box, open a touch friendly panel that is not modal
+    '--------------------------------------------------------------------------------------------------------------
     Sub ShowMsgBox(ByVal label As String)
         MsgBoxPanel.Left = 20
         MsgBoxLabel.Text = MsgBoxLabel.Text & vbCrLf & label 'add new text to existing string, if open
@@ -427,62 +427,38 @@ Public Class MainForm
         MsgBoxPanel.Visible = True
         MsgBoxPanel.Refresh()
     End Sub
+    '---close my message box
     Private Sub MsgboxClose_Click(ByVal sender As Object, ByVal e As EventArgs) Handles MsgBoxPanel.Click, MsgboxClose.Click
         MsgBoxPanel.Visible = False
         MsgBoxLabel.Text = "" 'clear the text when closed/hidden
     End Sub
 
-    '---Make OBS scene name from addr
-    Function ObsSourceName(ByVal oaddr As Integer) As String
-        ObsSourceName = ""
-        If oaddr = 1 Then ObsSourceName = "Cam1"
-        If oaddr = 2 Then ObsSourceName = "Cam2"
-        If oaddr = 3 Then ObsSourceName = "Cam3"
-        If oaddr = 4 Then ObsSourceName = "Cam4"
-        If oaddr = 5 Then ObsSourceName = "Cam5"
-        If oaddr = 6 Then ObsSourceName = "Words"
-        If oaddr = 7 Then ObsSourceName = "Mediaplayer1"
-        If oaddr = 8 Then ObsSourceName = "Aux"
-        If oaddr = 9 Then ObsSourceName = "Pip"
-        If oaddr = 10 Then ObsSourceName = "Black"
-        If oaddr = 21 Then ObsSourceName = "LeaderCaption"
-        If oaddr = 22 Then ObsSourceName = "PreacherCaption"
-        If oaddr = 23 Then ObsSourceName = "OtherCaption"
+    '---Make VMix input name from address number
+    Function VMixSourceName(ByVal oaddr As Integer) As String
+        VMixSourceName = ""
+        If oaddr = 1 Then VMixSourceName = "Cam1"
+        If oaddr = 2 Then VMixSourceName = "Cam2"
+        If oaddr = 3 Then VMixSourceName = "Cam3"
+        If oaddr = 4 Then VMixSourceName = "Cam4"
+        If oaddr = 5 Then VMixSourceName = "Cam5"
+        If oaddr = 6 Then VMixSourceName = "Words"
+        If oaddr = 7 Then VMixSourceName = "Mediaplayer1"
+        If oaddr = 8 Then VMixSourceName = "Aux"
+        If oaddr = 9 Then VMixSourceName = "Pip"
+        If oaddr = 10 Then VMixSourceName = "Black"
+        If oaddr = 21 Then VMixSourceName = "LeaderCaption"
+        If oaddr = 22 Then VMixSourceName = "PreacherCaption"
+        If oaddr = 23 Then VMixSourceName = "OtherCaption"
 
     End Function
-
-    Private Sub OpenWebSocket()
-        websocket = New WebSocket4Net.WebSocket("ws://localhost:4444/")
-        'AddHandler websocket.Opened, Sub(s, e) socketOpened(s, e)
-        'AddHandler websocket.Error, Sub(s, e) SocketError(s, e)
-        'AddHandler websocket.Closed, Sub(s, e) socketClosed(s, e)
-        AddHandler websocket.MessageReceived, Sub(s, ev) socketMessage(s, ev)
-        AddHandler websocket.DataReceived, Sub(s, ev) socketDataReceived(s, ev)
-        websocket.Open()
-
-        WebsocketReinitTimer = 10
-    End Sub
-
-    Private Sub WebsocketSendAndWait(ByVal msg As String)
-        If WebsocketTimeout = True Then Exit Sub
-        Dim t As Integer = Now.TimeOfDay.TotalSeconds
-        msg = Replace(msg, "TEST1", "WS" & WebsocketID)
-        Websocketwait = True
-        websocket.Send(msg)
-        While Websocketwait
-            Application.DoEvents()
-            If (Now.TimeOfDay.TotalSeconds - t) > 5 Then
-                ShowMsgBox("Can't connect to OBS")
-                WebsocketTimeout = True
-                Exit Sub
-            End If
-        End While
-    End Sub
-
+    '--------------------------------------------------------------------------------------------------------------
+    ' Internal network comms functions
+    '--------------------------------------------------------------------------------------------------------------
+    '---Getwebrequest, used to communicate with cameras and with vmix
     Private Function GetWebRequest(ByVal url As String)
         Debug.Print(url)
         Dim request As WebRequest = WebRequest.Create(url)
-        request.Timeout = 200
+        request.Timeout = 200  'timeout 200msec
         Dim resp As WebResponse = request.GetResponse()
         Dim T As String
         Using r As StreamReader = New StreamReader(resp.GetResponseStream(), Encoding.ASCII)
@@ -491,10 +467,8 @@ Public Class MainForm
         GetWebRequest = T
     End Function
 
-    Private Sub ReadMediaSources()
-        ListBoxMedia.Items.Clear()
-        websocket.Send("{""request-type"":""GetSceneList"",""message-id"":""GETSCENE""}")
-    End Sub
+
+    '---Send a vmix api command
     Private Function SendVmixCmd(ByVal cmd As String)
         Dim url As String, result As String
         url = "http://127.0.0.1:8088/api/" & cmd
@@ -511,8 +485,8 @@ Public Class MainForm
         Return result
     End Function
 
+    '---Send a command to the current preview camera
     Private Function SendCamCmd(ByVal cmd As String)
-        'Dim webClient As New System.Net.WebClient
         Dim url As String, result As String
         If addr = 0 Or addr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
@@ -521,7 +495,6 @@ Public Class MainForm
         result = ""
         Try
             'CamCmdPending = True
-            'result = webClient.DownloadString(url)
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
             CamIgnore(addr) = True
@@ -531,8 +504,8 @@ Public Class MainForm
         Return result
     End Function
 
+    '---send a no-hash type command to a camera
     Private Function SendCamCmdNoHash(ByVal cmd As String, ByVal typ As String)
-        'Dim webClient As New System.Net.WebClient
         Dim url As String, result As String
         If addr = 0 Or addr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
@@ -542,7 +515,6 @@ Public Class MainForm
         result = ""
         Try
             'CamCmdPending = True
-            'result = webClient.DownloadString(url)
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
             CamIgnore(addr) = True
@@ -552,8 +524,8 @@ Public Class MainForm
         Return result
     End Function
 
+    '---send a command to a particular camera
     Private Function SendCamCmdAddr(ByVal caddr As Integer, ByVal cmd As String)
-        'Dim webClient As New System.Net.WebClient
         Dim url As String, result As String
         If caddr = 0 Or caddr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
@@ -562,30 +534,6 @@ Public Class MainForm
         result = ""
         Try
             'CamCmdPending = True
-            'result = webClient.DownloadString(url)
-            result = GetWebRequest(url)
-        Catch ex As System.Net.WebException
-            CamIgnore(caddr) = True
-            ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
-        End Try
-        'CamCmdPending = False
-        Return result
-    End Function
-    Private Function SendCamCmdAddrNoHash(ByVal caddr As Integer, ByVal cmd As String, ByVal typ As String)
-        'Dim webClient As New System.Net.WebClient
-        'Dim webClient As New WebClientEx
-        Dim url As String, result As String
-        If caddr = 0 Or caddr > 5 Then Return ""
-        'If CamCmdPending = True Then Return ""
-        If CamIgnore(caddr) = True Then Return ""
-        'cmd = Replace(cmd, ":", "%3A")
-        If (typ = "") Then typ = "aw_ptz" 'aw_ptz for position, aw_cam for cam settings
-        url = "http://" & Globals.CamIP(caddr) & "/cgi-bin/" & typ & "?cmd=" & cmd & "&res=1"
-        result = ""
-        'webClient.Timeout = 500
-        Try
-            'CamCmdPending = True
-            'result = webClient.DownloadString(url)
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
             CamIgnore(caddr) = True
@@ -595,8 +543,28 @@ Public Class MainForm
         Return result
     End Function
 
+    '---send a no-hash type command to a particular camera 
+    Private Function SendCamCmdAddrNoHash(ByVal caddr As Integer, ByVal cmd As String, ByVal typ As String)
+        Dim url As String, result As String
+        If caddr = 0 Or caddr > 5 Then Return ""
+        'If CamCmdPending = True Then Return ""
+        If CamIgnore(caddr) = True Then Return ""
+        If (typ = "") Then typ = "aw_ptz" 'aw_ptz for position, aw_cam for cam settings
+        url = "http://" & Globals.CamIP(caddr) & "/cgi-bin/" & typ & "?cmd=" & cmd & "&res=1"
+        result = ""
+        Try
+            'CamCmdPending = True
+            result = GetWebRequest(url)
+        Catch ex As System.Net.WebException
+            CamIgnore(caddr) = True
+            ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
+        End Try
+        'CamCmdPending = False
+        Return result
+    End Function
+
+    '---send a query request to a camera to get settings back (used for reading internal sd card status)
     Function SendCamQuery(ByVal caddr As Integer, ByVal cmd As String)
-        'Dim webClient As New System.Net.WebClient
         Dim url As String, result As String
         If caddr = 0 Or caddr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
@@ -605,7 +573,6 @@ Public Class MainForm
         result = ""
         Try
             'CamCmdPending = True
-            'result = webClient.DownloadString(url)
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
             CamIgnore(caddr) = True
@@ -615,6 +582,7 @@ Public Class MainForm
         Return result
     End Function
 
+    '---send a query request but don't bother with the response (used for internal card record commands)
     Public Sub SendCamQueryNoResponse(ByVal caddr As Integer, ByVal cmd As String)
         Dim webClient As New System.Net.WebClient
         Dim url As String
@@ -622,8 +590,9 @@ Public Class MainForm
         webClient.DownloadString(url)
     End Sub
 
-
-    '----------------------Read camera states back from cameras-----------------------------------------------------
+    '--------------------------------------------------------------------------------------------------------------
+    ' Read camera states back from cameras
+    '--------------------------------------------------------------------------------------------------------------
     Sub ReadbackCameraStates(ByVal ta As Integer)
         Dim op As String
         SendCamCmdAddrNoHash(ta, "XSF:1", "aw_cam") 'set scene file "MANUAL 1"
@@ -645,7 +614,9 @@ Public Class MainForm
         CamFocus(ta) = Val("&H" & Mid(op, 3))
     End Sub
 
-    '----------------------Read presets back from file-----------------------------------------------------
+    '--------------------------------------------------------------------------------------------------------------
+    ' Read user presets out of file into internal array store
+    '--------------------------------------------------------------------------------------------------------------
     Sub ReadPresetFile()
         Dim TextFileReader As Microsoft.VisualBasic.FileIO.TextFieldParser
         Try
@@ -711,7 +682,7 @@ Public Class MainForm
                     End If
 
                 End If
-            Catch ex As  _
+            Catch ex As _
             Microsoft.VisualBasic.FileIO.MalformedLineException
                 MsgBox("Line " & ex.Message &
                 "is not valid and will be skipped.")
@@ -720,11 +691,14 @@ Public Class MainForm
         TextFileReader.Dispose()
         'read preset names for cam5. these are stored in the registry as the presets are fixed in the camera
         For i = 0 To 15
-            PresetCaption(16 * 6 + i) = GetSetting("Atemswitcher", "Preset5", i, i + 1)
+            PresetCaption(16 * 6 + i) = GetSetting("CCNCamControl", "Preset5", i, i + 1)
         Next
         UpdatePresets()
     End Sub
 
+    '--------------------------------------------------------------------------------------------------------------
+    ' Write user presets from internal array store to file
+    '--------------------------------------------------------------------------------------------------------------
     Sub WritePresetFile()
         Dim file As System.IO.StreamWriter
         Dim i As Integer, j As Integer
@@ -758,10 +732,11 @@ Public Class MainForm
 
         'also save cam5 legends to registry
         For i = 0 To 15
-            SaveSetting("Atemswitcher", "Preset5", i, PresetCaption(6 * 16 + i))
+            SaveSetting("CCNCamControl", "Preset5", i, PresetCaption(6 * 16 + i))
         Next
     End Sub
 
+    '--- Set default preset caption ("1-16") and central positions
     Sub SetDefaultPresets()
         Dim i As Integer, j As Integer
         For j = 0 To 3
@@ -774,24 +749,26 @@ Public Class MainForm
         Next j
     End Sub
 
+    '--------------------------------------------------------------------------------------------------------------
+    ' Open comm port for controller coms. This is a usb com port 
+    '--------------------------------------------------------------------------------------------------------------
     Public Sub ComportOpen()
         'open com port for controller comms
         If SerialPort1.IsOpen Then SerialPort1.Close()
         SerialPort1.BaudRate = 19200
-        SerialPort1.PortName = GetSetting("Atemswitcher", "Comm", "2", "COM2")
+        SerialPort1.PortName = GetSetting("CCNCamControl", "Comm", "2", "COM2")
         Try
             SerialPort1.Open()
         Catch
             'TODO: if this fails then scan all the ports looking for the controller. If that fails then show status controller not connected
             'but retry the connect every 10sec
             ShowMsgBox("The controller com port " & SerialPort1.PortName & " cannot be opened.")
-            'MsgBox("The controller com port " & SerialPort1.PortName & " cannot be opened.")
         End Try
     End Sub
 
-    '---------------------------------------------------------------------------------
-    'edit preset button caption
-
+    '--------------------------------------------------------------------------------------------------------------
+    ' Edit preset button captions directly on the buttons by moving a textbox around
+    '--------------------------------------------------------------------------------------------------------------
     Sub StartEditPresetDetails(ByVal index As Integer)
         TextBoxPresetEdit.Text = PresetCaption((addr - 1) * 16 + index - 1)
         TextBoxPresetEdit.Visible = True
@@ -802,6 +779,8 @@ Public Class MainForm
         TextBoxPresetEdit.SelectAll()
         TextBoxPresetEdit.Focus()
     End Sub
+
+    '---end preset caption edit
     Sub EndEditPresetDetails()
         If PresetLegendMode = 999 Then 'we were waiting for a preset button to be selected. Just exit edit mode
             BtnEditPreset.BackColor = Color.White
@@ -818,6 +797,8 @@ Public Class MainForm
         WritePresetFile()
         setactive()
     End Sub
+
+    '---handle user clicking somewhere else while editing caption
     Private Sub TextBoxPresetEdit_Leave(ByVal sender As Object, ByVal e As EventArgs) Handles TextBoxPresetEdit.Leave
         EndEditPresetDetails() 'user clicks on another control
     End Sub
@@ -830,7 +811,7 @@ Public Class MainForm
 
 
     '--------------------------------------------------------------------------------------------------------------
-    'Click on a preset button (may be recall, save or edit)
+    ' Click on a preset button (may be recall, save, edit, move)
     '--------------------------------------------------------------------------------------------------------------
     Private Sub BtnPreset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnPreset1.Click, BtnPreset2.Click, BtnPreset3.Click, BtnPreset4.Click, BtnPreset5.Click, BtnPreset6.Click, BtnPreset7.Click, BtnPreset8.Click, BtnPreset9.Click, BtnPreset10.Click, BtnPreset11.Click, BtnPreset12.Click, BtnPreset13.Click, BtnPreset14.Click, BtnPreset15.Click, BtnPreset16.Click
         Dim op As String
@@ -844,6 +825,7 @@ Public Class MainForm
         Dim i As Integer
         index = Val(Mid(sender.name, 10))
 
+        '---move a preset-----------------------------------------------------------------
         If MovePresetMode <> 0 Then 'we are moving a preset
             If MovePresetMode = 1 Then 'select preset to move
                 MovePresetFrom = index
@@ -881,15 +863,7 @@ Public Class MainForm
 
         If savemode = False Then
             If PresetLegendMode = 0 Then
-                'If AutoSongPreload = True And AutoPreset = 0 Then 'if in autosongmode and it has picked a preload, but user is picking a different preset, cancel the preload
-                'If AutoPreset = 1 Then 'if last shot was autoselected, then disable transitions if user picks another preset
-                'BtnPreload.BackColor = Color.White
-                'PreloadPreset = 0
-                'cdir = 0
-                'SetLiveMoveIndicators()
-                'UpdatePresets()
-                'AutoSongPreload = False
-                'End If
+                '---recall a preset--------------------------------------
                 AutoPreset = 0
                 If PreloadPreset = 0 Then
                     '---Recall a preset either live or preview
@@ -1056,10 +1030,10 @@ Public Class MainForm
             WritePresetFile()
             BtnPresetSave.BackColor = Color.White
 
-            End If
-        'If _serialPort.IsOpen Then _serialPort.Write(buffer, 0, 7)
+        End If
     End Sub
 
+    '---Update the camera settings values on the cam details screen
     Sub ShowCamValues()
         Dim ad As Integer
         If (PTZLive = False) Then ad = addr Else ad = liveaddr
@@ -1083,7 +1057,7 @@ Public Class MainForm
         ShowEncoderValues()
     End Sub
     '-----------------------------------------------------
-    ' Set Leds on controller buttons
+    ' Set Leds on input controller buttons to preview / program state
     ' ControllerLedState(0..13) sets colour bit0=red bit1=green bit2=blue
     '-----------------------------------------------------
     Sub SetControllerLedState(ByVal op)
@@ -1091,6 +1065,7 @@ Public Class MainForm
         If addr = op Then ControllerLedState(op - 1) = ControllerLedState(op - 1) + 2 'green
         If liveaddr = op Then ControllerLedState(op - 1) = ControllerLedState(op - 1) + 1 'red
     End Sub
+
     '-----------------------------------------------------
     ' Set active outputs and update button colours
     '-----------------------------------------------------
@@ -1143,28 +1118,13 @@ Public Class MainForm
         For i = 1 To 10
             SetControllerLedState(i)
         Next
-        'tally
+        'tally lights on cams
         If Globals.TallyMode Then
             SendCamCmdAddr(nextpreview, "DA0")
             SendCamCmdAddr(liveaddr, "DA1")
         End If
-        'atem
-        'If addr = 1 Then ExecuteLua("ATEMMixerMESetPreviewInput( 1,1," & Globals.AtemChannel(1) & " )") ' SDI1
-        'If addr = 2 Then ExecuteLua("ATEMMixerMESetPreviewInput( 1,1," & Globals.AtemChannel(2) & " )") ' SDI2
-        'If addr = 3 Then ExecuteLua("ATEMMixerMESetPreviewInput( 1,1," & Globals.AtemChannel(3) & " )") ' SDI3
-        'If addr = 4 Then ExecuteLua("ATEMMixerMESetPreviewInput( 1,1," & Globals.AtemChannel(4) & " )") ' SDI4
-        'obs
         If transitionwait = 0 Then
-            If Not VMixMode Then
-                If addr = 1 Then websocket.Send("{""request-type"":""SetPreviewScene"",""scene-name"":""Cam1"",""message-id"":""TEST1""}")
-                If addr = 2 Then websocket.Send("{""request-type"":""SetPreviewScene"",""scene-name"":""Cam2"",""message-id"":""TEST1""}")
-                If addr = 3 Then websocket.Send("{""request-type"":""SetPreviewScene"",""scene-name"":""Cam3"",""message-id"":""TEST1""}")
-                If addr = 4 Then websocket.Send("{""request-type"":""SetPreviewScene"",""scene-name"":""Cam4"",""message-id"":""TEST1""}")
-                If addr = 5 Then websocket.Send("{""request-type"":""SetPreviewScene"",""scene-name"":""Cam5"",""message-id"":""TEST1""}")
-            Else
-                If addr <= 5 Then SendVmixCmd("?Function=PreviewInput&Input=" & ObsSourceName(addr))
-            End If
-
+            If addr <= 5 Then SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(addr))
         End If
 
         'cam settings
@@ -1176,7 +1136,6 @@ Public Class MainForm
 
         'disable overlay if words are selected
         If (OverlayWasActive) Then BtnOverlay_Click(BtnOverlay, Nothing) : OverlayWasActive = 0
-        'If (liveaddr = 6 And overlayactive) Then BtnOverlay_Click(BtnOverlay, Nothing) : OverlayWasActive = 1
 
         'turn off live control
         BtnLivePTZ.BackColor = Color.White
@@ -1185,6 +1144,7 @@ Public Class MainForm
 
     End Sub
 
+    '---Update legends and lit states of preset buttons to show presets for current preview cam
     Sub UpdatePresets()
         Dim ad As Integer
 
@@ -1276,11 +1236,10 @@ Public Class MainForm
 
     End Sub
 
+    '---Handle click on one of the cam1-5 buttons. These touchbuttons aren't used but we call this function when the controller buttons are pressed
     Private Sub BtnCam1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles BtnCam1.Click, BtnCam2.Click, BtnCam3.Click, BtnCam4.Click, BtnCam5.Click
         Dim index As Integer
         index = Val(Mid(sender.name, 7))
-
-        'If _serialPort.IsOpen Then _serialPort.Write(buffer, 0, 7)
 
         'cancel any preloads
         PreloadPreset = 0
@@ -1295,6 +1254,7 @@ Public Class MainForm
 
     End Sub
 
+    '---Click the cut button. This function is called when the controller cut button is pressed
     Private Sub BtnCut_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnCut.Click
         If CutLockoutTimer > 0 Then Exit Sub
         If addr = 5 Then 'if we are cutting to black - mute audio out
@@ -1307,59 +1267,32 @@ Public Class MainForm
         nextpreview = liveaddr
         'If addr <> nextpreview Then addr = nextpreview
         liveaddr = addr
-        If (ObsSourceName(addr) <> "") And Not VMixMode Then
-            If (overlayactive) Then websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(addr) & """,""source"":""OpenLP"",""render"":true,""message-id"":""TEST1""}")
-            If (mediaoverlayactive) Then websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(addr) & """,""source"":""Caption"",""render"":true,""message-id"":""TEST1""}")
-        End If
         StartLiveMove()
-        'ExecuteLua("ATEMMixerMECut( 1,1 )")
-        If Not VMixMode Then
-            websocket.Send("{""request-type"":""TransitionToProgram"",""with-transition"": { ""name"":""Cut"" } ,""message-id"":""TEST1""}")
-        Else
-            SendVmixCmd("?Function=Fade&Duration=10")
-        End If
+        SendVmixCmd("?Function=Fade&Duration=10") '10ms fade =cut
 
         'If Globals.AutoSwap Then addr = nextpreview
         If Globals.AutoSwap Then transitionwait = 5
 
-        If (ObsSourceName(nextpreview) <> "") And Not VMixMode Then
-            If (overlayactive) Then websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(nextpreview) & """,""source"":""OpenLP"",""render"":false,""message-id"":""TEST1""}")
-            If (mediaoverlayactive) Then websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(nextpreview) & """,""source"":""Caption"",""render"":false,""message-id"":""TEST1""}")
-        End If
-
         setactive()
-        If AutoSongMode = True Or AutoSpeechMode = True Then AutoWait = 6
         CutLockoutTimer = 8
         DelayStop = 8
         AutoPreset = 0
 
     End Sub
 
+    '---click the fade button. This function is called when the controller fade button is pressed
     Private Sub BtnTransition_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnTransition.Click
         If CutLockoutTimer > 0 Then Exit Sub
 
         If liveaddr = 8 Then MediaPlayerWasActive = True 'if cutting to mediaplayer then remember we were on it
         nextpreview = liveaddr
         liveaddr = addr
-        If (ObsSourceName(addr) <> "") And Not VMixMode Then
-            If (overlayactive) Then websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(addr) & """,""source"":""OpenLP"",""render"":true,""message-id"":""TEST1""}")
-            If (mediaoverlayactive) Then websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(addr) & """,""source"":""Caption"",""render"":true,""message-id"":""TEST1""}")
-        End If
         StartLiveMove()
-        'ExecuteLua("ATEMMixerMEAutoTransition( 1,1 )")
         Dim ft As Double
-        Double.TryParse(TextBox1.Text, ft)
-        If Not VMixMode Then
-            websocket.Send("{""request-type"":""TransitionToProgram"",""with-transition"": { ""name"":""Fade"", ""duration"":" & ft * 800 & " } ,""message-id"":""TEST1""}")
-        Else
-            SendVmixCmd("?Function=Fade&Duration=500")
-        End If
+        Double.TryParse(TextBox1.Text, ft) 'fade time textbox
+        If (ft <> 0) Then ft = ft * 1000 : Else ft = 500
+        SendVmixCmd("?Function=Fade&Duration=" & ft)
         If Globals.AutoSwap Then transitionwait = 5 + Val(TextBox1.Text) * 10
-
-        If (ObsSourceName(nextpreview) <> "") And Not VMixMode Then
-            If (overlayactive) Then websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(nextpreview) & """,""source"":""OpenLP"",""render"":false,""message-id"":""TEST1""}")
-            If (mediaoverlayactive) Then websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(nextpreview) & """,""source"":""Caption"",""render"":false,""message-id"":""TEST1""}")
-        End If
 
         setactive()
         If AutoSongMode = True Or AutoSpeechMode = True Then AutoWait = transitionwait + 2
@@ -1368,6 +1301,7 @@ Public Class MainForm
         AutoPreset = 0
     End Sub
 
+    '---Click the preset save button
     Private Sub BtnPresetSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnPresetSave.Click
         If savemode = False Then
             BtnPresetSave.BackColor = Color.Red
@@ -1378,6 +1312,7 @@ Public Class MainForm
         End If
     End Sub
 
+    '---Click the preset move button
     Private Sub BtnMovePreset_Click(ByVal sender As Object, ByVal e As EventArgs) Handles BtnMovePreset.Click
         If (MovePresetMode = 0) Then
             MovePresetMode = 1
@@ -1388,6 +1323,18 @@ Public Class MainForm
         End If
     End Sub
 
+    '---Click the preset edit button
+    Private Sub BtnEditPreset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnEditPreset.Click
+        If PresetLegendMode = 0 Then
+            BtnEditPreset.BackColor = Color.Red
+            PresetLegendMode = 999
+        Else
+            EndEditPresetDetails()
+        End If
+    End Sub
+
+
+    '---Click the all stop button
     Private Sub BtnStop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnStop.Click
         SendCamCmdAddr(1, "PTS5050")
         SendCamCmdAddr(1, "Z50")
@@ -1400,7 +1347,7 @@ Public Class MainForm
         PendingZoom = 0 : PendingPan = 0 : PendingTilt = 0
     End Sub
 
-
+    '---Click the preset slow zoom in button
     Private Sub BtnSlowIn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSlowIn.Click
         If PresetLive = False Then
             cdir = cdir Xor &H20
@@ -1425,6 +1372,7 @@ Public Class MainForm
 
     End Sub
 
+    '---Click the preset slow zoom out button
     Private Sub BtnSlowOut_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSlowOut.Click
         If PresetLive = False Then
             cdir = cdir Xor &H40
@@ -1447,6 +1395,8 @@ Public Class MainForm
             PresetLive = False
         End If
     End Sub
+
+    '---Click the slow pan left button
     Private Sub BtnSlowPanL_Click(ByVal sender As Object, ByVal e As EventArgs) Handles BtnSlowPanL.Click
         If PresetLive = False Then
             cdir = cdir Xor &H2
@@ -1470,6 +1420,7 @@ Public Class MainForm
         End If
     End Sub
 
+    '---Click the slow pan right button
     Private Sub BtnSlowPanR_Click(ByVal sender As Object, ByVal e As EventArgs) Handles BtnSlowPanR.Click
         If PresetLive = False Then
             cdir = cdir Xor &H4
@@ -1493,19 +1444,20 @@ Public Class MainForm
         End If
     End Sub
 
-
+    '---Click on one of the non-cam input buttons. We call this function when a controller button is clicked
     Private Sub BtnInp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnInp1.Click, BtnInp2.Click, BtnInp3.Click, BtnInp4.Click, BtnInp5.Click
         Dim index = Val(Mid(sender.name, 7))
-        Dim obssource = ObsSourceName(index)
+        Dim obssource = VMixSourceName(index)
         addr = index + 5
         If Not VMixMode Then
-            websocket.Send("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(addr) & """,""message-id"":""TEST1""}")
+            websocket.Send("{""request-type"":""SetPreviewScene"",""scene-name"":""" & VMixSourceName(addr) & """,""message-id"":""TEST1""}")
         Else
-            SendVmixCmd("?Function=PreviewInput&Input=" & ObsSourceName(addr))
+            SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(addr))
         End If
         setactive()
     End Sub
 
+    '---"light up" the buttons to show live moves or zooms
     Sub SetLiveMoveIndicators()
         If cdir And &H2 Then BtnSlowPanL.BackColor = Color.Orange Else BtnSlowPanL.BackColor = Color.White
         If cdir And &H4 Then BtnSlowPanR.BackColor = Color.Orange Else BtnSlowPanR.BackColor = Color.White
@@ -1514,6 +1466,7 @@ Public Class MainForm
         If cdir = 0 And PreloadPreset = 0 Then BtnPreload.BackColor = Color.White
     End Sub
 
+    '---Start a live move as configured on the preset buttons
     Sub StartLiveMove()
         Dim ps As String, ts As String
         Dim ncdir As Integer = 0
@@ -1553,8 +1506,7 @@ Public Class MainForm
             If cdir And &H40 Then SendCamCmd("Z40")
         End If
         'End If
-        'If _serialPort.IsOpen Then _serialPort.Write(buffer, 0, 7)
-        'Threading.Thread.Sleep(20)
+
         'output the direction command
         If Globals.CamInvert(addr) Then  'inverted camera
             If (cdir And 2) <> 0 Then ncdir = ncdir Or 4
@@ -1569,91 +1521,42 @@ Public Class MainForm
         If (cdir And 8) <> 0 Then ts = "55"
         If (cdir And 16) <> 0 Then ts = "45"
         SendCamCmd("PTS" & ps & ts)
-        'If _serialPort.IsOpen Then _serialPort.Write(buffer, 0, 7)
+
         cdir = 0
         SetLiveMoveIndicators()
         BtnPreload.BackColor = Color.White : PreloadPreset = 0
 
     End Sub
 
+    '---Click the words overlay button. We call this when the controller button is pressed
     Private Sub BtnOverlay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnOverlay.Click
-        'ExecuteLua("ATEMMixerDSKExecuteAutoTransition( 1,1 )") ' dsk 1
-        Dim ft As Double
-        Double.TryParse(TextBox2.Text, ft)
-        'Words overlay. Set preview = current output with overlay in opposite state, start fade
-        'At end of fade set preview back to user preview
         If overlayactive = False Then
             overlayactive = True
-            If Not VMixMode Then
-                If ObsSourceName(liveaddr) <> "" Then
-                    WebsocketSendAndWait("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(liveaddr) & """,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(liveaddr) & """,""source"":""OpenLP"",""render"":true,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""TransitionToProgram"",""with-transition"": { ""name"":""Fade"", ""duration"":" & ft * 800 & " } ,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(addr) & """,""message-id"":""TEST1""}")
-                End If
-            Else
-                SendVmixCmd("?Function=OverlayInput1In&Input=OpenLP")
-            End If
+            SendVmixCmd("?Function=OverlayInput1In&Input=OpenLP")
         Else
             overlayactive = False
-            If Not VMixMode Then
-                If ObsSourceName(liveaddr) <> "" Then
-                    WebsocketSendAndWait("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(liveaddr) & """,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(liveaddr) & """,""source"":""OpenLP"",""render"":false,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""TransitionToProgram"",""with-transition"": { ""name"":""Fade"", ""duration"":" & ft * 800 & " } ,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(addr) & """,""message-id"":""TEST1""}")
-                End If
-            Else
-                SendVmixCmd("?Function=OverlayInput1Out&Input=OpenLP")
-            End If
+            SendVmixCmd("?Function=OverlayInput1Out&Input=OpenLP")
         End If
-            If (overlayactive = True) Then BtnOverlay.BackColor = Color.Red Else BtnOverlay.BackColor = Color.White
+        If (overlayactive = True) Then BtnOverlay.BackColor = Color.Red Else BtnOverlay.BackColor = Color.White
         If (overlayactive = True) Then ControllerLedState(10) = 1 Else ControllerLedState(10) = 0
     End Sub
 
+    '---Click the caption overlay button. We call this function when the controller button is pressed
     Private Sub BtnMediaOverlay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnMediaOverlay.Click
-        'ExecuteLua("ATEMMixerDSKExecuteAutoTransition( 1,2 )") ' dsk 1
-        Dim ft As Double
-        Double.TryParse(TextBox2.Text, ft)
 
         If mediaoverlayactive = False Then
             'media overlay was not previously active
-            'swap preview source to current source and add the overlay
-            If Not VMixMode Then
-                If ObsSourceName(liveaddr) <> "" Then
-                    WebsocketSendAndWait("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(liveaddr) & """,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(liveaddr) & """,""source"":""Caption"",""render"":true,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""TransitionToProgram"",""with-transition"": { ""name"":""Fade"", ""duration"":" & ft * 800 & " } ,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(addr) & """,""message-id"":""TEST1""}")
-                End If
-            Else
-                SendVmixCmd("?Function=OverlayInput2In&Input=" & ObsSourceName(CaptionIndex + 20))
-            End If
-
-            ' websocket.Send("{""request-type"":""SetSourceFilterVisibility"",""sourceName"":""Caption"",""filterName"":""Color Correction"",""filterEnabled"":false,""message-id"":""TEST1""}")
-            'websocket.Send("{""request-type"":""SetSourceRender"",""source"":""Caption"",""render"":true,""message-id"":""TEST1""}")
+            SendVmixCmd("?Function=OverlayInput2In&Input=" & VMixSourceName(CaptionIndex + 20))
             mediaoverlayactive = True
         Else
-            If Not VMixMode Then
-                If ObsSourceName(liveaddr) <> "" Then
-                    WebsocketSendAndWait("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(liveaddr) & """,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(liveaddr) & """,""source"":""Caption"",""render"":false,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""TransitionToProgram"",""with-transition"": { ""name"":""Fade"", ""duration"":" & ft * 800 & " } ,""message-id"":""TEST1""}")
-                    WebsocketSendAndWait("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(addr) & """,""message-id"":""TEST1""}")
-                End If
-            Else
-                SendVmixCmd("?Function=OverlayInput2Out&Input=" & ObsSourceName(CaptionIndex + 20))
-            End If
-
-            'websocket.Send("{""request-type"":""SetSourceFilterVisibility"",""sourceName"":""Caption"",""filterName"":""Color Correction"",""filterEnabled"":true,""message-id"":""TEST1""}")
-            'websocket.Send("{""request-type"":""SetSourceRender"",""source"":""Caption"",""render"":false,""message-id"":""TEST1""}")
+            SendVmixCmd("?Function=OverlayInput2Out&Input=" & VMixSourceName(CaptionIndex + 20))
             mediaoverlayactive = False
         End If
-
-
         If (mediaoverlayactive = True) Then BtnMediaOverlay.BackColor = Color.Red Else BtnMediaOverlay.BackColor = Color.White
         If (mediaoverlayactive = True) Then ControllerLedState(11) = 1 Else ControllerLedState(11) = 0
     End Sub
+
+    '---show a selection rectangle around the currently selected caption
     Sub CapRectangle(ByVal tb As Object)
         Dim l = tb.Left - 2 : Dim r = tb.Left + tb.Width + 2
         Dim t = tb.Top - 2 : Dim b = tb.Top + tb.Height + 2
@@ -1662,149 +1565,69 @@ Public Class MainForm
         LineShapeCapL.Y1 = t : LineShapeCapR.Y1 = t : LineShapeCapT.Y1 = t : LineShapeCapT.Y2 = t
         LineShapeCapL.Y2 = b : LineShapeCapR.Y2 = b : LineShapeCapB.Y1 = b : LineShapeCapB.Y2 = b
     End Sub
-    Private Sub SetCaptionText()
-        If CaptionIndex = 1 Then
-            CapRectangle(TextLeaderName)
-            If Not VMixMode Then
-                WebsocketSendAndWait("{""request-type"":""SetTextGDIPlusProperties"",""source"":""Leader"",""text"":""Leader"",""message-id"":""TEST1""}")
-                WebsocketSendAndWait("{""request-type"":""SetTextGDIPlusProperties"",""source"":""Leadername"",""text"":""" & TextLeaderName.Text & """,""message-id"":""TEST1""}")
-            End If
-        End If
-        If CaptionIndex = 2 Then
-            CapRectangle(TextPreacherName)
-            If Not VMixMode Then
-                WebsocketSendAndWait("{""request-type"":""SetTextGDIPlusProperties"",""source"":""Leader"",""text"":""Preacher"",""message-id"":""TEST1""}")
-                WebsocketSendAndWait("{""request-type"":""SetTextGDIPlusProperties"",""source"":""Leadername"",""text"":""   " & TextPreacherName.Text & """,""message-id"":""TEST1""}")
-            End If
 
-        End If
-        If CaptionIndex = 3 Then
-            CapRectangle(TextCaptionOther)
-            If Not VMixMode Then
-                WebsocketSendAndWait("{""request-type"":""SetTextGDIPlusProperties"",""source"":""Leader"",""text"":""" & TextCaptionOther.Text & """,""message-id"":""TEST1""}")
-                WebsocketSendAndWait("{""request-type"":""SetTextGDIPlusProperties"",""source"":""Leadername"",""text"":"""",""message-id"":""TEST1""}")
-            End If
-        End If
-        If VMixMode Then
-            Dim cap = WebUtility.HtmlEncode(TextLeaderName.Text)
-            SendVmixCmd("?Function=SetText&Input=LeaderCaption&SelectedName=Name.Text&Value=" & cap)
-            cap = WebUtility.HtmlEncode(TextPreacherName.Text)
-            SendVmixCmd("?Function=SetText&Input=PreacherCaption&SelectedName=Name.Text&Value=" & cap)
-            cap = WebUtility.HtmlEncode(TextCaptionOther.Text)
-            SendVmixCmd("?Function=SetText&Input=OtherCaption&SelectedName=Name.Text&Value=" & cap)
-        End If
+    '---send the captions to vmix
+    Private Sub SetCaptionText()
+        If CaptionIndex = 1 Then CapRectangle(TextLeaderName)
+        If CaptionIndex = 2 Then CapRectangle(TextPreacherName)
+        If CaptionIndex = 3 Then CapRectangle(TextCaptionOther)
+        Dim cap = WebUtility.HtmlEncode(TextLeaderName.Text)
+        SendVmixCmd("?Function=SetText&Input=LeaderCaption&SelectedName=Name.Text&Value=" & cap)
+        cap = WebUtility.HtmlEncode(TextPreacherName.Text)
+        SendVmixCmd("?Function=SetText&Input=PreacherCaption&SelectedName=Name.Text&Value=" & cap)
+        cap = WebUtility.HtmlEncode(TextCaptionOther.Text)
+        SendVmixCmd("?Function=SetText&Input=OtherCaption&SelectedName=Name.Text&Value=" & cap)
     End Sub
 
+    '---change caption selection to previous one
     Private Sub BtnCapPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnCPrev.Click
         If (CaptionIndex > 1) Then CaptionIndex = CaptionIndex - 1
         SetCaptionText()
-        'ExecuteLua("ATEMMixerMPSetCaptionIndex(1,2," & CaptionIndex & ")")
     End Sub
 
+    '---change caption selection to next one
     Private Sub BtnCapNxt_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnCNxt.Click
         If (CaptionIndex < 3) Then CaptionIndex = CaptionIndex + 1
         SetCaptionText()
-        'ExecuteLua("ATEMMixerMPSetCaptionIndex(1,2," & CaptionIndex & ")")
     End Sub
 
+    '---update vmix if the caption has been edited and loses focus (** this is not working)
     Private Sub TextLeaderName_LostFocus(ByVal sender As Object, ByVal e As EventArgs)
-        If Not VMixMode Then
-            If CaptionIndex = 1 Then websocket.Send("{""request-type"":""SetTextGDIPlusProperties"",""source"":""Leadername"",""text"":""    " & TextLeaderName.Text & """,""message-id"":""TEST1""}")
-        Else
-            SetCaptionText()
-        End If
+        SetCaptionText()
     End Sub
     Private Sub TextPreacherName_LostFocus(ByVal sender As Object, ByVal e As EventArgs)
-        If Not VMixMode Then
-            If CaptionIndex = 2 Then websocket.Send("{""request-type"":""SetTextGDIPlusProperties"",""source"":""Leadername"",""text"":""    " & TextPreacherName.Text & """,""message-id"":""TEST1""}")
-        Else
         SetCaptionText()
-        End If
     End Sub
     Private Sub TextCaptionOther_LostFocus(ByVal sender As Object, ByVal e As EventArgs)
-        If Not VMixMode Then
-            If CaptionIndex = 3 Then websocket.Send("{""request-type"":""SetTextGDIPlusProperties"",""source"":""Leadername"",""text"":""    " & TextCaptionOther.Text & """,""message-id"":""TEST1""}")
-        Else
         SetCaptionText()
-        End If
     End Sub
 
+    '---Select previous mediaplayer item
     Private Sub BtnMPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnMPrev.Click
         'websocket.Send("{""request-type"":""SetCurrentScene"",""scene-name"":""Mixer output"",""message-id"":""TEST1""}")
         If ListBoxMedia.Items.Count = 0 Then Exit Sub
         If MediaItem > 0 Then
             ListBoxMedia.Items.Item(MediaItem) = Replace(ListBoxMedia.Items.Item(MediaItem), "*", "")
-            WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":false,""message-id"":""TEST1""}")
+            'WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":false,""message-id"":""TEST1""}")
             MediaItem = MediaItem - 1
-            WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":true,""message-id"":""TEST1""}")
+            'WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":true,""message-id"":""TEST1""}")
             ListBoxMedia.Items.Item(MediaItem) = ListBoxMedia.Items.Item(MediaItem) & "*"
         End If
     End Sub
+
+    '---Select next mediaplayer item
     Private Sub BtnMNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnMNext.Click
         'websocket.Send("{""request-type"":""SetCurrentScene"",""scene-name"":""Loop"",""message-id"":""TEST1""}")
         If ListBoxMedia.Items.Count = 0 Then Exit Sub
         If MediaItem < ListBoxMedia.Items.Count - 1 Then
             ListBoxMedia.Items.Item(MediaItem) = Replace(ListBoxMedia.Items.Item(MediaItem), "*", "")
-            WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":false,""message-id"":""TEST1""}")
+            'WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":false,""message-id"":""TEST1""}")
             MediaItem = MediaItem + 1
-            WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":true,""message-id"":""TEST1""}")
+            'WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":true,""message-id"":""TEST1""}")
             ListBoxMedia.Items.Item(MediaItem) = ListBoxMedia.Items.Item(MediaItem) & "*"
         End If
     End Sub
 
-    Private Sub TextBoxPipSrc_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TextBoxPipSrc.Click
-        Select Case TextBoxPipSrc.Text
-            'Case "CAM1" : TextBoxPipSrc.Text = "CAM2" : ExecuteLua("ATEMMixerMEKeySetFillSource(1,1,1,7)")
-            'Case "CAM2" : TextBoxPipSrc.Text = "CAM3" : ExecuteLua("ATEMMixerMEKeySetFillSource(1,1,1,8")
-            'Case "CAM3" : TextBoxPipSrc.Text = "CAM4" : ExecuteLua("ATEMMixerMEKeySetFillSource(1,1,1,9)")
-            'Case "CAM4" : TextBoxPipSrc.Text = "CAM5" : ExecuteLua("ATEMMixerMEKeySetFillSource(1,1,1,4)")
-            'Case "CAM5" : TextBoxPipSrc.Text = "Words" : ExecuteLua("ATEMMixerMEKeySetFillSource(1,1,1,2)")
-            'Case "Words" : TextBoxPipSrc.Text = "CAM1" : ExecuteLua("ATEMMixerMEKeySetFillSource(1,1,1,6)")
-            'Case Else : TextBoxPipSrc.Text = "Words" : ExecuteLua("ATEMMixerMEKeySetFillSource(1,1,1,2)")
-        End Select
-    End Sub
-
-
-    Private Sub BtnPip_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnPip.Click
-
-        If (BtnPip.BackColor = Color.Red) Then
-            'pip is currently active
-            BtnPip.BackColor = Color.White
-            'If PipLive = True Then ExecuteLua("ATEMMixerMEKeySetOnAir(1,1,1,""FALSE"")")
-            'ExecuteLua("ATEMMixerMESetNextTransitionLayers(1,1,""BACKGROUND"")")
-            WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(PipAddr) & """,""source"":""Pip"",""render"":false,""message-id"":""TEST1""}")
-            If (PipAddr = liveaddr) Then 'if pip is currently active on live output, we need to do a transition to get it off
-                Dim ft As Double
-                Double.TryParse(TextBox1.Text, ft)
-                WebsocketSendAndWait("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(liveaddr) & """,""message-id"":""TEST1""}")
-                WebsocketSendAndWait("{""request-type"":""TransitionToProgram"",""with-transition"": { ""name"":""Fade"", ""duration"":" & ft * 800 & " } ,""message-id"":""TEST1""}")
-                WebsocketSendAndWait("{""request-type"":""SetPreviewScene"",""scene-name"":""" & ObsSourceName(addr) & """,""message-id"":""TEST1""}")
-                'set preview back to what it should be
-            End If
-            PipAddr = 0
-            PipLive = False
-        Else
-            'pip is not active
-            BtnPip.BackColor = Color.Red
-            'ExecuteLua("ATEMMixerMEKeySetOnAir(1,1,1,""TRUE"")")
-            'ExecuteLua("ATEMMixerMESetNextTransitionLayers(1,1,""BACKGROUND, KEY1"")")
-            PipAddr = addr
-            websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""" & ObsSourceName(addr) & """,""source"":""Pip"",""render"":true,""message-id"":""TEST1""}")
-        End If
-    End Sub
-
-    Private Sub BtnEditPreset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnEditPreset.Click
-        If PresetLegendMode = 0 Then
-            BtnEditPreset.BackColor = Color.Red
-            PresetLegendMode = 999
-        Else
-            EndEditPresetDetails()
-        End If
-    End Sub
-
-    Private Sub CheckBoxCU_CheckStateChanged(ByVal sender As Object, ByVal e As System.EventArgs)
-        setactive()
-    End Sub
 
     '-------------------------------------------------------------------------------------------------
     ' Camera manual settings
@@ -2123,7 +1946,7 @@ Public Class MainForm
         SetFocus(ad, CamFocus(ad))
     End Sub
 
-
+    '---Program shut down button
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
         If Button1.ForeColor = Color.Red Then
             ShutDownTimer = 1
@@ -2133,6 +1956,10 @@ Public Class MainForm
         End If
     End Sub
 
+
+    '--------------------------------------------------------------------------------------------------------------
+    ' Emergency camera movement controls on touchscreen
+    '--------------------------------------------------------------------------------------------------------------
     Private Sub CamFullTele_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyButtonFullTele.Click
         Dim ad As Integer
         If PTZLive = False Then ad = addr Else ad = liveaddr
@@ -2216,6 +2043,9 @@ Public Class MainForm
         mLog.Text = SendCamCmdAddr(ad, "PTS5050") 'pt stop
     End Sub
 
+    '--------------------------------------------------------------------------------------------------------------
+    ' More preset control buttons
+    '--------------------------------------------------------------------------------------------------------------
     Private Sub BtnFast_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnFast.Click
         BtnFast.BackColor = Color.Green
         BtnSlow.BackColor = Color.White
@@ -2226,7 +2056,7 @@ Public Class MainForm
         BtnSlow.BackColor = Color.Green
     End Sub
 
-
+    '---Live move button. Executes the current preset move now
     Private Sub BtnLive_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnLive.Click
         If PresetLive = False Then
             BtnLive.BackColor = Color.Green
@@ -2240,6 +2070,7 @@ Public Class MainForm
         UpdatePresets()
     End Sub
 
+    '---Joystick live button. Makes joystick and other cam controls operate live cam instead of preset
     Private Sub BtnLivePTZ_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnLivePTZ.Click
         If PTZLive = False Then
             BtnLivePTZ.BackColor = Color.Green
@@ -2251,6 +2082,7 @@ Public Class MainForm
         ShowCamValues()
     End Sub
 
+    '---Preload button, for live moves
     Private Sub BtnPreload_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnPreload.Click
         If PreloadPreset = 0 Then
             BtnPreload.BackColor = Color.Orange
@@ -2304,7 +2136,7 @@ Public Class MainForm
 
 
 
-
+    '---Not sure what this does
     Private Sub OverrideBtn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OverrideBtn.Click
         If CamOverride <> 0 Then
             OverrideBtn.BackColor = Color.White
@@ -2312,13 +2144,8 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub BtnAuxLock_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnAuxLock.Click
-        If BtnAuxLock.BackColor = Color.Red Then
-            BtnAuxLock.BackColor = Color.White
-        Else
-            BtnAuxLock.BackColor = Color.Red
-        End If
-    End Sub
+
+    '---Show rec status of cameras recording onto their internal cards
     Function CamRecStatus(ByVal inp As String, ByVal cam As Integer)
         Dim str As String
         Dim op As String
@@ -2371,6 +2198,8 @@ Public Class MainForm
         op = op + " of " + str + "GB"
         CamRecStatus = op
     End Function
+
+    '---Send start/stop record commands to cameras
     Private Sub BtnCam1Rec_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnCam1Rec.Click
         If CamRec(1) Then
             SendCamQueryNoResponse(1, "sdctrl?save=end")
@@ -2426,100 +2255,23 @@ Public Class MainForm
     End Sub
 
 
-
-    Private Sub BtnOBSIdent_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        'websocket.Send("{""request-type"":""SetCurrentScene"",""scene-name"":""Ident video"",""message-id"":""TEST1""}")
-        'BtnMPrev.BackColor = Color.White
-        'BtnOBSamintro.BackColor = Color.White
-        'BtnOBSpmintro.BackColor = Color.White
-        'BtnOBSIdent.BackColor = Color.Green
-        'BtnMNext.BackColor = Color.White
-        'If TieAux3 And PrevAux3 = 0 Then
-        'PrevAux3 = CurrentAux3 'remember what it was set to
-        'SetAux3(4) 'set foldback output to show OBS preview
-        'End If
-
-        'ClipRemainTime = Globals.Cliptime(3)
-    End Sub
-
-
-
+    '---Broadcast button---------------------
     Private Sub BtnOBSBroadcast_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnOBSBroadcast.Click
-        'Dim ct As Integer
-        'OBSResponse = ""
-        'websocket.Send("{""request-type"":""GetStreamingStatus"",""message-id"":""OBSSTATE""}")
-        'ct = 0
-        'While OBSResponse = "" And ct < 1000000 : ct = ct + 1 : End While
-        If Not VMixMode Then
-            If OBSStreamState = False Then
-                'BtnOBSBroadcast.BackColor = Color.Red
-                websocket.Send("{""request-type"":""StartStopStreaming"",""message-id"":""OBSSET""}")
-                StreamStartTime = Now.TimeOfDay.TotalSeconds
-            Else
-                'BtnOBSBroadcast.BackColor = Color.White
-                websocket.Send("{""request-type"":""StartStopStreaming"",""message-id"":""OBSSET""}")
-            End If
-            websocket.Send("{""request-type"":""GetStreamingStatus"",""message-id"":""OBSSTATE""}")
-        Else
-            If StreamPending = False Then 'don't allow button click while pending
-                If OBSStreamState = False Then StreamStartTime = Now.TimeOfDay.TotalSeconds : StreamPending = True : StreamPendingTime = 0 : BtnOBSBroadcast.BackColor = Color.Orange
-                SendVmixCmd("?Function=StartStopStreaming")
-            End If
+        If StreamPending = False Then 'don't allow button click while pending. The stream can take time to start
+            If VmixStreamState = False Then StreamStartTime = Now.TimeOfDay.TotalSeconds : StreamPending = True : StreamPendingTime = 0 : BtnOBSBroadcast.BackColor = Color.Orange
+            SendVmixCmd("?Function=StartStopStreaming")
         End If
 
     End Sub
-    Sub GetOBSState()
-        Dim ct As Integer
-        OBSResponse = ""
-        websocket.Send("{""request-type"":""GetStreamingStatus"",""message-id"":""TEST1""}")
-        ct = 0
-        While OBSResponse = "" And ct < 1000000 : ct = ct + 1 : End While
 
-    End Sub
+    '---Record button
     Private Sub BtnOBSRecord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnOBSRecord.Click
-        'websocket.Send("{""request-type"":""StartRecording"",""message-id"":""TEST1""}")
-        'Dim ct As Integer
-        'OBSResponse = ""
-        'websocket.Send("{""request-type"":""GetStreamingStatus"",""message-id"":""OBSSTATE""}")
-        'ct = 0
-        'While OBSResponse = "" And ct < 1000000 : ct = ct + 1 : End While
-        If Not VMixMode Then
-            If OBSRecState = False Then
-                'BtnOBSRecord.BackColor = Color.Red
-                websocket.Send("{""request-type"":""StartStopRecording"",""message-id"":""OBSSET""}")
-                RecStartTime = Now.TimeOfDay.TotalSeconds
-            Else
-                'BtnOBSRecord.BackColor = Color.White
-                websocket.Send("{""request-type"":""StartStopRecording"",""message-id"":""OBSSET""}")
-            End If
-            websocket.Send("{""request-type"":""GetStreamingStatus"",""message-id"":""OBSSTATE""}")
-            'websocket.Send("{""request-type"":""SetHeartbeat"",""message-id"":""OBSHB""}")
-            'websocket.Send("{""request-type"":""StartRecording"",""message-id"":""TEST""}")
-        Else
-            If OBSRecState = False Then RecStartTime = Now.TimeOfDay.TotalSeconds
-            SendVmixCmd("?Function=StartStopRecording")
-        End If
+        If VmixRecState = False Then RecStartTime = Now.TimeOfDay.TotalSeconds
+        SendVmixCmd("?Function=StartStopRecording")
     End Sub
 
 
-    Sub socketDataReceived(ByVal ss As Object, ByVal e As WebSocket4Net.DataReceivedEventArgs)
-        Dim str As String
-        str = Encoding.ASCII.GetString(e.Data)
-        MsgBox("Got OBS message! " & str)
-    End Sub
-
-    'Sub socketOpened(ByVal s As Object, ByVal e As EventArgs)
-    '    websocket.Send("{""ticks_history"":""R_50"",""end"":""latest"",""count"":10}")
-    'End Sub
-
-    'Sub socketClosed(ByVal s As Object, ByVal e As EventArgs)
-
-    'End Sub
-
-    'Sub socketError(ByVal s As Object, ByVal e As SuperSocket.ClientEngine.ErrorEventArgs)
-
-    'End Sub
-
+    '---extract json value in a slightly dodgy way (used for obs status)
     Function jsonValue(ByVal json As String, name As String)
         Dim p As Integer, v As Integer
         jsonValue = ""
@@ -2533,6 +2285,7 @@ Public Class MainForm
         jsonValue = Mid(json, 1, p - 1)
     End Function
 
+    '---extract value from xml (used to parse vmix status return)
     Function xmlValue(xml As String, name As String)
         Dim p As Integer, v As String
         xmlValue = ""
@@ -2543,137 +2296,62 @@ Public Class MainForm
         xmlValue = Strings.Left(v, InStr(v, "<") - 1)
     End Function
 
-    Sub ProcessStatus(OBSResponse As String)
+    '---process the vmix record / stream status
+    Sub ProcessStatus(VmixResponse As String)
         Dim RecState As String = ""
         Dim StreamState As String = ""
         Dim SceneState As String = ""
-        Dim litem As String
         Dim p As Integer, q As Integer, ct As Integer
 
-        If Not VMixMode Then
-            If InStr(OBSResponse, "OBSSTATE") <> 0 Then 'if this is a response to obs rec/stream status message
-                RecState = jsonValue(OBSResponse, """recording""")
-                If RecState = "" Or RecState = "false" Then OBSRecState = False Else OBSRecState = True
-                If OBSRecState = True And BtnOBSRecord.BackColor <> Color.Red Then BtnOBSRecord.BackColor = Color.Red
-                If OBSRecState = False And BtnOBSRecord.BackColor = Color.Red Then BtnOBSRecord.BackColor = Color.White
-                StreamState = jsonValue(OBSResponse, """streaming""")
-                If StreamState = "" Or StreamState = "false" Then OBSStreamState = False Else OBSStreamState = True
-                If OBSStreamState = True And BtnOBSBroadcast.BackColor <> Color.Red Then BtnOBSBroadcast.BackColor = Color.Red
-                If OBSStreamState = False And BtnOBSBroadcast.BackColor = Color.Red Then BtnOBSBroadcast.BackColor = Color.White
-                If jsonValue(OBSResponse, """stream-timecode""") <> "" Then
-                    'OBSStreamTime = Mid(OBSResponse, InStr(OBSResponse, "stream-timecode") + 19, 8)
-                    Dim t As Integer = Now.TimeOfDay.TotalSeconds - StreamStartTime
-                    Dim hr As Integer = Math.Floor(t / 3600)
-                    Dim min As Integer = (Math.Floor(t / 60)) Mod 60
-                    Dim sec As Integer = t Mod 60
-                    OBSStreamTime = hr.ToString("00") & ":" & min.ToString("00") & ":" & sec.ToString("00")
-                Else
-                    OBSStreamTime = "..."
-                End If
-                TextBoxOBSBroadcastTime.Text = OBSStreamTime
-                If jsonValue(OBSResponse, """rec-timecode""") <> "" Then
-                    'OBSRecTime = Mid(OBSResponse, InStr(OBSResponse, "rec-timecode") + 16, 8)
-                    Dim t As Integer = Now.TimeOfDay.TotalSeconds - RecStartTime
-                    Dim hr As Integer = Math.Floor(t / 3600)
-                    Dim min As Integer = (Math.Floor(t / 60)) Mod 60
-                    Dim sec As Integer = t Mod 60
-                    OBSRecTime = hr.ToString("00") & ":" & min.ToString("00") & ":" & sec.ToString("00")
-                Else
-                    OBSRecTime = "..."
-                End If
-                TextBoxOBSRecTime.Text = OBSRecTime
-                'End If
-            ElseIf jsonValue(OBSResponse, """OBSSCENE""") <> "" Then 'response as we are playing a clip. Watch out for it ending.
-                If jsonValue(OBSResponse, """name""") <> "" Then
-                    SceneState = jsonValue(OBSResponse, """name""")
-                End If
-            ElseIf InStr(OBSResponse, "PreviewSceneChanged") Then 'user has changed the preview scene on OBS
-                'Dim scenename As String
-                'scenename = Mid(OBSResponse, InStr(OBSResponse, "scene-name") + 14)
-                'scenename = Mid(scenename, 1, InStr(scenename, """") - 1)
-                'If (scenename = "Cam1") Then addr = 1 : setactive()
-                'If (scenename = "Cam2") Then addr = 2 : setactive()
-                'If (scenename = "Cam3") Then addr = 3 : setactive()
-            ElseIf jsonValue(OBSResponse, """GETSCENE""") <> "" Then 'response to get scene list, used to populate media list
-                SceneState = Mid(OBSResponse, InStr(OBSResponse, "Mediaplayer1"))
-                SceneState = Mid(SceneState, InStr(SceneState, """sources"":") + 10)
-                If InStr(SceneState, """sources"":") <> 0 Then SceneState = Mid(SceneState, 1, InStr(SceneState, """sources"":") - 40) 'if other scenes after this one, remove them
-                Debug.Print(SceneState)
-                p = 1 : ct = 0
-                While p <> 0
-                    p = InStr(SceneState, """name""")
-                    If p <> 0 Then
-                        litem = jsonValue(SceneState, """name""") 'Mid(SceneState, p + 9, q - p - 9)
-                        litem = Replace(litem, """", "")
-                        SceneState = Mid(SceneState, p + 9)
-                        If ct = 0 Then
-                            websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & litem & """,""render"":true,""message-id"":""TEST1""}")
-                            litem = litem & "*"
-                        Else
-                            websocket.Send("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & litem & """,""render"":false,""message-id"":""TEST1""}")
-                        End If
-                        ListBoxMedia.Invoke(Sub() ListBoxMedia.Items.Add(litem))
-                        ct = ct + 1
-                    End If
-                End While
-            ElseIf jsonValue(OBSResponse, """WS" & WebsocketID & """") <> "" Then
-                Websocketwait = False
-                WebsocketID = WebsocketID + 1
+
+        If (Len(VmixResponse) > 20) Then
+            RecState = xmlValue(VmixResponse, "recording")
+            If RecState = "" Or RecState = "false" Then VmixRecState = False Else VmixRecState = True
+            If VmixRecState = True And BtnOBSRecord.BackColor <> Color.Red Then BtnOBSRecord.BackColor = Color.Red
+            If VmixRecState = False And BtnOBSRecord.BackColor = Color.Red Then BtnOBSRecord.BackColor = Color.White
+            If VmixRecState = True Then
+                Dim t As Integer = Now.TimeOfDay.TotalSeconds - RecStartTime
+                Dim hr As Integer = Math.Floor(t / 3600)
+                Dim min As Integer = (Math.Floor(t / 60)) Mod 60
+                Dim sec As Integer = t Mod 60
+                VmixRecTime = hr.ToString("00") & ":" & min.ToString("00") & ":" & sec.ToString("00")
             Else
-                Debug.Print(OBSResponse)
+                VmixRecTime = "..."
             End If
-        Else 'vmixmode
-            If (Len(OBSResponse) > 20) Then
-                RecState = xmlValue(OBSResponse, "recording")
-                If RecState = "" Or RecState = "false" Then OBSRecState = False Else OBSRecState = True
-                If OBSRecState = True And BtnOBSRecord.BackColor <> Color.Red Then BtnOBSRecord.BackColor = Color.Red
-                If OBSRecState = False And BtnOBSRecord.BackColor = Color.Red Then BtnOBSRecord.BackColor = Color.White
-                If OBSRecState = True Then
-                    Dim t As Integer = Now.TimeOfDay.TotalSeconds - RecStartTime
-                    Dim hr As Integer = Math.Floor(t / 3600)
-                    Dim min As Integer = (Math.Floor(t / 60)) Mod 60
-                    Dim sec As Integer = t Mod 60
-                    OBSRecTime = hr.ToString("00") & ":" & min.ToString("00") & ":" & sec.ToString("00")
-                Else
-                    OBSRecTime = "..."
+            TextBoxOBSRecTime.Text = VmixRecTime
+            StreamState = xmlValue(VmixResponse, "streaming")
+            If StreamState = "" Or StreamState = "false" Then
+                VmixStreamState = False
+            Else
+                If VmixStreamState = False Then 'previously not streaming - just starting. Clear the streampending flag
+                    If StreamPending Then StreamPending = False : StreamStartTime = Now.TimeOfDay.TotalSeconds
                 End If
-                TextBoxOBSRecTime.Text = OBSRecTime
-                StreamState = xmlValue(OBSResponse, "streaming")
-                If StreamState = "" Or StreamState = "false" Then
-                    OBSStreamState = False
-                Else
-                    If OBSStreamState = False Then 'previously not streaming - just starting. Clear the streampending flag
-                        If StreamPending Then StreamPending = False : StreamStartTime = Now.TimeOfDay.TotalSeconds
-                    End If
-                    OBSStreamState = True
-                End If
-                If OBSStreamState = True And BtnOBSBroadcast.BackColor <> Color.Red Then BtnOBSBroadcast.BackColor = Color.Red
-                If OBSStreamState = False And BtnOBSBroadcast.BackColor = Color.Red Then BtnOBSBroadcast.BackColor = Color.White
-                If StreamState = True Then
-                    'OBSStreamTime = Mid(OBSResponse, InStr(OBSResponse, "stream-timecode") + 19, 8)
-                    Dim t As Integer
-                    t = Now.TimeOfDay.TotalSeconds - StreamStartTime
-                    Dim hr As Integer = Math.Floor(t / 3600)
-                    Dim min As Integer = (Math.Floor(t / 60)) Mod 60
-                    Dim sec As Integer = t Mod 60
-                    OBSStreamTime = hr.ToString("00") & ":" & min.ToString("00") & ":" & sec.ToString("00")
-                Else
-                    If Not StreamPending Then OBSStreamTime = "..." Else OBSStreamTime = "Starting..."
-                End If
-                TextBoxOBSBroadcastTime.Text = OBSStreamTime
+                VmixStreamState = True
             End If
+            If VmixStreamState = True And BtnOBSBroadcast.BackColor <> Color.Red Then BtnOBSBroadcast.BackColor = Color.Red
+            If VmixStreamState = False And BtnOBSBroadcast.BackColor = Color.Red Then BtnOBSBroadcast.BackColor = Color.White
+            If StreamState = True Then
+                Dim t As Integer
+                t = Now.TimeOfDay.TotalSeconds - StreamStartTime
+                Dim hr As Integer = Math.Floor(t / 3600)
+                Dim min As Integer = (Math.Floor(t / 60)) Mod 60
+                Dim sec As Integer = t Mod 60
+                VmixStreamTime = hr.ToString("00") & ":" & min.ToString("00") & ":" & sec.ToString("00")
+            Else
+                If Not StreamPending Then VmixStreamTime = "..." Else VmixStreamTime = "Starting..."
             End If
+            TextBoxOBSBroadcastTime.Text = VmixStreamTime
+        End If
 
     End Sub
 
-    Sub socketMessage(ByVal s As Object, ByVal e As WebSocket4Net.MessageReceivedEventArgs)
-        ProcessStatus(e.Message)
-        'MsgBox(e.Message)
-    End Sub
+
 
     '#########################################################################################################################################################################
     ' SERIAL PORT (PTZ controller)
     '#########################################################################################################################################################################
+
+    'send the button led states to the controller
     Private Sub SendSerial()
         Dim b(32) As Byte
         b(0) = 2  'start
@@ -2690,11 +2368,12 @@ Public Class MainForm
         SerialPort1.Write(b, 0, 11)
     End Sub
 
+    'receive joystick and button presses from controller
     Private Sub SerialPort1_DataReceived(ByVal sender As Object, ByVal e As System.IO.Ports.SerialDataReceivedEventArgs) Handles SerialPort1.DataReceived
         Dim x As Byte, k As Byte, newserial As Byte
         Dim ad As Integer
         Dim op As String
-        CheckForIllegalCrossThreadCalls = False 'allows us to write diagnostics to textbox on form
+        CheckForIllegalCrossThreadCalls = False 'naughty but allows us to write diagnostics to textbox on form
         If SerialPort1.IsOpen = False Then Exit Sub
 
         newserial = 0
@@ -2725,16 +2404,8 @@ Public Class MainForm
             If EncoderB > 32767 Then EncoderB = EncoderB - 65536
             If EncoderB = 0 Then EncoderBReset = 0
             JoyX = SerialInBuf(9) + (SerialInBuf(12) And 64) * 2
-            'TextLeaderName.Text = JoyX
-            'If (JoyX > 208) Then JoyX = 208
-            'JoyX = JoyX * 255 / 208
             JoyY = SerialInBuf(10) + (SerialInBuf(12) And 32) * 4
-            'TextPreacherName.Text = JoyY
-            'If (JoyY > 202) Then JoyY = 202
-            'JoyY = JoyY * 255 / 202
             JoyZ = SerialInBuf(11) + (SerialInBuf(12) And 16) * 8
-            'TextCaptionOther.Text = JoyZ
-            'JoyZ = JoyZ * 255 / 194
             SendSerial() 'send back the button illumination info
 
             If (ControlKeyState <> PrevControlKeyState) Then
@@ -2747,7 +2418,7 @@ Public Class MainForm
                 End If
                 PrevControlKeyState = ControlKeyState
 
-                If KeyHit Then
+                If KeyHit Then 'handle button presses
                     If LastKey = 1 Then BtnCam1.PerformClick()
                     If LastKey = 2 Then BtnCam2.PerformClick()
                     If LastKey = 3 Then BtnCam3.PerformClick()
@@ -2771,6 +2442,7 @@ Public Class MainForm
 
             End If
 
+            'handle encoder rotation
             If EncoderA <> PrevEncoderA And EncoderAReset = 0 Then
                 If (alreadysending = 0) Then 'this stops us sending a bunch of commands too quickly
                     SetEncoderValue(1, EncoderA - PrevEncoderA, EncoderATime)
@@ -2793,7 +2465,7 @@ Public Class MainForm
 
             'check for joystick being operated
             'we will define a dead band at the centre of the joystick
-            Dim JoyDB As Byte = 8 'deadband of joystick
+            Dim JoyDB As Byte = 8 'deadband of joystick (not currently used)
             'If JoyX < (128 - JoyDB) Or JoyX > (128 + JoyDB) Or JoyY < (128 - JoyDB) Or JoyY > (128 + JoyDB) Or JoyZ < (128 - JoyDB) Or JoyZ > (128 + JoyDB) Then
 
             Dim xpos As Integer, ypos As Integer, zpos As Integer, zoom As Boolean = False
@@ -2803,33 +2475,7 @@ Public Class MainForm
                 xpos = 255 - JoyX
                 ypos = JoyY
                 zpos = JoyZ
-                'If (xpos > 128 - JoyDB) And (xpos < 128 + JoyDB) Then
-                'xpos = 128
-                'Else
-                'If (xpos < 128 - JoyDB) Then
-                'xpos = xpos + JoyDB
-                'Else
-                'xpos = xpos - JoyDB
-                'End If
-                'End If
-                'If (ypos > 128 - JoyDB) And (ypos < 128 + JoyDB) Then
-                'ypos = 128
-                'Else
-                'If (ypos < 128 - JoyDB) Then
-                '    ypos = ypos + JoyDB
-                'Else
-                'ypos = ypos - JoyDB
-                'End If
-                'End If
-                'If (zpos > 128 - JoyDB) And (zpos < 128 + JoyDB) Then
-                'zpos = 128
-                'Else
-                'If (zpos < 128 - JoyDB) Then
-                'zpos = zpos + JoyDB
-                'Else
-                'zpos = zpos - JoyDB
-                'End If
-                'End If
+
                 If Globals.CamInvert(ad) Then xpos = 255 - xpos : ypos = 255 - ypos
                 'JoyZ = zpos - JoyDB : JoyX = xpos - JoyDB : JoyY = ypos - JoyDB
                 'JoyZ = 1 + Int(JoyZ * 99 / (255 - JoyDB * 2))
@@ -2859,182 +2505,6 @@ Public Class MainForm
             End If
         End If
 
-
-        Exit Sub
-
-        While SerialPort1.BytesToRead > 0
-            x = SerialPort1.ReadByte
-            If (x = 255) Then
-                serialcount = serialcount + 1
-                'If serialcount >= 6 Then 'serial data thinning so we don't overwhelm the cameras
-                If 1 Then
-                    serialcount = 0
-                    SerialInBufPtr = 0
-                    JoyX = SerialInBuf(1)
-                    JoyY = SerialInBuf(2)
-                    JoyZ = SerialInBuf(3)
-                    Key(0) = SerialInBuf(4)
-                    Key(1) = SerialInBuf(5)
-                    Key(2) = SerialInBuf(6)
-                    REncode = SerialInBuf(7)
-                    'diagnostic
-                    'TextBox10.Text = SerialInBuf(1) & vbCrLf & SerialInBuf(2) & vbCrLf & SerialInBuf(3)
-                    'TextBox11.Text = SerialInBuf(4) & vbCrLf & SerialInBuf(5) & vbCrLf & SerialInBuf(6) & vbCrLf & SerialInBuf(7)
-                    'check for keypress
-                    If PrevKey(0) <> Key(0) Or PrevKey(1) <> Key(1) Or PrevKey(2) <> Key(2) Then
-                        If Key(0) > PrevKey(0) Then
-                            KeyHit = True
-                            x = Key(0) Xor PrevKey(0)
-                            For k = 0 To 7
-                                If (x And (2 ^ k)) <> 0 Then LastKey = k
-                            Next k
-                        End If
-                        PrevKey(0) = Key(0)
-                        If Key(1) > PrevKey(1) Then
-                            KeyHit = True
-                            x = Key(1) Xor PrevKey(1)
-                            For k = 0 To 7
-                                If (x And (2 ^ k)) <> 0 Then LastKey = k + 8
-                            Next k
-                        End If
-                        PrevKey(1) = Key(1)
-                        If Key(2) > PrevKey(2) Then
-                            KeyHit = True
-                            x = Key(2) Xor PrevKey(2)
-                            For k = 0 To 7
-                                If (x And (2 ^ k)) <> 0 Then LastKey = k + 16
-                            Next k
-                        End If
-                        PrevKey(2) = Key(2)
-                    End If
-                    'check for encoder change
-                    If REncode <> PrevEncode Then EncChange = True
-
-                    'if 1-4 keypress then override cam operation
-                    If (KeyHit) Then
-                        mLog.Text = LastKey
-                        KeyHit = False
-                        If (LastKey = 11) Then
-                            If (CamOverride <> 1) Then
-                                'SerialPort1.Write(Chr(&HFF) & Chr(&H1) & Chr(&H0) & Chr(&H0) & Chr(&H0) & Chr(&H0) & Chr(&H0))
-                                'SerialPort1.Write(Chr(&HFF) & Chr(&HFF) & Chr(&HFF))
-                                CamOverride = 1
-                                OverrideBtn.BackColor = Color.Orange
-                            Else
-                                CamOverride = 0
-                                'SerialPort1.Write(Chr(&HFF) & Chr(&HAA) & Chr(&HAA))
-                                'SerialPort1.Write(Chr(&HFF) & Chr(&H0) & Chr(&H0) & Chr(&H0) & Chr(&H0))
-                                OverrideBtn.BackColor = Color.White
-                            End If
-                        End If
-                        If (LastKey = 12) Then
-                            If (CamOverride <> 2) Then
-                                'SerialPort1.Write(&HFF & &H2 & &H0 & &H0)
-                                'SerialPort1.Write(&HFF & &HAA & &HAA)
-                                CamOverride = 2
-                                OverrideBtn.BackColor = Color.Orange
-                            Else
-                                CamOverride = 0
-                                OverrideBtn.BackColor = Color.White
-                            End If
-                        End If
-                        If (LastKey = 13) Then
-                            If (CamOverride <> 3) Then
-                                'SerialPort1.Write(&HFF & &H4 & &H0)
-                                CamOverride = 3
-                                OverrideBtn.BackColor = Color.Orange
-                            Else
-                                CamOverride = 0
-                                OverrideBtn.BackColor = Color.White
-                            End If
-                        End If
-                        If (LastKey = 14) Then
-                            If (CamOverride <> 4) Then
-                                'SerialPort1.Write(&HFF & &H8 & &H0)
-                                CamOverride = 4
-                                OverrideBtn.BackColor = Color.Orange
-                            Else
-                                CamOverride = 0
-                                OverrideBtn.BackColor = Color.White
-                            End If
-                        End If
-                        If (LastKey = 15) Then
-                            CamOverride = 0
-                            OverrideBtn.BackColor = Color.White
-                        End If
-                    End If
-
-                    'check for joystick being operated
-                    'we will define a dead band at the centre of the joystick
-                    Dim JoyDB As Byte = 8 'deadband of joystick
-                    'If JoyX < (128 - JoyDB) Or JoyX > (128 + JoyDB) Or JoyY < (128 - JoyDB) Or JoyY > (128 + JoyDB) Or JoyZ < (128 - JoyDB) Or JoyZ > (128 + JoyDB) Then
-
-                    Dim xpos As Integer, ypos As Integer, zpos As Integer, zoom As Boolean = False
-                    If PTZLive = False Then ad = addr Else ad = liveaddr
-                    If (CamOverride > 0) Then ad = CamOverride 'override the selected camera from the buttons
-                    If (ad < 5) Or ad = 7 Then
-                        xpos = JoyX
-                        ypos = JoyY
-                        zpos = 255 - JoyZ
-                        'If (xpos > 128 - JoyDB) And (xpos < 128 + JoyDB) Then
-                        'xpos = 128
-                        'Else
-                        'If (xpos < 128 - JoyDB) Then
-                        'xpos = xpos + JoyDB
-                        'Else
-                        'xpos = xpos - JoyDB
-                        'End If
-                        'End If
-                        'If (ypos > 128 - JoyDB) And (ypos < 128 + JoyDB) Then
-                        'ypos = 128
-                        'Else
-                        'If (ypos < 128 - JoyDB) Then
-                        '    ypos = ypos + JoyDB
-                        'Else
-                        'ypos = ypos - JoyDB
-                        'End If
-                        'End If
-                        'If (zpos > 128 - JoyDB) And (zpos < 128 + JoyDB) Then
-                        'zpos = 128
-                        'Else
-                        'If (zpos < 128 - JoyDB) Then
-                        'zpos = zpos + JoyDB
-                        'Else
-                        'zpos = zpos - JoyDB
-                        'End If
-                        'End If
-                        If Globals.CamInvert(ad) Then xpos = 255 - xpos : ypos = 255 - ypos
-                        'JoyZ = zpos - JoyDB : JoyX = xpos - JoyDB : JoyY = ypos - JoyDB
-                        'JoyZ = 1 + Int(JoyZ * 99 / (255 - JoyDB * 2))
-                        If (zpos >= 128) Then JoyZ = 100 - zoomconvert(255 - zpos) Else JoyZ = zoomconvert(zpos)
-                        If (JoyZ <> PrevJoyZ) Then
-                            If (alreadysending = False) Then 'this function is reentrant. We need to make sure we are not already sending something from a previous command.
-                                op = Format(JoyZ, "00")
-                                alreadysending = True
-                                SendCamCmdAddr(ad, "Z" & op)
-                                PrevJoyZ = JoyZ 'only store the prev value if we actually send the new value
-                                alreadysending = False
-                            End If
-                        End If
-                        'JoyX = 1 + Int(JoyX * 99 / (255 - JoyDB * 2)) : JoyY = 1 + Int(JoyY * 99 / (255 - JoyDB * 2))
-                        If (xpos >= 128) Then JoyX = 100 - joyconvert(255 - xpos) Else JoyX = joyconvert(xpos)
-                        If (ypos >= 128) Then JoyY = 100 - joyconvert(255 - ypos) Else JoyY = joyconvert(ypos)
-                        If (JoyX <> PrevJoyX) Or (JoyY <> PrevJoyY) Then
-                            If alreadysending = False Then
-                                op = Format(JoyX, "00") & Format(JoyY, "00")
-                                alreadysending = True
-                                SendCamCmdAddr(ad, "PTS" & op)
-                                PrevJoyX = JoyX : PrevJoyY = JoyY
-                                alreadysending = False
-                            End If
-                        End If
-                        'mLog.Text = JoyX & ":" & JoyY & ":" & JoyZ
-                    End If
-                End If
-            End If
-            SerialInBuf(SerialInBufPtr) = x
-            If SerialInBufPtr < 16 Then SerialInBufPtr = SerialInBufPtr + 1
-        End While
     End Sub
 
 
@@ -3043,16 +2513,13 @@ Public Class MainForm
     ' TIMERS
     '#########################################################################################################################################################################
 
+    '---Timer 1 = 100ms used for all system timing functions
     Private Sub Timer1_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer1.Tick
         Dim ta As Integer
-        Dim aux As Integer
         Dim op As String
         Dim px As Integer, py As Integer
 
-        'timer to wait for camera serial bytes
-        If (gotrx > 0) Then gotrx = gotrx - 1
-
-        If (alreadysending > 0) Then alreadysending = alreadysending - 1
+        If (alreadysending > 0) Then alreadysending = alreadysending - 1 'timer for sending to cameras
 
         'timer to autoconnect on startup
         If (startuptimer < 100) Then startuptimer = startuptimer + 1
@@ -3060,26 +2527,13 @@ Public Class MainForm
         If startuptimer = 99 Then MsgBoxPanel.Visible = False
         If (startuptimer = 5) Then 'open com ports
             Timer1.Enabled = False
-            If GetSetting("Atemswitcher", "Set", "Askprofile", True) = True Then
+            If GetSetting("CCNCamControl", "Set", "Askprofile", True) = True Then
                 SelectPresetFile()
-                'Dim fd As OpenFileDialog = New OpenFileDialog()
-
-                'fd.Title = "Select presets file"
-                'fd.InitialDirectory = Globals.PresetFilePath
-                'fd.FileName = Globals.PresetFileName
-                'fd.Filter = "Presets files (*.aps)|*.aps|All files (*.*)|*.*"
-                'fd.FilterIndex = 1
-                'fd.RestoreDirectory = True
-
-                'If fd.ShowDialog() = DialogResult.OK Then
-                ' Globals.PresetFileName = Mid(fd.FileName, InStrRev(fd.FileName, "\") + 1) 'this is the filename without the path
-                ' Globals.PresetFilePath = Mid(fd.FileName, 1, InStrRev(fd.FileName, "\")) 'this is the filename without the path
-                ' SaveSetting("Atemswitcher", "Set", "PresetsFile", Globals.PresetFileName)
-                ' ReadPresetFile()
-                'End If
             End If
             GroupBox1.Show()
             GroupBox1.Left = 100 : GroupBox1.Top = 100
+
+            'if ctrl key held on boot - emergency startup mode
             If ctrlkey Then Label22.Text = "EMERGENCY STARTUP MODE" & vbCrLf Else Label22.Text = ""
             Label22.Text = Label22.Text & "Profile: " & Globals.PresetFileName & vbCrLf
             Label22.Text = Label22.Text & "Opening com port..."
@@ -3090,31 +2544,17 @@ Public Class MainForm
                 Label22.Text = Label22.Text & "Fail" & vbCrLf
             End If
             GroupBox1.Refresh()
-            'also make sure OBS is in the right profile
-            websocket.Send("{""request-type"":""SetCurrentProfile"",""profile-name"":""SJN Youtube live"",""message-id"":""TEST1""}")
-            'and open the multiviewer
-            'websocket.Send("{""request-type"":""OpenProjector"",""type"":""Multiview"",""monitor"":-1,""message-id"":""TEST1""}")
 
             Timer1.Enabled = True
         End If
-        If (startuptimer = 10) Then 'connect to atem
-            websocket.Send("{""request-type"":""SetCurrentScene"",""scene-name"":""Cam1"",""message-id"":""TEST1""}")
-            'websocket.Send("{""request-type"":""SetPreviewScene"",""scene-name"":""Cam2"",""message-id"":""TEST1""}")
-            'setactive()
+        If (startuptimer = 10) Then 'connect to vmix
+            SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(2))
             nextpreview = 2
             transitionwait = 2 'will set preview to 2
             SetCaptionText()
-            '        Timer1.Enabled = False
-            '        Label22.Text = Label22.Text & "Connecting to Atem..."
-            '        bConnect_Click(Nothing, Nothing)
-            '        If (atemconnect = True) Then Label22.Text = Label22.Text & "Done" & vbCrLf Else Label22.Text = Label22.Text & "Fail" & vbCrLf
-            '        GroupBox1.Refresh()
-            '        Timer1.Enabled = True
-            ReadMediaSources()
         End If
         If (startuptimer = 15) Then
             Timer1.Enabled = False
-            'If atemconnect = False Then CamIgnore(1) = True : CamIgnore(2) = True : CamIgnore(3) = True : CamIgnore(4) = True 'if atem connect fails, don't try to connect cameras
             For ta = 1 To 4
                 SendCamCmdAddr(ta, "O1") 'power on command
             Next
@@ -3245,22 +2685,6 @@ Public Class MainForm
         'timer to check for double presses of cut and fade, and also check that the live/prev cams match what we think they are
         If CutLockoutTimer > 0 Then
             CutLockoutTimer = CutLockoutTimer - 1
-            If CutLockoutTimer = 0 Then
-                'check that the preview and main outs are correct
-                'If liveaddr >= 1 And liveaddr <= 4 Then
-                'RequestLua("ATEMMixerMEGetProgramInput(1,1)") 'read prog input back from atem (comes back as <response>INTEGER:6</response>)
-                'px = InStr(LuaReturn, "INTEGER:")
-                'If (px <> 0) Then py = Val(Mid(LuaReturn, px + 8, 1))
-                'If py <> liveaddr + 5 Then
-                ''error!!! the live cam setting is wrong
-                'ExecuteLua("ATEMMixerMESetProgramInput( 1,1," & liveaddr + 5 & " )")
-                'Dim objWriter As New System.IO.StreamWriter("vblog.txt", True)
-                'objWriter.WriteLine(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") & " " & "AtemLive:" & py - 5 & " VBLive:" & liveaddr)
-                'objWriter.Close()
-                'End If
-                'End If
-
-            End If
         End If
 
         'pending zoom - check if reached desired pos or no longer live
@@ -3366,7 +2790,7 @@ Public Class MainForm
             End If
         End If
 
-        'check for serial port full buffer - if this happens the serial int will stop firing
+        'check for serial port full buffer - if this happens the serial int will stop firing so empty the buffer
         If (SerialTimeout > 0) Then
             SerialTimeout = SerialTimeout - 1
             If SerialTimeout = 0 And SerialPort1.IsOpen Then
@@ -3389,24 +2813,20 @@ Public Class MainForm
         If (ShutDownTimer > 0) Then
             ShutDownTimer = ShutDownTimer + 1
         End If
-        If (ShutDownTimer = 2) And GetSetting("Atemswitcher", "Set", "CamStandby", True) = True Then 'put cams into standby
+        If (ShutDownTimer = 2) And GetSetting("CCNCamControl", "Set", "CamStandby", True) = True Then 'put cams into standby
             Timer1.Enabled = False
             GroupBox1.Show()
             GroupBox1.Left = 100 : GroupBox1.Top = 100
-            Label22.Text = "Closing down cameras..." & vbCrLf
+            ShowMsgBox("Closing down cameras... wait")
             SendCamCmdAddr(1, "O0")
             SendCamCmdAddr(2, "O0")
             SendCamCmdAddr(3, "O0")
             SendCamCmdAddr(4, "O0")
             SendCamCmdAddr(5, "O0")
-            'SendCamCmdAddr(1, "APC8000FFFF") 'central position lens fully down
-            'SendCamCmdAddr(2, "APC8000FFFF")
-            'SendCamCmdAddr(3, "APC8000FFFF")
-            'SendCamCmdAddr(4, "APC8000FFFF")
             GroupBox1.Refresh()
             Timer1.Enabled = True
         End If
-        If ShutDownTimer = 30 Then Label22.Text = Label22.Text & "Exit application..." & vbCrLf
+        If ShutDownTimer = 30 Then ShowMsgBox("Exit application...")
         If ShutDownTimer = 50 Then Application.Exit()
 
 
@@ -3414,17 +2834,13 @@ Public Class MainForm
 
     Private Sub Timer2_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer2.Tick
         'ticks every 1 sec
-        'check OBS status (returns in websocket handler routine elsewhere)
-        If Not VMixMode Then
-            websocket.Send("{""request-type"":""GetStreamingStatus"",""message-id"":""OBSSTATE""}")
-        Else
-            Dim stat = SendVmixCmd("")
-            ProcessStatus(stat)
+        'check vmix status 
+        Dim stat = SendVmixCmd("")
+        ProcessStatus(stat)
 
-            If StreamPending Then
-                StreamPendingTime = StreamPendingTime + 1
-                If (StreamPendingTime > 15) Then StreamPending = False : BtnOBSBroadcast.BackColor = Color.White
-            End If
+        If StreamPending Then
+            StreamPendingTime = StreamPendingTime + 1
+            If (StreamPendingTime > 15) Then StreamPending = False : BtnOBSBroadcast.BackColor = Color.White
         End If
 
         'check if cameras recording
@@ -3435,7 +2851,7 @@ Public Class MainForm
         If CamRec(3) Or CamRecStatusTimer = 60 Then TextBoxCam3Rec.Text = CamRecStatus(SendCamQuery(3, "get_state"), 3)
         If CamRec(4) Or CamRecStatusTimer = 60 Then TextBoxCam4Rec.Text = CamRecStatus(SendCamQuery(4, "get_state"), 4)
 
-        'check for change of screens / loss of connection to controller
+        'check for change of windows screen setup / loss of connection to controller
         If Screen.AllScreens.Count <> ScreenCount Then
             ScreenCount = Screen.AllScreens.Count
             Dim scrfound = False
@@ -3682,31 +3098,31 @@ Public Class MainForm
         For Each s In SerialPort.GetPortNames()
             ComboBoxSetupComport.Items.Add(s)
         Next s
-        TextBoxIPCam1.Text = (GetSetting("Atemswitcher", "CamIP", "1", "192.168.1.91"))
-        TextBoxIPCam2.Text = (GetSetting("Atemswitcher", "CamIP", "2", "192.168.1.92"))
-        TextBoxIPCam3.Text = (GetSetting("Atemswitcher", "CamIP", "3", "192.168.1.93"))
-        TextBoxIPCam4.Text = (GetSetting("Atemswitcher", "CamIP", "4", "192.168.1.94"))
-        TextBoxIPCam5.Text = (GetSetting("Atemswitcher", "CamIP", "5", "192.168.1.95"))
+        TextBoxIPCam1.Text = (GetSetting("CCNCamControl", "CamIP", "1", "192.168.1.91"))
+        TextBoxIPCam2.Text = (GetSetting("CCNCamControl", "CamIP", "2", "192.168.1.92"))
+        TextBoxIPCam3.Text = (GetSetting("CCNCamControl", "CamIP", "3", "192.168.1.93"))
+        TextBoxIPCam4.Text = (GetSetting("CCNCamControl", "CamIP", "4", "192.168.1.94"))
+        TextBoxIPCam5.Text = (GetSetting("CCNCamControl", "CamIP", "5", "192.168.1.95"))
 
         TextBoxPresetFilename.Text = Globals.PresetFileName
         TextBoxPresetFolder.Text = Globals.PresetFilePath
-        i = ComboBoxSetupComport.FindString(GetSetting("Atemswitcher", "Comm", "2", "COM2"))
+        i = ComboBoxSetupComport.FindString(GetSetting("CCNCamControl", "Comm", "2", "COM2"))
         ComboBoxSetupComport.SelectedIndex = i
 
         If Globals.TallyMode Then CheckBoxTally.Checked = True
         If Globals.AutoSwap Then CheckBoxAutoSwap.Checked = True
-        If GetSetting("Atemswitcher", "Set", "Askprofile", True) = True Then CheckBoxProfile.Checked = True
-        If GetSetting("Atemswitcher", "Set", "CamStandby", True) = True Then CheckBoxStandby.Checked = True
+        If GetSetting("CCNCamControl", "Set", "Askprofile", True) = True Then CheckBoxProfile.Checked = True
+        If GetSetting("CCNCamControl", "Set", "CamStandby", True) = True Then CheckBoxStandby.Checked = True
 
-        If GetSetting("Atemswitcher", "Set", "Cam1Dis", False) = True Then CheckBoxCam1Dis.Checked = True Else CheckBoxCam1Dis.Checked = False
-        If GetSetting("Atemswitcher", "Set", "Cam2Dis", False) = True Then CheckBoxCam2Dis.Checked = True Else CheckBoxCam2Dis.Checked = False
-        If GetSetting("Atemswitcher", "Set", "Cam3Dis", False) = True Then CheckBoxCam3Dis.Checked = True Else CheckBoxCam3Dis.Checked = False
-        If GetSetting("Atemswitcher", "Set", "Cam4Dis", False) = True Then CheckBoxCam4Dis.Checked = True Else CheckBoxCam4Dis.Checked = False
-        If GetSetting("Atemswitcher", "Set", "Cam5Dis", False) = True Then CheckBoxCam5Dis.Checked = True Else CheckBoxCam5Dis.Checked = False
+        If GetSetting("CCNCamControl", "Set", "Cam1Dis", False) = True Then CheckBoxCam1Dis.Checked = True Else CheckBoxCam1Dis.Checked = False
+        If GetSetting("CCNCamControl", "Set", "Cam2Dis", False) = True Then CheckBoxCam2Dis.Checked = True Else CheckBoxCam2Dis.Checked = False
+        If GetSetting("CCNCamControl", "Set", "Cam3Dis", False) = True Then CheckBoxCam3Dis.Checked = True Else CheckBoxCam3Dis.Checked = False
+        If GetSetting("CCNCamControl", "Set", "Cam4Dis", False) = True Then CheckBoxCam4Dis.Checked = True Else CheckBoxCam4Dis.Checked = False
+        If GetSetting("CCNCamControl", "Set", "Cam5Dis", False) = True Then CheckBoxCam5Dis.Checked = True Else CheckBoxCam5Dis.Checked = False
 
-        If GetSetting("Atemswitcher", "Set", "SaveFocus", False) = True Then CheckBoxSaveFocus.Checked = True Else CheckBoxSaveFocus.Checked = False
-        If GetSetting("Atemswitcher", "Set", "SaveIris", False) = True Then CheckBoxSaveIris.Checked = True Else CheckBoxSaveIris.Checked = False
-        If GetSetting("Atemswitcher", "Set", "SaveAE", False) = True Then CheckBoxSaveAE.Checked = True Else CheckBoxSaveAE.Checked = False
+        If GetSetting("CCNCamControl", "Set", "SaveFocus", False) = True Then CheckBoxSaveFocus.Checked = True Else CheckBoxSaveFocus.Checked = False
+        If GetSetting("CCNCamControl", "Set", "SaveIris", False) = True Then CheckBoxSaveIris.Checked = True Else CheckBoxSaveIris.Checked = False
+        If GetSetting("CCNCamControl", "Set", "SaveAE", False) = True Then CheckBoxSaveAE.Checked = True Else CheckBoxSaveAE.Checked = False
 
         If Globals.CamInvert(1) Then CheckBoxInvert1.Checked = True
         If Globals.CamInvert(2) Then CheckBoxInvert2.Checked = True
@@ -3718,32 +3134,32 @@ Public Class MainForm
 
     '----Update globals / registry with edited values
     Sub StoreSetupScreen()
-        SaveSetting("Atemswitcher", "CamIP", "1", TextBoxIPCam1.Text)
-        SaveSetting("Atemswitcher", "CamIP", "2", TextBoxIPCam2.Text)
-        SaveSetting("Atemswitcher", "CamIP", "3", TextBoxIPCam3.Text)
-        SaveSetting("Atemswitcher", "CamIP", "4", TextBoxIPCam4.Text)
-        SaveSetting("Atemswitcher", "CamIP", "5", TextBoxIPCam5.Text)
+        SaveSetting("CCNCamControl", "CamIP", "1", TextBoxIPCam1.Text)
+        SaveSetting("CCNCamControl", "CamIP", "2", TextBoxIPCam2.Text)
+        SaveSetting("CCNCamControl", "CamIP", "3", TextBoxIPCam3.Text)
+        SaveSetting("CCNCamControl", "CamIP", "4", TextBoxIPCam4.Text)
+        SaveSetting("CCNCamControl", "CamIP", "5", TextBoxIPCam5.Text)
 
-        SaveSetting("Atemswitcher", "Set", "Tally", CheckBoxTally.Checked)
-        SaveSetting("Atemswitcher", "Set", "Autoswap", CheckBoxAutoSwap.Checked)
-        SaveSetting("Atemswitcher", "Set", "CamStandby", CheckBoxStandby.Checked)
-        SaveSetting("Atemswitcher", "Set", "Askprofile", CheckBoxProfile.Checked)
-        SaveSetting("Atemswitcher", "Set", "Caminvert1", CheckBoxInvert1.Checked)
-        SaveSetting("Atemswitcher", "Set", "Caminvert2", CheckBoxInvert2.Checked)
-        SaveSetting("Atemswitcher", "Set", "Caminvert3", CheckBoxInvert3.Checked)
-        SaveSetting("Atemswitcher", "Set", "Caminvert4", CheckBoxInvert4.Checked)
-        SaveSetting("Atemswitcher", "Set", "PresetsFile", TextBoxPresetFilename.Text)
-        SaveSetting("Atemswitcher", "Set", "PresetsPath", TextBoxPresetFolder.Text)
+        SaveSetting("CCNCamControl", "Set", "Tally", CheckBoxTally.Checked)
+        SaveSetting("CCNCamControl", "Set", "Autoswap", CheckBoxAutoSwap.Checked)
+        SaveSetting("CCNCamControl", "Set", "CamStandby", CheckBoxStandby.Checked)
+        SaveSetting("CCNCamControl", "Set", "Askprofile", CheckBoxProfile.Checked)
+        SaveSetting("CCNCamControl", "Set", "Caminvert1", CheckBoxInvert1.Checked)
+        SaveSetting("CCNCamControl", "Set", "Caminvert2", CheckBoxInvert2.Checked)
+        SaveSetting("CCNCamControl", "Set", "Caminvert3", CheckBoxInvert3.Checked)
+        SaveSetting("CCNCamControl", "Set", "Caminvert4", CheckBoxInvert4.Checked)
+        SaveSetting("CCNCamControl", "Set", "PresetsFile", TextBoxPresetFilename.Text)
+        SaveSetting("CCNCamControl", "Set", "PresetsPath", TextBoxPresetFolder.Text)
 
-        SaveSetting("Atemswitcher", "Set", "SaveFocus", CheckBoxSaveFocus.Checked)
-        SaveSetting("Atemswitcher", "Set", "SaveIris", CheckBoxSaveIris.Checked)
-        SaveSetting("Atemswitcher", "Set", "SaveAE", CheckBoxSaveAE.Checked)
+        SaveSetting("CCNCamControl", "Set", "SaveFocus", CheckBoxSaveFocus.Checked)
+        SaveSetting("CCNCamControl", "Set", "SaveIris", CheckBoxSaveIris.Checked)
+        SaveSetting("CCNCamControl", "Set", "SaveAE", CheckBoxSaveAE.Checked)
 
-        SaveSetting("Atemswitcher", "Set", "Cam1Dis", CheckBoxCam1Dis.Checked)
-        SaveSetting("Atemswitcher", "Set", "Cam2Dis", CheckBoxCam2Dis.Checked)
-        SaveSetting("Atemswitcher", "Set", "Cam3Dis", CheckBoxCam3Dis.Checked)
-        SaveSetting("Atemswitcher", "Set", "Cam4Dis", CheckBoxCam4Dis.Checked)
-        SaveSetting("Atemswitcher", "Set", "Cam5Dis", CheckBoxCam5Dis.Checked)
+        SaveSetting("CCNCamControl", "Set", "Cam1Dis", CheckBoxCam1Dis.Checked)
+        SaveSetting("CCNCamControl", "Set", "Cam2Dis", CheckBoxCam2Dis.Checked)
+        SaveSetting("CCNCamControl", "Set", "Cam3Dis", CheckBoxCam3Dis.Checked)
+        SaveSetting("CCNCamControl", "Set", "Cam4Dis", CheckBoxCam4Dis.Checked)
+        SaveSetting("CCNCamControl", "Set", "Cam5Dis", CheckBoxCam5Dis.Checked)
 
         Globals.PresetFileName = TextBoxPresetFilename.Text
         Globals.CamIP(1) = TextBoxIPCam1.Text
@@ -3761,15 +3177,15 @@ Public Class MainForm
     End Sub
 
     '----update when control loses focus
-    Sub SetupLostFocus() Handles TextBoxIPCam1.LostFocus, TextBoxIPCam2.LostFocus, TextBoxIPCam3.LostFocus, TextBoxIPCam4.LostFocus, _
-        TextBoxIPCam5.LostFocus, CheckBoxCam1Dis.Click, CheckBoxCam2Dis.Click, CheckBoxCam3Dis.Click, CheckBoxCam4Dis.Click, CheckBoxCam5Dis.Click, _
-        CheckBoxTally.Click, CheckBoxAutoSwap.Click, CheckBoxStandby.Click, CheckBoxProfile.Click, CheckBoxInvert1.Click, CheckBoxInvert2.Click, CheckBoxInvert3.Click, CheckBoxInvert4.Click, _
+    Sub SetupLostFocus() Handles TextBoxIPCam1.LostFocus, TextBoxIPCam2.LostFocus, TextBoxIPCam3.LostFocus, TextBoxIPCam4.LostFocus,
+        TextBoxIPCam5.LostFocus, CheckBoxCam1Dis.Click, CheckBoxCam2Dis.Click, CheckBoxCam3Dis.Click, CheckBoxCam4Dis.Click, CheckBoxCam5Dis.Click,
+        CheckBoxTally.Click, CheckBoxAutoSwap.Click, CheckBoxStandby.Click, CheckBoxProfile.Click, CheckBoxInvert1.Click, CheckBoxInvert2.Click, CheckBoxInvert3.Click, CheckBoxInvert4.Click,
         CheckBoxSaveFocus.Click, CheckBoxSaveIris.Click, CheckBoxSaveAE.Click, TextBoxPresetFilename.LostFocus, TextBoxPresetFolder.LostFocus
 
         StoreSetupScreen()
     End Sub
     Private Sub ComboBoxComport_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBoxSetupComport.SelectedIndexChanged
-        SaveSetting("Atemswitcher", "Comm", "2", ComboBoxSetupComport.SelectedItem)
+        SaveSetting("CCNCamControl", "Comm", "2", ComboBoxSetupComport.SelectedItem)
         ComportOpen()
     End Sub
 
@@ -3871,11 +3287,11 @@ Public Class MainForm
     Private Sub ButtonRetryOBS_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonRetryOBS.Click
         websocket.Close()   'try reconnecting to OBS
         WebsocketTimeout = False
-        OpenWebSocket()
+        'OpenWebSocket()
         While WebsocketReinitTimer > 0
             Application.DoEvents()
         End While
-        ReadMediaSources()
+        'ReadMediaSources()
     End Sub
 
 
