@@ -111,6 +111,10 @@ Public Class MainForm
     Dim ScreenCount As Integer
     Dim StreamPending As Boolean = False
     Dim StreamPendingTime As Integer
+    Dim MediaFiles(5) As String
+    Dim MediaLoop(5) As Boolean
+    Dim MediaMute(5) As Boolean
+    Dim MediaMax As Integer = 5
 
     Dim JoyX As Byte
     Dim JoyY As Byte
@@ -267,6 +271,12 @@ Public Class MainForm
         Globals.Cliptime(3) = (GetSetting("CCNCamControl", "Cliptime", "3", "60"))
         Globals.Cliptime(4) = (GetSetting("CCNCamControl", "Cliptime", "4", "60"))
 
+        For i = 0 To MediaMax
+            MediaFiles(i) = GetSetting("CCNCamControl", "MediaFiles", i, "")
+            MediaLoop(i) = GetSetting("CCNCamControl", "MediaLoop", i, False)
+            MediaMute(i) = GetSetting("CCNCamControl", "MediaMute", i, False)
+        Next
+
         BtnFast.BackColor = Color.Green
         BtnLiveSlow.BackColor = Color.Green
         BtnAuxLock.BackColor = Color.Red
@@ -276,6 +286,7 @@ Public Class MainForm
         EncoderAllocation(1) = 0 : EncoderAllocation(2) = 4
         ShowEncoderAllocations()
         SetCaptionText()
+        LoadMediaList()
 
     End Sub
 
@@ -1263,8 +1274,11 @@ Public Class MainForm
         If liveaddr = 5 And addr <> 8 Then 'cutting away from black - restore audio
             AudioFade = 1
         End If
-        If liveaddr = 8 Then MediaPlayerWasActive = True 'if cutting to mediaplayer then remember we were on it
-        nextpreview = liveaddr
+        If liveaddr = 7 Then
+            MediaPlayerWasActive = True 'if cutting to mediaplayer then remember we were on it, when cut away go to next item
+            If MediaMute(MediaItem) Then SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=0,1000") 'fade main audio
+        End If
+            nextpreview = liveaddr
         'If addr <> nextpreview Then addr = nextpreview
         liveaddr = addr
         StartLiveMove()
@@ -1284,7 +1298,10 @@ Public Class MainForm
     Private Sub BtnTransition_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnTransition.Click
         If CutLockoutTimer > 0 Then Exit Sub
 
-        If liveaddr = 8 Then MediaPlayerWasActive = True 'if cutting to mediaplayer then remember we were on it
+        If liveaddr = 7 Then
+            MediaPlayerWasActive = True
+            If MediaMute(MediaItem) Then SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=0,1000") 'if cutting to mediaplayer then remember we were on it
+        End If
         nextpreview = liveaddr
         liveaddr = addr
         StartLiveMove()
@@ -1295,7 +1312,6 @@ Public Class MainForm
         If Globals.AutoSwap Then transitionwait = 5 + Val(TextBox1.Text) * 10
 
         setactive()
-        If AutoSongMode = True Or AutoSpeechMode = True Then AutoWait = transitionwait + 2
         CutLockoutTimer = transitionwait
         DelayStop = transitionwait
         AutoPreset = 0
@@ -1449,11 +1465,7 @@ Public Class MainForm
         Dim index = Val(Mid(sender.name, 7))
         Dim obssource = VMixSourceName(index)
         addr = index + 5
-        If Not VMixMode Then
-            websocket.Send("{""request-type"":""SetPreviewScene"",""scene-name"":""" & VMixSourceName(addr) & """,""message-id"":""TEST1""}")
-        Else
-            SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(addr))
-        End If
+        SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(addr))
         setactive()
     End Sub
 
@@ -1602,32 +1614,57 @@ Public Class MainForm
         SetCaptionText()
     End Sub
 
+    '---Load mediaplayer listbox
+    Private Sub LoadMediaList()
+        Dim shortfile As String
+        ListBoxMedia.Items.Clear()
+        For i = 0 To MediaMax - 1
+            If Len(MediaFiles(i)) > 0 Then
+                If InStr(MediaFiles(i), "\") <> 0 Then
+                    shortfile = Mid(MediaFiles(i), InStrRev(MediaFiles(i), "\") + 1)
+                Else
+                    shortfile = MediaFiles(i)
+                End If
+                ListBoxMedia.Items.Add(shortfile)
+            End If
+        Next
+        MediaItem = 0
+        ListBoxMedia.SelectedIndex = MediaItem
+        'SetMediaItem(MediaFiles(MediaItem), MediaLoop(MediaItem))
+    End Sub
+
+    '---Send mediaplayer item to vmix
+    Private Sub SetCurrentMediaItem()
+        'vmix can't set a single video item by API so we use a list input with single item which can be set
+        SendVmixCmd("?Function=ListRemoveAll&Input=" & VMixSourceName(7))
+        SendVmixCmd("?Function=ListAdd&Input=" & VMixSourceName(7) & "&Value=" & MediaFiles(MediaItem))
+        If MediaLoop(MediaItem) Then SendVmixCmd("?Function=LoopOn&Input=" & VMixSourceName(7)) : Else SendVmixCmd("?Function=LoopOff&Input=" & VMixSourceName(7))
+    End Sub
+
     '---Select previous mediaplayer item
     Private Sub BtnMPrev_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnMPrev.Click
-        'websocket.Send("{""request-type"":""SetCurrentScene"",""scene-name"":""Mixer output"",""message-id"":""TEST1""}")
         If ListBoxMedia.Items.Count = 0 Then Exit Sub
         If MediaItem > 0 Then
-            ListBoxMedia.Items.Item(MediaItem) = Replace(ListBoxMedia.Items.Item(MediaItem), "*", "")
-            'WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":false,""message-id"":""TEST1""}")
             MediaItem = MediaItem - 1
-            'WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":true,""message-id"":""TEST1""}")
-            ListBoxMedia.Items.Item(MediaItem) = ListBoxMedia.Items.Item(MediaItem) & "*"
+            ListBoxMedia.SelectedIndex = MediaItem
+            SetCurrentMediaItem()
         End If
     End Sub
 
     '---Select next mediaplayer item
     Private Sub BtnMNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnMNext.Click
-        'websocket.Send("{""request-type"":""SetCurrentScene"",""scene-name"":""Loop"",""message-id"":""TEST1""}")
         If ListBoxMedia.Items.Count = 0 Then Exit Sub
         If MediaItem < ListBoxMedia.Items.Count - 1 Then
-            ListBoxMedia.Items.Item(MediaItem) = Replace(ListBoxMedia.Items.Item(MediaItem), "*", "")
-            'WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":false,""message-id"":""TEST1""}")
             MediaItem = MediaItem + 1
-            'WebsocketSendAndWait("{""request-type"":""SetSceneItemRender"",""scene-name"":""Mediaplayer1"",""source"":""" & ListBoxMedia.Items.Item(MediaItem) & """,""render"":true,""message-id"":""TEST1""}")
-            ListBoxMedia.Items.Item(MediaItem) = ListBoxMedia.Items.Item(MediaItem) & "*"
+            ListBoxMedia.SelectedIndex = MediaItem
+            SetCurrentMediaItem()
         End If
     End Sub
 
+    '---if user clicks on the listbox set it back to where we think it should be
+    Private Sub ListBoxMedia_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBoxMedia.SelectedIndexChanged
+        ListBoxMedia.SelectedIndex = MediaItem
+    End Sub
 
     '-------------------------------------------------------------------------------------------------
     ' Camera manual settings
@@ -2552,6 +2589,7 @@ Public Class MainForm
             nextpreview = 2
             transitionwait = 2 'will set preview to 2
             SetCaptionText()
+            SetCurrentMediaItem()
         End If
         If (startuptimer = 15) Then
             Timer1.Enabled = False
@@ -2673,9 +2711,12 @@ Public Class MainForm
                 setactive()
                 If MediaPlayerWasActive Then 'if we just transitioned away from media player, go to the next clip
                     MediaPlayerWasActive = False
+                    If MediaMute(MediaItem) Then 'restore the main audio if we muted it
+                        SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=100,1000")
+                    End If
                     BtnMNext.PerformClick()
+                    End If
                 End If
-            End If
         End If
 
         If WebsocketReinitTimer > 0 Then
@@ -2826,7 +2867,7 @@ Public Class MainForm
             GroupBox1.Refresh()
             Timer1.Enabled = True
         End If
-        If ShutDownTimer = 30 Then ShowMsgBox("Exit application...")
+        If ShutDownTimer = 30 Then ShowMsgBox("Exit application...") : StoreSetupScreen()
         If ShutDownTimer = 50 Then Application.Exit()
 
 
@@ -3129,6 +3170,22 @@ Public Class MainForm
         If Globals.CamInvert(3) Then CheckBoxInvert3.Checked = True
         If Globals.CamInvert(4) Then CheckBoxInvert4.Checked = True
 
+        Media1TextBox.Text = MediaFiles(0)
+        Media2TextBox.Text = MediaFiles(1)
+        Media3TextBox.Text = MediaFiles(2)
+        Media4TextBox.Text = MediaFiles(3)
+        Media5TextBox.Text = MediaFiles(4)
+        If MediaLoop(0) Then Media1LoopCheckBox.Checked = True Else Media1LoopCheckBox.Checked = False
+        If MediaLoop(1) Then Media2LoopCheckBox.Checked = True Else Media2LoopCheckBox.Checked = False
+        If MediaLoop(2) Then Media3LoopCheckBox.Checked = True Else Media3LoopCheckBox.Checked = False
+        If MediaLoop(3) Then Media4LoopCheckBox.Checked = True Else Media4LoopCheckBox.Checked = False
+        If MediaLoop(4) Then Media5LoopCheckBox.Checked = True Else Media5LoopCheckBox.Checked = False
+        If MediaMute(0) Then Media1MuteCheckBox.Checked = True Else Media1MuteCheckBox.Checked = False
+        If MediaMute(1) Then Media2MuteCheckBox.Checked = True Else Media2MuteCheckBox.Checked = False
+        If MediaMute(2) Then Media3MuteCheckBox.Checked = True Else Media3MuteCheckBox.Checked = False
+        If MediaMute(3) Then Media4MuteCheckBox.Checked = True Else Media4MuteCheckBox.Checked = False
+        If MediaMute(4) Then Media5MuteCheckBox.Checked = True Else Media5MuteCheckBox.Checked = False
+
         UpdateCameraLinkStatus()
     End Sub
 
@@ -3174,6 +3231,29 @@ Public Class MainForm
         If CheckBoxCam3Dis.Checked Then Globals.Cam3Dis = True Else Globals.Cam3Dis = False
         If CheckBoxCam4Dis.Checked Then Globals.Cam4Dis = True Else Globals.Cam4Dis = False
         If CheckBoxCam5Dis.Checked Then Globals.Cam5Dis = True Else Globals.Cam5Dis = False
+
+        MediaFiles(0) = Media1TextBox.Text
+        MediaFiles(1) = Media2TextBox.Text
+        MediaFiles(2) = Media3TextBox.Text
+        MediaFiles(3) = Media4TextBox.Text
+        MediaFiles(4) = Media5TextBox.Text
+        MediaLoop(0) = Media1LoopCheckBox.Checked
+        MediaLoop(1) = Media2LoopCheckBox.Checked
+        MediaLoop(2) = Media3LoopCheckBox.Checked
+        MediaLoop(3) = Media4LoopCheckBox.Checked
+        MediaLoop(4) = Media5LoopCheckBox.Checked
+        MediaMute(0) = Media1MuteCheckBox.Checked
+        MediaMute(1) = Media2MuteCheckBox.Checked
+        MediaMute(2) = Media3MuteCheckBox.Checked
+        MediaMute(3) = Media4MuteCheckBox.Checked
+        MediaMute(4) = Media5MuteCheckBox.Checked
+
+        For i = 0 To MediaMax
+            SaveSetting("CCNCamControl", "MediaFiles", i, MediaFiles(i))
+            SaveSetting("CCNCamControl", "MediaLoop", i, MediaLoop(i))
+            SaveSetting("CCNCamControl", "MediaMute", i, MediaMute(i))
+        Next
+
     End Sub
 
     '----update when control loses focus
@@ -3281,6 +3361,41 @@ Public Class MainForm
 
     Private Sub ButtonTouchscreen_Click(sender As Object, e As EventArgs) Handles ButtonTouchscreen.Click
         Shell("explorer.exe shell:::{80F3F1D5-FECA-45F3-BC32-752C152E456E}")
+    End Sub
+
+    Private Sub BtnMediaSetup_Click(sender As Object, e As EventArgs) Handles BtnMediaSetup.Click
+        MediaFilePanel.Left = 120
+        MediaFilePanel.Top = 60
+        MediaFilePanel.Visible = True
+    End Sub
+
+    Private Sub MediaFileClose_Click(sender As Object, e As EventArgs) Handles MediaFileClose.Click
+        StoreSetupScreen()
+        MediaFilePanel.Visible = False
+        LoadMediaList()
+        MediaItem = 0
+        SetCurrentMediaItem()
+    End Sub
+
+    Private Sub BtnMedia1Browse_Click(sender As Object, e As EventArgs) Handles BtnMedia1Browse.Click
+        Dim fd As OpenFileDialog = New OpenFileDialog()
+        If fd.ShowDialog() = DialogResult.OK Then Media1TextBox.Text = fd.FileName
+    End Sub
+    Private Sub BtnMedia2Browse_Click(sender As Object, e As EventArgs) Handles BtnMedia2Browse.Click
+        Dim fd As OpenFileDialog = New OpenFileDialog()
+        If fd.ShowDialog() = DialogResult.OK Then Media2TextBox.Text = fd.FileName
+    End Sub
+    Private Sub BtnMedia3Browse_Click(sender As Object, e As EventArgs) Handles BtnMedia3Browse.Click
+        Dim fd As OpenFileDialog = New OpenFileDialog()
+        If fd.ShowDialog() = DialogResult.OK Then Media3TextBox.Text = fd.FileName
+    End Sub
+    Private Sub BtnMedia4Browse_Click(sender As Object, e As EventArgs) Handles BtnMedia4Browse.Click
+        Dim fd As OpenFileDialog = New OpenFileDialog()
+        If fd.ShowDialog() = DialogResult.OK Then Media4TextBox.Text = fd.FileName
+    End Sub
+    Private Sub BtnMedia5Browse_Click(sender As Object, e As EventArgs) Handles BtnMedia5Browse.Click
+        Dim fd As OpenFileDialog = New OpenFileDialog()
+        If fd.ShowDialog() = DialogResult.OK Then Media5TextBox.Text = fd.FileName
     End Sub
 
 
