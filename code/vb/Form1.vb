@@ -1048,6 +1048,7 @@ Public Class MainForm
     Sub ShowCamValues()
         Dim ad As Integer
         If (PTZLive = False) Then ad = addr Else ad = liveaddr
+        If ad > 5 Then Exit Sub
         If CamIris(ad) <> 9999 Then TextBoxIris.Text = CamIris(ad) Else TextBoxIris.Text = "Auto"
         If (CamAgc(ad) <= &H38) Then TextBoxAgc.Text = CamAgc(ad) * 3 & "dB" Else TextBoxAgc.Text = "Auto"
         TextBoxAeShift.Text = CamAEShift(ad)
@@ -1629,7 +1630,7 @@ Public Class MainForm
             End If
         Next
         MediaItem = 0
-        ListBoxMedia.SelectedIndex = MediaItem
+        If ListBoxMedia.Items.Count <> 0 Then ListBoxMedia.SelectedIndex = MediaItem
         'SetMediaItem(MediaFiles(MediaItem), MediaLoop(MediaItem))
     End Sub
 
