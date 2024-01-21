@@ -1584,11 +1584,11 @@ Public Class MainForm
         If CaptionIndex = 1 Then CapRectangle(TextLeaderName)
         If CaptionIndex = 2 Then CapRectangle(TextPreacherName)
         If CaptionIndex = 3 Then CapRectangle(TextCaptionOther)
-        Dim cap = WebUtility.HtmlEncode(TextLeaderName.Text)
+        Dim cap = System.Uri.EscapeDataString(TextLeaderName.Text)
         SendVmixCmd("?Function=SetText&Input=LeaderCaption&SelectedName=Name.Text&Value=" & cap)
-        cap = WebUtility.HtmlEncode(TextPreacherName.Text)
+        cap = System.Uri.EscapeDataString(TextPreacherName.Text)
         SendVmixCmd("?Function=SetText&Input=PreacherCaption&SelectedName=Name.Text&Value=" & cap)
-        cap = WebUtility.HtmlEncode(TextCaptionOther.Text)
+        cap = System.Uri.EscapeDataString(TextCaptionOther.Text)
         SendVmixCmd("?Function=SetText&Input=OtherCaption&SelectedName=Name.Text&Value=" & cap)
     End Sub
 
@@ -1738,7 +1738,8 @@ Public Class MainForm
         End If
         SetIris(ad, CamIris(ad))
     End Sub
-    Private Sub BtnIrisAuto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyButtonAutoIris.Click
+
+    Private Sub BtnIrisAuto()
         Dim ad As Integer
         If PTZLive = False Then ad = addr Else ad = liveaddr
         If ad > 5 Then Exit Sub
@@ -1747,6 +1748,10 @@ Public Class MainForm
         Else
             SetIris(ad, 9999)
         End If
+    End Sub
+
+    Private Sub BtnIrisAuto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyButtonAutoIris.Click
+        BtnIrisAuto()
     End Sub
     Sub SetAGC(ad As Integer, v As Integer)
         If ad = 5 Then Return 'not provided on this camera
@@ -1797,7 +1802,8 @@ Public Class MainForm
         CamAgc(ad) = CamAgc(ad) + 1
         SetAGC(ad, CamAgc(ad))
     End Sub
-    Private Sub BtnAgcAuto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyButtonAutoAgc.Click
+
+    Private Sub BtnAgcAuto()
         Dim ad As Integer
         If PTZLive = False Then ad = addr Else ad = liveaddr
         If ad = 5 Then Return 'not provided on this camera
@@ -1809,6 +1815,10 @@ Public Class MainForm
             CamAgc(ad) = 128
             SetAGC(ad, CamAgc(ad))
         End If
+    End Sub
+
+    Private Sub BtnAgcAuto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyButtonAutoAgc.Click
+        BtnAgcAuto()
     End Sub
     Sub SetAGCLimit(ad As Integer, v As Integer)
         If ad = 5 Then Return 'not provided on this camera
@@ -1943,7 +1953,8 @@ Public Class MainForm
         TextBoxFocus.Text = CamFocus(ad)
         ShowEncoderValues()
     End Sub
-    Private Sub BtnFocusAuto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnFocusAuto.Click
+
+    Private Sub BtnFocusSetAuto()
         Dim ad As Integer
         If (PTZLive = True) Then ad = liveaddr Else ad = addr
         If ad > 5 Then Exit Sub
@@ -1954,7 +1965,7 @@ Public Class MainForm
         ShowEncoderValues()
     End Sub
 
-    Private Sub BtnFocusLock_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnFocusLock.Click
+    Private Sub BtnFocusSetLock()
         Dim ad As Integer
         Dim op As String
         If (PTZLive = True) Then ad = liveaddr Else ad = addr
@@ -1966,6 +1977,14 @@ Public Class MainForm
         TextBoxFocus.Text = CamFocus(ad)
         BtnFocusAuto.BackColor = Color.White : BtnFocusLock.BackColor = Color.Red
         ShowEncoderValues()
+    End Sub
+
+    Private Sub BtnFocusAuto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnFocusAuto.Click
+        BtnFocusSetAuto()
+    End Sub
+
+    Private Sub BtnFocusLock_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnFocusLock.Click
+        BtnFocusSetLock()
     End Sub
 
     Private Sub BtnFocusUp_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles BtnFocusUp.Click
@@ -2509,7 +2528,7 @@ Public Class MainForm
             Dim xpos As Integer, ypos As Integer, zpos As Integer, zoom As Boolean = False
             If PTZLive = False Then ad = addr Else ad = liveaddr
             If (CamOverride > 0) Then ad = CamOverride 'override the selected camera from the buttons
-            If (ad < 5) Or ad = 7 Then
+            If (ad <= 5) Then
                 xpos = 255 - JoyX
                 ypos = JoyY
                 zpos = JoyZ
@@ -3074,9 +3093,9 @@ Public Class MainForm
         If PTZLive = False Then ad = addr Else ad = liveaddr
         If ad > 5 Then Exit Sub
         Select Case EncoderAllocation(enc)
-            Case 0 : If (BtnFocusAuto.BackColor = Color.White) Then BtnFocusAuto.PerformClick() Else BtnFocusLock.PerformClick()
-            Case 1 : If (MyButtonAutoIris.BackColor = Color.White) Then MyButtonAutoIris.PerformClick() Else SetIris(ad, CamIris(ad))
-            Case 2 : If (MyButtonAutoAgc.BackColor = Color.White) Then MyButtonAutoAgc.PerformClick() Else SetAGC(ad, CamAgc(ad))
+            Case 0 : If (BtnFocusAuto.BackColor = Color.White) Then BtnFocusSetAuto() Else BtnFocusSetLock()
+            Case 1 : If (MyButtonAutoIris.BackColor = Color.White) Then BtnIrisAuto() Else SetIris(ad, CamIris(ad))
+            Case 2 : If (MyButtonAutoAgc.BackColor = Color.White) Then BtnAgcAuto() Else SetAGC(ad, CamAgc(ad))
             Case 3 : SetAGCLimit(ad, 1)
             Case 4 : SetAEShift(ad, 0)
         End Select
@@ -3274,6 +3293,7 @@ Public Class MainForm
     Sub SendOsdCmd(cmd As String)
         Dim ad
         If PTZLive = False Then ad = addr Else ad = liveaddr
+        If ad > 5 Then Exit Sub
         SendCamQueryNoResponse(ad, "aw_cam?cmd=" & cmd & "&res=1")
     End Sub
     Private Sub ButtonOsdMenu_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSetupMenu.Click
