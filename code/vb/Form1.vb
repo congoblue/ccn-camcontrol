@@ -1266,20 +1266,28 @@ Public Class MainForm
 
     End Sub
 
+    Private Sub HandleTransitionAudio()
+        If addr = 7 And MediaMute(MediaItem) Then 'if cutting to mediaplayer and the clip is to replace main audio
+            SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=0,1000") 'fade main audio
+        End If
+        If addr = 10 Then 'if cutting to black, fade out main audio
+            SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=0,1000") 'fade main audio
+        End If
+        If liveaddr = 7 Then 'cutting away from mediaplayer
+            MediaPlayerWasActive = True 'set this flag which will move mediaplayer onto next item after a delay
+            If MediaMute(MediaItem) Then SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=100,1000") 'if we muted main audio, restore it
+        End If
+        If liveaddr = 10 Then 'if cutting away from black, restore main audio
+            SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=100,1000") 'fade main audio
+        End If
+    End Sub
+
     '---Click the cut button. This function is called when the controller cut button is pressed
     Private Sub BtnCut_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnCut.Click
         If CutLockoutTimer > 0 Then Exit Sub
-        If addr = 5 Then 'if we are cutting to black - mute audio out
-            AudioFade = -1 ': AudioLevel = 0
-        End If
-        If liveaddr = 5 And addr <> 8 Then 'cutting away from black - restore audio
-            AudioFade = 1
-        End If
-        If liveaddr = 7 Then
-            MediaPlayerWasActive = True 'if cutting to mediaplayer then remember we were on it, when cut away go to next item
-            If MediaMute(MediaItem) Then SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=0,1000") 'fade main audio
-        End If
-            nextpreview = liveaddr
+        HandleTransitionAudio()
+
+        nextpreview = liveaddr
         'If addr <> nextpreview Then addr = nextpreview
         liveaddr = addr
         StartLiveMove()
@@ -1299,10 +1307,8 @@ Public Class MainForm
     Private Sub BtnTransition_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnTransition.Click
         If CutLockoutTimer > 0 Then Exit Sub
 
-        If liveaddr = 7 Then
-            MediaPlayerWasActive = True
-            If MediaMute(MediaItem) Then SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=0,1000") 'if cutting to mediaplayer then remember we were on it
-        End If
+        HandleTransitionAudio()
+
         nextpreview = liveaddr
         liveaddr = addr
         StartLiveMove()
@@ -1464,7 +1470,6 @@ Public Class MainForm
     '---Click on one of the non-cam input buttons. We call this function when a controller button is clicked
     Private Sub BtnInp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnInp1.Click, BtnInp2.Click, BtnInp3.Click, BtnInp4.Click, BtnInp5.Click
         Dim index = Val(Mid(sender.name, 7))
-        Dim obssource = VMixSourceName(index)
         addr = index + 5
         SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(addr))
         setactive()
@@ -2731,11 +2736,8 @@ Public Class MainForm
                 setactive()
                 If MediaPlayerWasActive Then 'if we just transitioned away from media player, go to the next clip
                     MediaPlayerWasActive = False
-                    If MediaMute(MediaItem) Then 'restore the main audio if we muted it
-                        SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=100,1000")
-                    End If
                     BtnMNext.PerformClick()
-                    End If
+                End If
                 End If
         End If
 
