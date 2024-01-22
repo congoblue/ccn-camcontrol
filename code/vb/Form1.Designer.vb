@@ -88,10 +88,8 @@ Partial Class MainForm
         Me.TextBoxCam2Rec = New System.Windows.Forms.TextBox()
         Me.TextBoxCam3Rec = New System.Windows.Forms.TextBox()
         Me.TextBoxCam4Rec = New System.Windows.Forms.TextBox()
-        Me.Button8 = New System.Windows.Forms.Button()
         Me.Label23 = New System.Windows.Forms.Label()
         Me.TextBoxPipSrc = New System.Windows.Forms.TextBox()
-        Me.ButtonRetryOBS = New System.Windows.Forms.Button()
         Me.PresetPanel = New System.Windows.Forms.Panel()
         Me.TextBoxPresetEdit = New System.Windows.Forms.TextBox()
         Me.LabelCap3 = New System.Windows.Forms.Label()
@@ -903,7 +901,7 @@ Partial Class MainForm
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(38, 16)
         Me.Label13.TabIndex = 215
-        Me.Label13.Text = "v1.0.2"
+        Me.Label13.Text = "v1.0.3"
         '
         'LabelProfile
         '
@@ -1016,17 +1014,6 @@ Partial Class MainForm
         Me.TextBoxCam4Rec.TabIndex = 287
         Me.TextBoxCam4Rec.Text = "."
         '
-        'Button8
-        '
-        Me.Button8.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button8.Location = New System.Drawing.Point(208, 317)
-        Me.Button8.Name = "Button8"
-        Me.Button8.Size = New System.Drawing.Size(51, 40)
-        Me.Button8.TabIndex = 288
-        Me.Button8.Text = "Files"
-        Me.Button8.UseVisualStyleBackColor = True
-        Me.Button8.Visible = False
-        '
         'Label23
         '
         Me.Label23.AutoSize = True
@@ -1052,16 +1039,6 @@ Partial Class MainForm
         Me.TextBoxPipSrc.TabIndex = 302
         Me.TextBoxPipSrc.Text = "Words"
         Me.TextBoxPipSrc.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'ButtonRetryOBS
-        '
-        Me.ButtonRetryOBS.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtonRetryOBS.Location = New System.Drawing.Point(459, 204)
-        Me.ButtonRetryOBS.Name = "ButtonRetryOBS"
-        Me.ButtonRetryOBS.Size = New System.Drawing.Size(80, 50)
-        Me.ButtonRetryOBS.TabIndex = 315
-        Me.ButtonRetryOBS.Text = "Retry OBS"
-        Me.ButtonRetryOBS.UseVisualStyleBackColor = True
         '
         'PresetPanel
         '
@@ -1364,7 +1341,6 @@ Partial Class MainForm
         Me.CamPanel.Controls.Add(Me.TextBoxCam4Rec)
         Me.CamPanel.Controls.Add(Me.TextBoxCam3Rec)
         Me.CamPanel.Controls.Add(Me.TextBoxCam2Rec)
-        Me.CamPanel.Controls.Add(Me.Button8)
         Me.CamPanel.Controls.Add(Me.TextBoxCam1Rec)
         Me.CamPanel.Controls.Add(Me.TextPlayerTime)
         Me.CamPanel.Controls.Add(Me.BtnCam4Rec)
@@ -1463,7 +1439,6 @@ Partial Class MainForm
         Me.SettingsPanel.Controls.Add(Me.Label3)
         Me.SettingsPanel.Controls.Add(Me.CheckBoxCam5Dis)
         Me.SettingsPanel.Controls.Add(Me.BtnSetupOsd)
-        Me.SettingsPanel.Controls.Add(Me.ButtonRetryOBS)
         Me.SettingsPanel.Controls.Add(Me.BtnSetupDown)
         Me.SettingsPanel.Controls.Add(Me.BtnSetupUp)
         Me.SettingsPanel.Controls.Add(Me.BtnSetupEnter)
@@ -1532,7 +1507,7 @@ Partial Class MainForm
         'ButtonTouchscreen
         '
         Me.ButtonTouchscreen.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtonTouchscreen.Location = New System.Drawing.Point(545, 204)
+        Me.ButtonTouchscreen.Location = New System.Drawing.Point(480, 205)
         Me.ButtonTouchscreen.Name = "ButtonTouchscreen"
         Me.ButtonTouchscreen.Size = New System.Drawing.Size(80, 50)
         Me.ButtonTouchscreen.TabIndex = 319
@@ -4121,7 +4096,6 @@ Partial Class MainForm
     Friend WithEvents TextBoxCam2Rec As System.Windows.Forms.TextBox
     Friend WithEvents TextBoxCam3Rec As System.Windows.Forms.TextBox
     Friend WithEvents TextBoxCam4Rec As System.Windows.Forms.TextBox
-    Friend WithEvents Button8 As System.Windows.Forms.Button
     Friend WithEvents Label23 As System.Windows.Forms.Label
     Friend WithEvents Auxsel10 As CCNCamcontrol.MyButton
     Friend WithEvents Auxsel11 As CCNCamcontrol.MyButton
@@ -4132,7 +4106,6 @@ Partial Class MainForm
     Friend WithEvents Aux3Btn12 As CCNCamcontrol.MyButton
     Friend WithEvents AuxSel12 As CCNCamcontrol.MyButton
     Friend WithEvents BtnInp4 As CCNCamcontrol.MyButton
-    Friend WithEvents ButtonRetryOBS As System.Windows.Forms.Button
     Private WithEvents ShapeContainer1 As Microsoft.VisualBasic.PowerPacks.ShapeContainer
     Private WithEvents LineShape5 As Microsoft.VisualBasic.PowerPacks.LineShape
     Private WithEvents LineShape4 As Microsoft.VisualBasic.PowerPacks.LineShape
@@ -4190,7 +4163,6 @@ Partial Class MainForm
     Friend WithEvents BtnSlowPanL As MyButton
     Friend WithEvents BtnCNxt As MyButton
     Friend WithEvents BtnCPrev As MyButton
-    Friend WithEvents ShapeContainer3 As PowerPacks.ShapeContainer
     Private WithEvents LineShapeCapR As PowerPacks.LineShape
     Private WithEvents LineShapeCapL As PowerPacks.LineShape
     Private WithEvents LineShapeCapB As PowerPacks.LineShape
@@ -4297,4 +4269,5 @@ Partial Class MainForm
     Friend WithEvents Media1LoopCheckBox As CheckBox
     Friend WithEvents Media1TextBox As TextBox
     Friend WithEvents Label38 As Label
+    Private WithEvents ShapeContainer3 As PowerPacks.ShapeContainer
 End Class

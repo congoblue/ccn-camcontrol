@@ -1,56 +1,39 @@
-﻿Imports System.Net.Sockets
-Imports System.Net
+﻿Imports System.Net
 Imports System.Text
 Imports System.IO
 Imports System.IO.Ports
 Imports System.Threading
 Imports System.ComponentModel
-Imports System.Web.Script.Serialization
-Imports WebSocket4Net
 
 
 
 
 Public Class MainForm
 
-    Dim VMixMode As Boolean = True
     Dim VMixError As Boolean = False
-    Const BUFSIZE As Integer = 256
-    Dim _serialPort As New SerialPort
-    Dim buffer(BUFSIZE) As Byte
-    Dim BufPutIndex As Integer = 0
-    Dim BufGetIndex As Integer = 0
-    Dim BufCount As Integer = 0
-    Dim startuptimer As Integer = 0
+    Dim StartupTimer As Integer = 0
     Dim ShutDownTimer As Integer = 0
     Dim ComCheckTimer As Integer = 18
-    Dim addr As Integer
-    Dim inpaddr As Integer
-    Dim liveaddr As Integer
-    Dim kc As Integer
-    Dim cdir As Integer
-    Dim savemode As Boolean
+    Dim Addr As Integer
+    Dim LiveAddr As Integer
+    Dim CDir As Integer
+    Dim SaveMode As Boolean
     Dim PresetLegendMode As Integer = 0
-    Dim atemconnect As Boolean = False
-    Dim camconnect As Boolean
-    Dim overlayactive As Boolean
-    Dim mediaoverlayactive As Boolean
+    Dim OverlayActive As Boolean
+    Dim MediaOverlayActive As Boolean
     Dim CaptionIndex As Integer = 1
-    Dim VISMacrosConnection As New System.Net.Sockets.TcpClient()
-    Dim ServerNetworkStream As NetworkStream
-    Dim websocket As WebSocket4Net.WebSocket
     Dim VmixResponse As String
     Dim VmixRecState As Boolean
     Dim VmixStreamState As Boolean
     Dim VmixRecTime As String
     Dim VmixStreamTime As String
-    Dim gain(8) As Integer
-    Dim wblock(8) As Integer
+    Dim Gain(8) As Integer
+    Dim WbLock(8) As Integer
     Dim DelayStop As Integer
     Dim DelayAddr As Integer
-    Dim nextpreview As Integer
-    Dim transitionwait As Integer
-    Dim presetstate(8) As Integer
+    Dim NextPreview As Integer
+    Dim TransitionWait As Integer
+    Dim PresetState(8) As Integer
     Dim CamIris(8) As Integer
     Dim CamAgc(8) As Integer
     Dim CamAEShift(8) As Integer
@@ -60,7 +43,6 @@ Public Class MainForm
     Dim CamFocusManual(8) As Integer
     Dim CamFocus(8) As Integer
     Dim ProgCloseTimer As Integer = 0
-    Dim OverlayWasActive As Integer = 0
     Dim CamIgnore(8) As Boolean
     Dim PendingZoom As Integer = 0
     Dim PendingPan As Integer = 0
@@ -72,42 +54,19 @@ Public Class MainForm
     Dim PzAddr As Integer
     Dim PTZLive As Boolean = False
     Dim PresetLive As Boolean = False
-    Dim AutoSongMode As Boolean = False
-    Dim AutoSongPreload As Boolean = False
-    Dim PrevAutoSongShot As Integer
-    Dim AutoSpeechMode As Boolean = False
-    Dim PrevAutoSpeech As Boolean = False
-    Dim SingleAutoShot As Integer = 0
-    Dim AutoPreset As Integer = 0
-    Dim AutoWait As Integer = 0
     Dim CutLockoutTimer As Integer
-    Dim ctrlkey As Boolean
+    Dim CtrlKey As Boolean
     Dim CamOverride As Integer = 0
-    Dim AudioFade As Integer
-    Dim AudioLevel As Integer
-    Dim MediaLevel As Integer
-    Dim MediaNext As Boolean
-    Dim PlayerAutoPause As Boolean
-    Dim PlayerAutoNext As Boolean
-    Dim PlayerLoop As Boolean
-    Dim TieAux3 As Boolean = True
-    Dim CurrentAux3 As Integer
-    Dim PrevAux3 As Integer = 0
     Dim CamRec(4) As Boolean
     Dim CamRecStatusTimer As Integer = 0
     Dim CamCmdPending As Boolean = False
-    Dim PipAddr As Integer = 0 'the input showing pip
     Dim MediaItem As Integer
     Dim MediaPlayerWasActive As Boolean = False
-    Dim WebsocketID As Integer
-    Dim Websocketwait As Boolean
-    Dim WebsocketReinitTimer As Integer = 0
     Dim MovePresetMode As Integer = 0
     Dim MovePresetFrom As Integer = 0
     Dim PresetLoadStart As Integer = 0
     Dim PresetLoadFileCount As Integer = 0
     Dim EncoderAllocation(2) As Integer
-    Dim WebsocketTimeout As Boolean = False
     Dim ScreenCount As Integer
     Dim StreamPending As Boolean = False
     Dim StreamPendingTime As Integer
@@ -115,6 +74,19 @@ Public Class MainForm
     Dim MediaLoop(5) As Boolean
     Dim MediaMute(5) As Boolean
     Dim MediaMax As Integer = 5
+
+    Dim TallyMode As Boolean
+    Dim AutoSwap As Boolean
+    Dim CamInvert(8) As Boolean
+    Dim CamIP(8) As String
+    Dim PresetFileName As String
+    Dim PresetFilePath As String
+    Dim CamStatus(8) As Boolean
+    Dim Cam1Dis As Boolean
+    Dim Cam2Dis As Boolean
+    Dim Cam3Dis As Boolean
+    Dim Cam4Dis As Boolean
+    Dim Cam5Dis As Boolean
 
     Dim JoyX As Byte
     Dim JoyY As Byte
@@ -160,9 +132,6 @@ Public Class MainForm
     Dim PreloadPreset As Integer
     Dim LiveMoveSpeed As Integer = 0
     Dim ClipRemainTime As Integer
-
-    Dim LuaReturn As String
-    Dim PipLive As Boolean
 
     'arrays to store preset positions
     Dim PresetCaption(128) As String
@@ -242,34 +211,29 @@ Public Class MainForm
         'Debug.Print(joyconvert(i) & ",")
         'Next
 
-        Globals.TallyMode = GetSetting("CCNCamControl", "Set", "Tally", False)
-        Globals.AutoSwap = GetSetting("CCNCamControl", "Set", "Autoswap", True)
-        Globals.PresetFilePath = GetSetting("CCNCamControl", "Set", "PresetsPath", Mid(Application.ExecutablePath, 1, InStrRev(Application.ExecutablePath, "\")))
-        If Globals.PresetFilePath = "" Then Globals.PresetFilePath = Mid(Application.ExecutablePath, 1, InStrRev(Application.ExecutablePath, "\"))
-        Globals.PresetFileName = GetSetting("CCNCamControl", "Set", "PresetsFile", "default.aps")
-        If InStr(Globals.PresetFileName, "\") Then Globals.PresetFileName = Mid(Globals.PresetFileName, InStrRev(Globals.PresetFileName, "\") + 1)
-        If Globals.PresetFileName = "" Then Globals.PresetFileName = "default.aps"
-        Globals.CamInvert(1) = GetSetting("CCNCamControl", "Set", "Caminvert1", False)
-        Globals.CamInvert(2) = GetSetting("CCNCamControl", "Set", "Caminvert2", False)
-        Globals.CamInvert(3) = GetSetting("CCNCamControl", "Set", "Caminvert3", False)
-        Globals.CamInvert(4) = GetSetting("CCNCamControl", "Set", "Caminvert4", False)
+        TallyMode = GetSetting("CCNCamControl", "Set", "Tally", False)
+        AutoSwap = GetSetting("CCNCamControl", "Set", "Autoswap", True)
+        PresetFilePath = GetSetting("CCNCamControl", "Set", "PresetsPath", Mid(Application.ExecutablePath, 1, InStrRev(Application.ExecutablePath, "\")))
+        If PresetFilePath = "" Then PresetFilePath = Mid(Application.ExecutablePath, 1, InStrRev(Application.ExecutablePath, "\"))
+        PresetFileName = GetSetting("CCNCamControl", "Set", "PresetsFile", "default.aps")
+        If InStr(PresetFileName, "\") Then PresetFileName = Mid(PresetFileName, InStrRev(PresetFileName, "\") + 1)
+        If PresetFileName = "" Then PresetFileName = "default.aps"
+        CamInvert(1) = GetSetting("CCNCamControl", "Set", "Caminvert1", False)
+        CamInvert(2) = GetSetting("CCNCamControl", "Set", "Caminvert2", False)
+        CamInvert(3) = GetSetting("CCNCamControl", "Set", "Caminvert3", False)
+        CamInvert(4) = GetSetting("CCNCamControl", "Set", "Caminvert4", False)
 
-        Globals.Cam1Dis = GetSetting("CCNCamControl", "Set", "Cam1Dis", False)
-        Globals.Cam2Dis = GetSetting("CCNCamControl", "Set", "Cam2Dis", False)
-        Globals.Cam3Dis = GetSetting("CCNCamControl", "Set", "Cam3Dis", False)
-        Globals.Cam4Dis = GetSetting("CCNCamControl", "Set", "Cam4Dis", False)
-        Globals.Cam5Dis = GetSetting("CCNCamControl", "Set", "Cam5Dis", False)
+        Cam1Dis = GetSetting("CCNCamControl", "Set", "Cam1Dis", False)
+        Cam2Dis = GetSetting("CCNCamControl", "Set", "Cam2Dis", False)
+        Cam3Dis = GetSetting("CCNCamControl", "Set", "Cam3Dis", False)
+        Cam4Dis = GetSetting("CCNCamControl", "Set", "Cam4Dis", False)
+        Cam5Dis = GetSetting("CCNCamControl", "Set", "Cam5Dis", False)
 
-        Globals.CamIP(1) = (GetSetting("CCNCamControl", "CamIP", "1", "192.168.1.91"))
-        Globals.CamIP(2) = (GetSetting("CCNCamControl", "CamIP", "2", "192.168.1.92"))
-        Globals.CamIP(3) = (GetSetting("CCNCamControl", "CamIP", "3", "192.168.1.93"))
-        Globals.CamIP(4) = (GetSetting("CCNCamControl", "CamIP", "4", "192.168.1.94"))
-        Globals.CamIP(5) = (GetSetting("CCNCamControl", "CamIP", "5", "192.168.1.95"))
-
-        Globals.Cliptime(1) = (GetSetting("CCNCamControl", "Cliptime", "1", "60"))
-        Globals.Cliptime(2) = (GetSetting("CCNCamControl", "Cliptime", "2", "60"))
-        Globals.Cliptime(3) = (GetSetting("CCNCamControl", "Cliptime", "3", "60"))
-        Globals.Cliptime(4) = (GetSetting("CCNCamControl", "Cliptime", "4", "60"))
+        CamIP(1) = (GetSetting("CCNCamControl", "CamIP", "1", "192.168.1.91"))
+        CamIP(2) = (GetSetting("CCNCamControl", "CamIP", "2", "192.168.1.92"))
+        CamIP(3) = (GetSetting("CCNCamControl", "CamIP", "3", "192.168.1.93"))
+        CamIP(4) = (GetSetting("CCNCamControl", "CamIP", "4", "192.168.1.94"))
+        CamIP(5) = (GetSetting("CCNCamControl", "CamIP", "5", "192.168.1.95"))
 
         For i = 0 To MediaMax
             MediaFiles(i) = GetSetting("CCNCamControl", "MediaFiles", i, "")
@@ -291,7 +255,6 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Disposed(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Disposed
-        If _serialPort.IsOpen Then _serialPort.Close()
         If SerialPort1.IsOpen Then SerialPort1.Close()
         'BackgroundWorker1.CancelAsync()
     End Sub
@@ -302,7 +265,7 @@ Public Class MainForm
         'Exit Sub
         Dim aryFi As IO.FileInfo()
         Try
-            Dim di As New IO.DirectoryInfo(Globals.PresetFilePath)
+            Dim di As New IO.DirectoryInfo(PresetFilePath)
             aryFi = di.GetFiles("*.aps")
         Catch
             MsgBox("Preset file error")
@@ -311,7 +274,6 @@ Public Class MainForm
         End Try
         Dim fi As IO.FileInfo
         Dim btnct As Integer = 0
-        Dim i As Integer
 
 
         PresetLoadPanel.Left = 50
@@ -412,8 +374,8 @@ Public Class MainForm
                 End If
                 PresetLoadRedraw()
             Else
-                Globals.PresetFileName = pfname
-                SaveSetting("CCNCamControl", "Set", "PresetsFile", Globals.PresetFileName)
+                PresetFileName = pfname
+                SaveSetting("CCNCamControl", "Set", "PresetsFile", PresetFileName)
                 ReadPresetFile()
 
                 For i = 0 To PresetLoadFileCount - 1
@@ -499,17 +461,17 @@ Public Class MainForm
     '---Send a command to the current preview camera
     Private Function SendCamCmd(ByVal cmd As String)
         Dim url As String, result As String
-        If addr = 0 Or addr > 5 Then Return ""
+        If Addr = 0 Or Addr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
-        If CamIgnore(addr) = True Then Return ""
-        url = "http://" & Globals.CamIP(addr) & "/cgi-bin/aw_ptz?cmd=%23" & cmd & "&res=1"
+        If CamIgnore(Addr) = True Then Return ""
+        url = "http://" & CamIP(Addr) & "/cgi-bin/aw_ptz?cmd=%23" & cmd & "&res=1"
         result = ""
         Try
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            CamIgnore(addr) = True
-            ShowMsgBox("Error sending to camera " & addr & " (" & ex.Message & ")")
+            CamIgnore(Addr) = True
+            ShowMsgBox("Error sending to camera " & Addr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
         Return result
@@ -518,18 +480,18 @@ Public Class MainForm
     '---send a no-hash type command to a camera
     Private Function SendCamCmdNoHash(ByVal cmd As String, ByVal typ As String)
         Dim url As String, result As String
-        If addr = 0 Or addr > 5 Then Return ""
+        If Addr = 0 Or Addr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
-        If CamIgnore(addr) = True Then Return ""
+        If CamIgnore(Addr) = True Then Return ""
         If (typ = "") Then typ = "aw_ptz" 'aw_ptz for position, aw_cam for cam settings
-        url = "http://" & Globals.CamIP(addr) & "/cgi-bin/" & typ & "?cmd=" & cmd & "&res=1"
+        url = "http://" & CamIP(Addr) & "/cgi-bin/" & typ & "?cmd=" & cmd & "&res=1"
         result = ""
         Try
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            CamIgnore(addr) = True
-            ShowMsgBox("Error sending to camera " & addr & " (" & ex.Message & ")")
+            CamIgnore(Addr) = True
+            ShowMsgBox("Error sending to camera " & Addr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
         Return result
@@ -541,7 +503,7 @@ Public Class MainForm
         If caddr = 0 Or caddr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
         If CamIgnore(caddr) = True Then Return ""
-        url = "http://" & Globals.CamIP(caddr) & "/cgi-bin/aw_ptz?cmd=%23" & cmd & "&res=1"
+        url = "http://" & CamIP(caddr) & "/cgi-bin/aw_ptz?cmd=%23" & cmd & "&res=1"
         result = ""
         Try
             'CamCmdPending = True
@@ -561,7 +523,7 @@ Public Class MainForm
         'If CamCmdPending = True Then Return ""
         If CamIgnore(caddr) = True Then Return ""
         If (typ = "") Then typ = "aw_ptz" 'aw_ptz for position, aw_cam for cam settings
-        url = "http://" & Globals.CamIP(caddr) & "/cgi-bin/" & typ & "?cmd=" & cmd & "&res=1"
+        url = "http://" & CamIP(caddr) & "/cgi-bin/" & typ & "?cmd=" & cmd & "&res=1"
         result = ""
         Try
             'CamCmdPending = True
@@ -580,7 +542,7 @@ Public Class MainForm
         If caddr = 0 Or caddr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
         If CamIgnore(caddr) = True Then Return ""
-        url = "http://" & Globals.CamIP(caddr) & "/cgi-bin/" & cmd
+        url = "http://" & CamIP(caddr) & "/cgi-bin/" & cmd
         result = ""
         Try
             'CamCmdPending = True
@@ -597,7 +559,7 @@ Public Class MainForm
     Public Sub SendCamQueryNoResponse(ByVal caddr As Integer, ByVal cmd As String)
         Dim webClient As New System.Net.WebClient
         Dim url As String
-        url = "http://" & Globals.CamIP(caddr) & "/cgi-bin/" & cmd
+        url = "http://" & CamIP(caddr) & "/cgi-bin/" & cmd
         webClient.DownloadString(url)
     End Sub
 
@@ -631,10 +593,10 @@ Public Class MainForm
     Sub ReadPresetFile()
         Dim TextFileReader As Microsoft.VisualBasic.FileIO.TextFieldParser
         Try
-            TextFileReader = My.Computer.FileSystem.OpenTextFieldParser(Globals.PresetFilePath & Globals.PresetFileName)
+            TextFileReader = My.Computer.FileSystem.OpenTextFieldParser(PresetFilePath & PresetFileName)
         Catch
             WritePresetFile()
-            TextFileReader = My.Computer.FileSystem.OpenTextFieldParser(Globals.PresetFilePath & Globals.PresetFileName)
+            TextFileReader = My.Computer.FileSystem.OpenTextFieldParser(PresetFilePath & PresetFileName)
         End Try
         TextFileReader.TextFieldType = FileIO.FieldType.Delimited
         TextFileReader.SetDelimiters(",")
@@ -715,9 +677,9 @@ Public Class MainForm
         Dim i As Integer, j As Integer
         Dim ln As String
         Try
-            file = My.Computer.FileSystem.OpenTextFileWriter(Globals.PresetFilePath & Globals.PresetFileName, False) 'false=no append
+            file = My.Computer.FileSystem.OpenTextFileWriter(PresetFilePath & PresetFileName, False) 'false=no append
         Catch
-            MsgBox("Could not write preset file " & Globals.PresetFilePath & Globals.PresetFileName)
+            MsgBox("Could not write preset file " & PresetFilePath & PresetFileName)
             Return
         End Try
 
@@ -781,7 +743,7 @@ Public Class MainForm
     ' Edit preset button captions directly on the buttons by moving a textbox around
     '--------------------------------------------------------------------------------------------------------------
     Sub StartEditPresetDetails(ByVal index As Integer)
-        TextBoxPresetEdit.Text = PresetCaption((addr - 1) * 16 + index - 1)
+        TextBoxPresetEdit.Text = PresetCaption((Addr - 1) * 16 + index - 1)
         TextBoxPresetEdit.Visible = True
         Dim btnx = ((index - 1) Mod 4)
         Dim btny = Int(((index - 1) / 4))
@@ -801,7 +763,7 @@ Public Class MainForm
         If TextBoxPresetEdit.Visible = False Then
             Exit Sub 'another action may have already run this routine
         End If
-        If (PresetLegendMode <> 0) Then PresetCaption((addr - 1) * 16 + PresetLegendMode - 1) = TextBoxPresetEdit.Text
+        If (PresetLegendMode <> 0) Then PresetCaption((Addr - 1) * 16 + PresetLegendMode - 1) = TextBoxPresetEdit.Text
         BtnEditPreset.BackColor = Color.White
         PresetLegendMode = 0
         TextBoxPresetEdit.Visible = False
@@ -848,7 +810,7 @@ Public Class MainForm
                 Exit Sub
             End If
             If MovePresetMode = 2 Then 'select where its going
-                If PresetLive = False Then ad = addr Else ad = liveaddr
+                If PresetLive = False Then ad = Addr Else ad = LiveAddr
                 'swap caption
                 Dim tmp
                 tmp = PresetCaption((ad - 1) * 16 + (MovePresetFrom - 1)) : PresetCaption((ad - 1) * 16 + (MovePresetFrom - 1)) = PresetCaption((ad - 1) * 16 + (index - 1)) : PresetCaption((ad - 1) * 16 + (index - 1)) = tmp
@@ -872,23 +834,22 @@ Public Class MainForm
 
         End If
 
-        If savemode = False Then
+        If SaveMode = False Then
             If PresetLegendMode = 0 Then
                 '---recall a preset--------------------------------------
-                AutoPreset = 0
                 If PreloadPreset = 0 Then
                     '---Recall a preset either live or preview
-                    If (addr = 5) Then
+                    If (Addr = 5) Then
                         If index < 11 Then
                             SendCamCmd("R0" & index - 1) 'recall preset on camera for cam5
-                            presetstate(addr) = 2 ^ (index - 1)
+                            PresetState(Addr) = 2 ^ (index - 1)
                             UpdatePresets() 'show presets for new cam
                         End If
                     End If
-                    If ((PresetLive = False) And (addr < 5)) Or ((PresetLive = True) And (liveaddr < 5)) Then 'recall preset
+                    If ((PresetLive = False) And (Addr < 5)) Or ((PresetLive = True) And (LiveAddr < 5)) Then 'recall preset
                         'SendCamCmd("UPVS250")
-                        If (addr = liveaddr) Or PresetLive = True Then 'live preset recall. attempt to go there slowly
-                            ad = liveaddr
+                        If (Addr = LiveAddr) Or PresetLive = True Then 'live preset recall. attempt to go there slowly
+                            ad = LiveAddr
                             cu = SendCamCmdAddr(ad, "GZ") 'get current zoom pos
                             cz = Val("&H" & Mid(cu, 3)) 'the current zoom pos in decimal
                             pz = Val("&H" & PresetZPos((ad - 1) * 16 + index - 1)) 'the new zoom pos in decimal
@@ -969,25 +930,23 @@ Public Class MainForm
                             SendCamCmdAddr(ad, "PTS" & Format("00", xt) & Format("00", yt))
                             If xt <> 0 Then PendingPan = px
                             If yt <> 0 Then PendingTilt = py
-                            presetstate(ad) = 2 ^ (index - 1)
+                            PresetState(ad) = 2 ^ (index - 1)
                             BtnLive.BackColor = Color.White : PresetLive = False
                         Else
                             cu = "101" 'preview cam move - move at fast speed (not max speed as that is quite noisy)
-                            SendCamCmd("AXZ" & PresetZPos((addr - 1) * 16 + index - 1))
-                            SendCamCmd("APS" & PresetXPos((addr - 1) * 16 + index - 1) & PresetYPos((addr - 1) * 16 + index - 1) & cu) 'last 3 set speed 1D=max 0-1-2 = slow med fast
-                            presetstate(addr) = 2 ^ (index - 1)
-                            PrevAutoSongShot = index
+                            SendCamCmd("AXZ" & PresetZPos((Addr - 1) * 16 + index - 1))
+                            SendCamCmd("APS" & PresetXPos((Addr - 1) * 16 + index - 1) & PresetYPos((Addr - 1) * 16 + index - 1) & cu) 'last 3 set speed 1D=max 0-1-2 = slow med fast
+                            PresetState(Addr) = 2 ^ (index - 1)
                         End If
                         UpdatePresets() 'show presets for new cam
 
                     End If
                 Else 'preload preset mode
-                    If (addr <= 4) Then
+                    If (Addr <= 4) Then
                         'If (PreloadPreset <> 0) Then
-                        AutoSongPreload = False
                         PreloadPreset = index
                         UpdatePresets()
-                        cdir = 0
+                        CDir = 0
                         SetLiveMoveIndicators()
                         'End If
                     End If
@@ -999,45 +958,45 @@ Public Class MainForm
             End If
         Else
             'save current preset position
-            If (addr <= 4) Then
+            If (Addr <= 4) Then
                 op = SendCamCmd("GZ") 'get current zoom position
                 op = Mid(op, 3)
-                PresetZPos((addr - 1) * 16 + index - 1) = op
+                PresetZPos((Addr - 1) * 16 + index - 1) = op
                 op = SendCamCmd("APC") 'get current pt position
                 op = Mid(op, 4)
-                PresetXPos((addr - 1) * 16 + index - 1) = Mid(op, 1, 4)
-                PresetYPos((addr - 1) * 16 + index - 1) = Mid(op, 5, 4)
+                PresetXPos((Addr - 1) * 16 + index - 1) = Mid(op, 1, 4)
+                PresetYPos((Addr - 1) * 16 + index - 1) = Mid(op, 5, 4)
                 op = SendCamCmd("D1") 'get current autofocus state
                 op = Mid(op, 3)
                 If (op = "0") Then
                     op = SendCamCmd("GF") 'get current focus position
                     op = Mid(op, 3)
-                    PresetFocus((addr - 1) * 16 + index - 1) = op
+                    PresetFocus((Addr - 1) * 16 + index - 1) = op
                 Else
-                    PresetFocus((addr - 1) * 16 + index - 1) = 9999
+                    PresetFocus((Addr - 1) * 16 + index - 1) = 9999
                 End If
-                op = SendCamCmdAddrNoHash(addr, "QSD:48", "aw_cam") 'get "contrast" setting
-                PresetAE((addr - 1) * 16 + index - 1) = (Val(Mid(op, 8)) - 32) * 20 / 64
-                op = SendCamCmdAddrNoHash(addr, "QRV", "aw_cam") 'get iris setting
-                PresetIris((addr - 1) * 16 + index - 1) = Val("&H" & Mid(op, 5))
+                op = SendCamCmdAddrNoHash(Addr, "QSD:48", "aw_cam") 'get "contrast" setting
+                PresetAE((Addr - 1) * 16 + index - 1) = (Val(Mid(op, 8)) - 32) * 20 / 64
+                op = SendCamCmdAddrNoHash(Addr, "QRV", "aw_cam") 'get iris setting
+                PresetIris((Addr - 1) * 16 + index - 1) = Val("&H" & Mid(op, 5))
 
-                If PresetCaption((addr - 1) * 16 + index - 1) = Convert.ToString(index) Then 'automatically ask for legend if the legend is just the initial number
+                If PresetCaption((Addr - 1) * 16 + index - 1) = Convert.ToString(index) Then 'automatically ask for legend if the legend is just the initial number
                     PresetLegendMode = index
                     StartEditPresetDetails(index)
                 End If
-                presetstate(addr) = 2 ^ (index - 1)
+                PresetState(Addr) = 2 ^ (index - 1)
                 setactive()
-            ElseIf addr = 5 Then
+            ElseIf Addr = 5 Then
                 If index < 11 Then
                     SendCamCmd("M0" & index - 1) 'store preset on camera for cam5
-                    If PresetCaption((addr - 1) * 16 + index - 1) = Convert.ToString(index) Then 'automatically ask for legend if the legend is just the initial number
+                    If PresetCaption((Addr - 1) * 16 + index - 1) = Convert.ToString(index) Then 'automatically ask for legend if the legend is just the initial number
                         StartEditPresetDetails(index)
                     End If
-                    presetstate(addr) = 2 ^ (index - 1)
+                    PresetState(Addr) = 2 ^ (index - 1)
                     setactive()
                 End If
             End If
-            savemode = 0
+            SaveMode = 0
             WritePresetFile()
             BtnPresetSave.BackColor = Color.White
 
@@ -1047,7 +1006,7 @@ Public Class MainForm
     '---Update the camera settings values on the cam details screen
     Sub ShowCamValues()
         Dim ad As Integer
-        If (PTZLive = False) Then ad = addr Else ad = liveaddr
+        If (PTZLive = False) Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         If CamIris(ad) <> 9999 Then TextBoxIris.Text = CamIris(ad) Else TextBoxIris.Text = "Auto"
         If (CamAgc(ad) <= &H38) Then TextBoxAgc.Text = CamAgc(ad) * 3 & "dB" Else TextBoxAgc.Text = "Auto"
@@ -1074,8 +1033,8 @@ Public Class MainForm
     '-----------------------------------------------------
     Sub SetControllerLedState(ByVal op)
         ControllerLedState(op - 1) = 0
-        If addr = op Then ControllerLedState(op - 1) = ControllerLedState(op - 1) + 2 'green
-        If liveaddr = op Then ControllerLedState(op - 1) = ControllerLedState(op - 1) + 1 'red
+        If Addr = op Then ControllerLedState(op - 1) = ControllerLedState(op - 1) + 2 'green
+        If LiveAddr = op Then ControllerLedState(op - 1) = ControllerLedState(op - 1) + 1 'red
     End Sub
 
     '-----------------------------------------------------
@@ -1093,61 +1052,58 @@ Public Class MainForm
         BtnInp3.BackColor = Color.White
         BtnInp4.BackColor = Color.White
         BtnInp5.BackColor = Color.White
-        If addr = liveaddr Then
-            If addr = 1 Then BtnCam1.BackColor = Color.Yellow
-            If addr = 2 Then BtnCam2.BackColor = Color.Yellow
-            If addr = 3 Then BtnCam3.BackColor = Color.Yellow
-            If addr = 4 Then BtnCam4.BackColor = Color.Yellow
-            If addr = 5 Then BtnCam5.BackColor = Color.Yellow
-            If addr = 6 Then BtnInp1.BackColor = Color.Yellow
-            If addr = 7 Then BtnInp2.BackColor = Color.Yellow
-            If addr = 8 Then BtnInp3.BackColor = Color.Yellow
-            If addr = 9 Then BtnInp4.BackColor = Color.Yellow
-            If addr = 10 Then BtnInp5.BackColor = Color.Yellow
+        If Addr = LiveAddr Then
+            If Addr = 1 Then BtnCam1.BackColor = Color.Yellow
+            If Addr = 2 Then BtnCam2.BackColor = Color.Yellow
+            If Addr = 3 Then BtnCam3.BackColor = Color.Yellow
+            If Addr = 4 Then BtnCam4.BackColor = Color.Yellow
+            If Addr = 5 Then BtnCam5.BackColor = Color.Yellow
+            If Addr = 6 Then BtnInp1.BackColor = Color.Yellow
+            If Addr = 7 Then BtnInp2.BackColor = Color.Yellow
+            If Addr = 8 Then BtnInp3.BackColor = Color.Yellow
+            If Addr = 9 Then BtnInp4.BackColor = Color.Yellow
+            If Addr = 10 Then BtnInp5.BackColor = Color.Yellow
         Else
-            If addr = 1 Then BtnCam1.BackColor = Color.Green
-            If addr = 2 Then BtnCam2.BackColor = Color.Green
-            If addr = 3 Then BtnCam3.BackColor = Color.Green
-            If addr = 4 Then BtnCam4.BackColor = Color.Green
-            If addr = 5 Then BtnCam5.BackColor = Color.Green
-            If addr = 6 Then BtnInp1.BackColor = Color.Green
-            If addr = 7 Then BtnInp2.BackColor = Color.Green
-            If addr = 8 Then BtnInp3.BackColor = Color.Green
-            If addr = 9 Then BtnInp4.BackColor = Color.Green
-            If addr = 10 Then BtnInp5.BackColor = Color.Green
-            If liveaddr = 1 Then BtnCam1.BackColor = Color.Red
-            If liveaddr = 2 Then BtnCam2.BackColor = Color.Red
-            If liveaddr = 3 Then BtnCam3.BackColor = Color.Red
-            If liveaddr = 4 Then BtnCam4.BackColor = Color.Red
-            If liveaddr = 5 Then BtnCam5.BackColor = Color.Red
-            If liveaddr = 6 Then BtnInp1.BackColor = Color.Red
-            If liveaddr = 7 Then BtnInp2.BackColor = Color.Red
-            If liveaddr = 8 Then BtnInp3.BackColor = Color.Red
-            If liveaddr = 9 Then BtnInp4.BackColor = Color.Red
-            If liveaddr = 10 Then BtnInp5.BackColor = Color.Red
+            If Addr = 1 Then BtnCam1.BackColor = Color.Green
+            If Addr = 2 Then BtnCam2.BackColor = Color.Green
+            If Addr = 3 Then BtnCam3.BackColor = Color.Green
+            If Addr = 4 Then BtnCam4.BackColor = Color.Green
+            If Addr = 5 Then BtnCam5.BackColor = Color.Green
+            If Addr = 6 Then BtnInp1.BackColor = Color.Green
+            If Addr = 7 Then BtnInp2.BackColor = Color.Green
+            If Addr = 8 Then BtnInp3.BackColor = Color.Green
+            If Addr = 9 Then BtnInp4.BackColor = Color.Green
+            If Addr = 10 Then BtnInp5.BackColor = Color.Green
+            If LiveAddr = 1 Then BtnCam1.BackColor = Color.Red
+            If LiveAddr = 2 Then BtnCam2.BackColor = Color.Red
+            If LiveAddr = 3 Then BtnCam3.BackColor = Color.Red
+            If LiveAddr = 4 Then BtnCam4.BackColor = Color.Red
+            If LiveAddr = 5 Then BtnCam5.BackColor = Color.Red
+            If LiveAddr = 6 Then BtnInp1.BackColor = Color.Red
+            If LiveAddr = 7 Then BtnInp2.BackColor = Color.Red
+            If LiveAddr = 8 Then BtnInp3.BackColor = Color.Red
+            If LiveAddr = 9 Then BtnInp4.BackColor = Color.Red
+            If LiveAddr = 10 Then BtnInp5.BackColor = Color.Red
         End If
         'controller button LEDs
         For i = 1 To 10
             SetControllerLedState(i)
         Next
         'tally lights on cams
-        If Globals.TallyMode Then
-            SendCamCmdAddr(nextpreview, "DA0")
-            SendCamCmdAddr(liveaddr, "DA1")
+        If TallyMode Then
+            SendCamCmdAddr(NextPreview, "DA0")
+            SendCamCmdAddr(LiveAddr, "DA1")
         End If
-        If transitionwait = 0 Then
-            If addr <= 5 Then SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(addr))
+        If TransitionWait = 0 Then
+            If Addr <= 5 Then SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(Addr))
         End If
 
         'cam settings
-        If (addr <= 5) Then
+        If (Addr <= 5) Then
             ShowCamValues()
             'load preset button captions
             UpdatePresets()
         End If
-
-        'disable overlay if words are selected
-        If (OverlayWasActive) Then BtnOverlay_Click(BtnOverlay, Nothing) : OverlayWasActive = 0
 
         'turn off live control
         BtnLivePTZ.BackColor = Color.White
@@ -1160,7 +1116,7 @@ Public Class MainForm
     Sub UpdatePresets()
         Dim ad As Integer
 
-        If PresetLive = False Then ad = addr Else ad = liveaddr
+        If PresetLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then 'for non-cam inputs just show 1-16 legends
             BtnPreset1.Text = "1" : BtnPreset1.BackColor = Color.White
             BtnPreset2.Text = "2" : BtnPreset2.BackColor = Color.White
@@ -1191,7 +1147,7 @@ Public Class MainForm
         BtnPreset8.Text = PresetCaption((ad - 1) * 16 + 7) : BtnPreset8.BackColor = Color.White
         BtnPreset9.Text = PresetCaption((ad - 1) * 16 + 8) : BtnPreset9.BackColor = Color.White
         BtnPreset10.Text = PresetCaption((ad - 1) * 16 + 9) : BtnPreset10.BackColor = Color.White
-        If addr <> 5 Then
+        If Addr <> 5 Then
             BtnPreset11.Text = PresetCaption((ad - 1) * 16 + 10) : BtnPreset11.BackColor = Color.White
             BtnPreset12.Text = PresetCaption((ad - 1) * 16 + 11) : BtnPreset12.BackColor = Color.White
             BtnPreset13.Text = PresetCaption((ad - 1) * 16 + 12) : BtnPreset13.BackColor = Color.White
@@ -1209,22 +1165,22 @@ Public Class MainForm
 
 
         If ad <= 5 Then
-            If (presetstate(ad) And 1) <> 0 Then BtnPreset1.BackColor = Color.Green
-            If (presetstate(ad) And 2) <> 0 Then BtnPreset2.BackColor = Color.Green
-            If (presetstate(ad) And 4) <> 0 Then BtnPreset3.BackColor = Color.Green
-            If (presetstate(ad) And 8) <> 0 Then BtnPreset4.BackColor = Color.Green
-            If (presetstate(ad) And 16) <> 0 Then BtnPreset5.BackColor = Color.Green
-            If (presetstate(ad) And 32) <> 0 Then BtnPreset6.BackColor = Color.Green
-            If (presetstate(ad) And 64) <> 0 Then BtnPreset7.BackColor = Color.Green
-            If (presetstate(ad) And 128) <> 0 Then BtnPreset8.BackColor = Color.Green
-            If (presetstate(ad) And &H100) <> 0 Then BtnPreset9.BackColor = Color.Green
-            If (presetstate(ad) And &H200) <> 0 Then BtnPreset10.BackColor = Color.Green
-            If (presetstate(ad) And &H400) <> 0 Then BtnPreset11.BackColor = Color.Green
-            If (presetstate(ad) And &H800) <> 0 Then BtnPreset12.BackColor = Color.Green
-            If (presetstate(ad) And &H1000) <> 0 Then BtnPreset13.BackColor = Color.Green
-            If (presetstate(ad) And &H2000) <> 0 Then BtnPreset14.BackColor = Color.Green
-            If (presetstate(ad) And &H4000) <> 0 Then BtnPreset15.BackColor = Color.Green
-            If (presetstate(ad) And &H8000) <> 0 Then BtnPreset16.BackColor = Color.Green
+            If (PresetState(ad) And 1) <> 0 Then BtnPreset1.BackColor = Color.Green
+            If (PresetState(ad) And 2) <> 0 Then BtnPreset2.BackColor = Color.Green
+            If (PresetState(ad) And 4) <> 0 Then BtnPreset3.BackColor = Color.Green
+            If (PresetState(ad) And 8) <> 0 Then BtnPreset4.BackColor = Color.Green
+            If (PresetState(ad) And 16) <> 0 Then BtnPreset5.BackColor = Color.Green
+            If (PresetState(ad) And 32) <> 0 Then BtnPreset6.BackColor = Color.Green
+            If (PresetState(ad) And 64) <> 0 Then BtnPreset7.BackColor = Color.Green
+            If (PresetState(ad) And 128) <> 0 Then BtnPreset8.BackColor = Color.Green
+            If (PresetState(ad) And &H100) <> 0 Then BtnPreset9.BackColor = Color.Green
+            If (PresetState(ad) And &H200) <> 0 Then BtnPreset10.BackColor = Color.Green
+            If (PresetState(ad) And &H400) <> 0 Then BtnPreset11.BackColor = Color.Green
+            If (PresetState(ad) And &H800) <> 0 Then BtnPreset12.BackColor = Color.Green
+            If (PresetState(ad) And &H1000) <> 0 Then BtnPreset13.BackColor = Color.Green
+            If (PresetState(ad) And &H2000) <> 0 Then BtnPreset14.BackColor = Color.Green
+            If (PresetState(ad) And &H4000) <> 0 Then BtnPreset15.BackColor = Color.Green
+            If (PresetState(ad) And &H8000) <> 0 Then BtnPreset16.BackColor = Color.Green
         End If
 
         If PreloadPreset > 0 And PreloadPreset < 99 And PresetLive = False Then
@@ -1255,11 +1211,11 @@ Public Class MainForm
 
         'cancel any preloads
         PreloadPreset = 0
-        cdir = 0
+        CDir = 0
         SetLiveMoveIndicators()
         UpdatePresets()
 
-        addr = index
+        Addr = index
         BtnLive.BackColor = Color.White : PresetLive = False
         BtnLivePTZ.BackColor = Color.White : PTZLive = False
         setactive()
@@ -1267,17 +1223,17 @@ Public Class MainForm
     End Sub
 
     Private Sub HandleTransitionAudio()
-        If addr = 7 And MediaMute(MediaItem) Then 'if cutting to mediaplayer and the clip is to replace main audio
+        If Addr = 7 And MediaMute(MediaItem) Then 'if cutting to mediaplayer and the clip is to replace main audio
             SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=0,1000") 'fade main audio
         End If
-        If addr = 10 Then 'if cutting to black, fade out main audio
+        If Addr = 10 Then 'if cutting to black, fade out main audio
             SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=0,1000") 'fade main audio
         End If
-        If liveaddr = 7 Then 'cutting away from mediaplayer
+        If LiveAddr = 7 Then 'cutting away from mediaplayer
             MediaPlayerWasActive = True 'set this flag which will move mediaplayer onto next item after a delay
             If MediaMute(MediaItem) Then SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=100,1000") 'if we muted main audio, restore it
         End If
-        If liveaddr = 10 Then 'if cutting away from black, restore main audio
+        If LiveAddr = 10 Then 'if cutting away from black, restore main audio
             SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=100,1000") 'fade main audio
         End If
     End Sub
@@ -1287,19 +1243,18 @@ Public Class MainForm
         If CutLockoutTimer > 0 Then Exit Sub
         HandleTransitionAudio()
 
-        nextpreview = liveaddr
+        NextPreview = LiveAddr
         'If addr <> nextpreview Then addr = nextpreview
-        liveaddr = addr
+        LiveAddr = Addr
         StartLiveMove()
         SendVmixCmd("?Function=Fade&Duration=10") '10ms fade =cut
 
-        'If Globals.AutoSwap Then addr = nextpreview
-        If Globals.AutoSwap Then transitionwait = 5
+        'If AutoSwap Then addr = nextpreview
+        If AutoSwap Then TransitionWait = 5
 
         setactive()
         CutLockoutTimer = 8
         DelayStop = 8
-        AutoPreset = 0
 
     End Sub
 
@@ -1309,29 +1264,28 @@ Public Class MainForm
 
         HandleTransitionAudio()
 
-        nextpreview = liveaddr
-        liveaddr = addr
+        NextPreview = LiveAddr
+        LiveAddr = Addr
         StartLiveMove()
         Dim ft As Double
         Double.TryParse(TextBox1.Text, ft) 'fade time textbox
         If (ft <> 0) Then ft = ft * 1000 : Else ft = 500
         SendVmixCmd("?Function=Fade&Duration=" & ft)
-        If Globals.AutoSwap Then transitionwait = 5 + Val(TextBox1.Text) * 10
+        If AutoSwap Then TransitionWait = 5 + Val(TextBox1.Text) * 10
 
         setactive()
-        CutLockoutTimer = transitionwait
-        DelayStop = transitionwait
-        AutoPreset = 0
+        CutLockoutTimer = TransitionWait
+        DelayStop = TransitionWait
     End Sub
 
     '---Click the preset save button
     Private Sub BtnPresetSave_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnPresetSave.Click
-        If savemode = False Then
+        If SaveMode = False Then
             BtnPresetSave.BackColor = Color.Red
-            savemode = True
+            SaveMode = True
         Else
             BtnPresetSave.BackColor = Color.White
-            savemode = False
+            SaveMode = False
         End If
     End Sub
 
@@ -1373,10 +1327,10 @@ Public Class MainForm
     '---Click the preset slow zoom in button
     Private Sub BtnSlowIn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSlowIn.Click
         If PresetLive = False Then
-            cdir = cdir Xor &H20
-            If (cdir And &H20) Then cdir = cdir And Not &H40 'cancel zoom out if zoom in set
+            CDir = CDir Xor &H20
+            If (CDir And &H20) Then CDir = CDir And Not &H40 'cancel zoom out if zoom in set
             SetLiveMoveIndicators()
-            If cdir <> 0 Then
+            If CDir <> 0 Then
                 BtnPreload.BackColor = Color.Orange : PreloadPreset = 99
             Else
                 BtnPreload.BackColor = Color.White : PreloadPreset = 0
@@ -1385,9 +1339,9 @@ Public Class MainForm
             UpdatePresets()
         Else
             If LiveMoveSpeed = 0 Then
-                SendCamCmdAddr(liveaddr, "Z51")
+                SendCamCmdAddr(LiveAddr, "Z51")
             Else
-                SendCamCmdAddr(liveaddr, "Z60")
+                SendCamCmdAddr(LiveAddr, "Z60")
             End If
             BtnLive.BackColor = Color.White
             PresetLive = False
@@ -1398,10 +1352,10 @@ Public Class MainForm
     '---Click the preset slow zoom out button
     Private Sub BtnSlowOut_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSlowOut.Click
         If PresetLive = False Then
-            cdir = cdir Xor &H40
-            If (cdir And &H40) Then cdir = cdir And Not &H20 'cancel zoom in if zoom out set
+            CDir = CDir Xor &H40
+            If (CDir And &H40) Then CDir = CDir And Not &H20 'cancel zoom in if zoom out set
             SetLiveMoveIndicators()
-            If cdir <> 0 Then
+            If CDir <> 0 Then
                 BtnPreload.BackColor = Color.Orange : PreloadPreset = 99
             Else
                 BtnPreload.BackColor = Color.White : PreloadPreset = 0
@@ -1410,9 +1364,9 @@ Public Class MainForm
             UpdatePresets()
         Else
             If LiveMoveSpeed = 0 Then
-                SendCamCmdAddr(liveaddr, "Z49")
+                SendCamCmdAddr(LiveAddr, "Z49")
             Else
-                SendCamCmdAddr(liveaddr, "Z40")
+                SendCamCmdAddr(LiveAddr, "Z40")
             End If
             BtnLive.BackColor = Color.White
             PresetLive = False
@@ -1422,10 +1376,10 @@ Public Class MainForm
     '---Click the slow pan left button
     Private Sub BtnSlowPanL_Click(ByVal sender As Object, ByVal e As EventArgs) Handles BtnSlowPanL.Click
         If PresetLive = False Then
-            cdir = cdir Xor &H2
-            If (cdir And &H2) Then cdir = cdir And Not &H4 'cancel zoom out if zoom in set
+            CDir = CDir Xor &H2
+            If (CDir And &H2) Then CDir = CDir And Not &H4 'cancel zoom out if zoom in set
             SetLiveMoveIndicators()
-            If cdir <> 0 Then
+            If CDir <> 0 Then
                 BtnPreload.BackColor = Color.Orange : PreloadPreset = 99
             Else
                 BtnPreload.BackColor = Color.White : PreloadPreset = 0
@@ -1434,9 +1388,9 @@ Public Class MainForm
             UpdatePresets()
         Else
             If LiveMoveSpeed = 0 Then
-                SendCamCmdAddr(liveaddr, "PTS4800")
+                SendCamCmdAddr(LiveAddr, "PTS4800")
             Else
-                SendCamCmdAddr(liveaddr, "PTS4500")
+                SendCamCmdAddr(LiveAddr, "PTS4500")
             End If
             BtnLive.BackColor = Color.White
             PresetLive = False
@@ -1446,10 +1400,10 @@ Public Class MainForm
     '---Click the slow pan right button
     Private Sub BtnSlowPanR_Click(ByVal sender As Object, ByVal e As EventArgs) Handles BtnSlowPanR.Click
         If PresetLive = False Then
-            cdir = cdir Xor &H4
-            If (cdir And &H4) Then cdir = cdir And Not &H2 'cancel zoom out if zoom in set
+            CDir = CDir Xor &H4
+            If (CDir And &H4) Then CDir = CDir And Not &H2 'cancel zoom out if zoom in set
             SetLiveMoveIndicators()
-            If cdir <> 0 Then
+            If CDir <> 0 Then
                 BtnPreload.BackColor = Color.Orange : PreloadPreset = 99
             Else
                 BtnPreload.BackColor = Color.White : PreloadPreset = 0
@@ -1458,9 +1412,9 @@ Public Class MainForm
             UpdatePresets()
         Else
             If LiveMoveSpeed = 0 Then
-                SendCamCmdAddr(liveaddr, "PTS5200")
+                SendCamCmdAddr(LiveAddr, "PTS5200")
             Else
-                SendCamCmdAddr(liveaddr, "PTS5500")
+                SendCamCmdAddr(LiveAddr, "PTS5500")
             End If
             BtnLive.BackColor = Color.White
             PresetLive = False
@@ -1470,18 +1424,18 @@ Public Class MainForm
     '---Click on one of the non-cam input buttons. We call this function when a controller button is clicked
     Private Sub BtnInp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnInp1.Click, BtnInp2.Click, BtnInp3.Click, BtnInp4.Click, BtnInp5.Click
         Dim index = Val(Mid(sender.name, 7))
-        addr = index + 5
-        SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(addr))
+        Addr = index + 5
+        SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(Addr))
         setactive()
     End Sub
 
     '---"light up" the buttons to show live moves or zooms
     Sub SetLiveMoveIndicators()
-        If cdir And &H2 Then BtnSlowPanL.BackColor = Color.Orange Else BtnSlowPanL.BackColor = Color.White
-        If cdir And &H4 Then BtnSlowPanR.BackColor = Color.Orange Else BtnSlowPanR.BackColor = Color.White
-        If cdir And &H20 Then BtnSlowIn.BackColor = Color.Orange Else BtnSlowIn.BackColor = Color.White
-        If cdir And &H40 Then BtnSlowOut.BackColor = Color.Orange Else BtnSlowOut.BackColor = Color.White
-        If cdir = 0 And PreloadPreset = 0 Then BtnPreload.BackColor = Color.White
+        If CDir And &H2 Then BtnSlowPanL.BackColor = Color.Orange Else BtnSlowPanL.BackColor = Color.White
+        If CDir And &H4 Then BtnSlowPanR.BackColor = Color.Orange Else BtnSlowPanR.BackColor = Color.White
+        If CDir And &H20 Then BtnSlowIn.BackColor = Color.Orange Else BtnSlowIn.BackColor = Color.White
+        If CDir And &H40 Then BtnSlowOut.BackColor = Color.Orange Else BtnSlowOut.BackColor = Color.White
+        If CDir = 0 And PreloadPreset = 0 Then BtnPreload.BackColor = Color.White
     End Sub
 
     '---Start a live move as configured on the preset buttons
@@ -1510,37 +1464,37 @@ Public Class MainForm
             BtnPreload.BackColor = Color.White
             Exit Sub
         End If
-        If cdir = 0 Then Exit Sub
+        If CDir = 0 Then Exit Sub
         'set slow zoom speed
         'If (cdir And &H1E) <> 0 Then
         'If cdir And &H20 Then SendCamCmd("Z60")
         'If cdir And &H40 Then SendCamCmd("Z40")
         'Else
         If LiveMoveSpeed = 0 Then
-            If cdir And &H20 Then SendCamCmd("Z51")
-            If cdir And &H40 Then SendCamCmd("Z49")
+            If CDir And &H20 Then SendCamCmd("Z51")
+            If CDir And &H40 Then SendCamCmd("Z49")
         Else
-            If cdir And &H20 Then SendCamCmd("Z60")
-            If cdir And &H40 Then SendCamCmd("Z40")
+            If CDir And &H20 Then SendCamCmd("Z60")
+            If CDir And &H40 Then SendCamCmd("Z40")
         End If
         'End If
 
         'output the direction command
-        If Globals.CamInvert(addr) Then  'inverted camera
-            If (cdir And 2) <> 0 Then ncdir = ncdir Or 4
-            If (cdir And 4) <> 0 Then ncdir = ncdir Or 2
-            If (cdir And 8) <> 0 Then ncdir = ncdir Or 16
-            If (cdir And 16) <> 0 Then ncdir = ncdir Or 8
-            cdir = ncdir
+        If CamInvert(Addr) Then  'inverted camera
+            If (CDir And 2) <> 0 Then ncdir = ncdir Or 4
+            If (CDir And 4) <> 0 Then ncdir = ncdir Or 2
+            If (CDir And 8) <> 0 Then ncdir = ncdir Or 16
+            If (CDir And 16) <> 0 Then ncdir = ncdir Or 8
+            CDir = ncdir
         End If
         ps = "50" : ts = "50"
-        If (cdir And 2) <> 0 Then ps = "55"
-        If (cdir And 4) <> 0 Then ps = "45"
-        If (cdir And 8) <> 0 Then ts = "55"
-        If (cdir And 16) <> 0 Then ts = "45"
+        If (CDir And 2) <> 0 Then ps = "55"
+        If (CDir And 4) <> 0 Then ps = "45"
+        If (CDir And 8) <> 0 Then ts = "55"
+        If (CDir And 16) <> 0 Then ts = "45"
         SendCamCmd("PTS" & ps & ts)
 
-        cdir = 0
+        CDir = 0
         SetLiveMoveIndicators()
         BtnPreload.BackColor = Color.White : PreloadPreset = 0
 
@@ -1548,30 +1502,30 @@ Public Class MainForm
 
     '---Click the words overlay button. We call this when the controller button is pressed
     Private Sub BtnOverlay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnOverlay.Click
-        If overlayactive = False Then
-            overlayactive = True
+        If OverlayActive = False Then
+            OverlayActive = True
             SendVmixCmd("?Function=OverlayInput1In&Input=OpenLP")
         Else
-            overlayactive = False
+            OverlayActive = False
             SendVmixCmd("?Function=OverlayInput1Out&Input=OpenLP")
         End If
-        If (overlayactive = True) Then BtnOverlay.BackColor = Color.Red Else BtnOverlay.BackColor = Color.White
-        If (overlayactive = True) Then ControllerLedState(10) = 1 Else ControllerLedState(10) = 0
+        If (OverlayActive = True) Then BtnOverlay.BackColor = Color.Red Else BtnOverlay.BackColor = Color.White
+        If (OverlayActive = True) Then ControllerLedState(10) = 1 Else ControllerLedState(10) = 0
     End Sub
 
     '---Click the caption overlay button. We call this function when the controller button is pressed
     Private Sub BtnMediaOverlay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnMediaOverlay.Click
 
-        If mediaoverlayactive = False Then
+        If MediaOverlayActive = False Then
             'media overlay was not previously active
             SendVmixCmd("?Function=OverlayInput2In&Input=" & VMixSourceName(CaptionIndex + 20))
-            mediaoverlayactive = True
+            MediaOverlayActive = True
         Else
             SendVmixCmd("?Function=OverlayInput2Out&Input=" & VMixSourceName(CaptionIndex + 20))
-            mediaoverlayactive = False
+            MediaOverlayActive = False
         End If
-        If (mediaoverlayactive = True) Then BtnMediaOverlay.BackColor = Color.Red Else BtnMediaOverlay.BackColor = Color.White
-        If (mediaoverlayactive = True) Then ControllerLedState(11) = 1 Else ControllerLedState(11) = 0
+        If (MediaOverlayActive = True) Then BtnMediaOverlay.BackColor = Color.Red Else BtnMediaOverlay.BackColor = Color.White
+        If (MediaOverlayActive = True) Then ControllerLedState(11) = 1 Else ControllerLedState(11) = 0
     End Sub
 
     '---show a selection rectangle around the currently selected caption
@@ -1722,7 +1676,7 @@ Public Class MainForm
 
     Private Sub BtnIrisDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnIrisDown.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         If ad <> 5 Then
             CamIris(ad) = CamIris(ad) - 10
@@ -1734,7 +1688,7 @@ Public Class MainForm
 
     Private Sub BtnIrisUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnIrisUp.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         If ad <> 5 Then
             CamIris(ad) = CamIris(ad) + 10
@@ -1746,7 +1700,7 @@ Public Class MainForm
 
     Private Sub BtnIrisAuto()
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         If CamIris(ad) = 9999 Then 'iris was in auto mode
             SetIris(ad, 9998)
@@ -1786,7 +1740,7 @@ Public Class MainForm
     End Sub
     Private Sub BtnAGCDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnAGCDown.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad = 5 Then Return 'not provided on this camera
         If ad > 5 Then Exit Sub
         'op = SendCamCmdAddrNoHash(ad, "QGU") 'get gain setting
@@ -1798,7 +1752,7 @@ Public Class MainForm
 
     Private Sub BtnAGCUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnAGCUp.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad = 5 Then Return 'not provided on this camera
         If ad > 5 Then Exit Sub
         'op = SendCamCmdAddrNoHash(ad, "QGU") 'get gain setting
@@ -1810,7 +1764,7 @@ Public Class MainForm
 
     Private Sub BtnAgcAuto()
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad = 5 Then Return 'not provided on this camera
         If ad > 5 Then Exit Sub
         If CamAgc(ad) = 128 Then
@@ -1837,7 +1791,7 @@ Public Class MainForm
     End Sub
     Private Sub BtnGainDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnGainDown.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad = 5 Then Return 'not provided on this camera
         If ad > 5 Then Exit Sub
         CamAGCLimit(ad) = CamAGCLimit(ad) - 1
@@ -1846,7 +1800,7 @@ Public Class MainForm
 
     Private Sub BtnGainUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnGainUp.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad = 5 Then Return 'not provided on this camera
         If ad > 5 Then Exit Sub
         CamAGCLimit(ad) = CamAGCLimit(ad) + 1
@@ -1864,7 +1818,7 @@ Public Class MainForm
     End Sub
     Private Sub BtnAEShiftDn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnAEShiftDn.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         CamAEShift(ad) = CamAEShift(ad) - 1
         SetAEShift(ad, CamAEShift(ad))
@@ -1872,7 +1826,7 @@ Public Class MainForm
 
     Private Sub BtnAEShiftUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnAEShiftUp.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         CamAEShift(ad) = CamAEShift(ad) + 1
         SetAEShift(ad, CamAEShift(ad))
@@ -1895,7 +1849,7 @@ Public Class MainForm
     End Sub
     Private Sub BtnWbBlueDn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnWbBlueDn.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         If ad <> 5 Then
             mLog.Text = SendCamCmdAddrNoHash(ad, "OAW:9", "aw_cam")
@@ -1911,7 +1865,7 @@ Public Class MainForm
 
     Private Sub BtnWbBlueUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnWbBlueUp.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         If ad <> 5 Then
             mLog.Text = SendCamCmdAddrNoHash(ad, "OAW:9", "aw_cam")
@@ -1926,7 +1880,7 @@ Public Class MainForm
     End Sub
     Private Sub BtnWBAuto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyButtonAutoWB.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         If MyButtonAutoWB.BackColor = Color.Red Then
             If ad <> 5 Then
@@ -1961,7 +1915,7 @@ Public Class MainForm
 
     Private Sub BtnFocusSetAuto()
         Dim ad As Integer
-        If (PTZLive = True) Then ad = liveaddr Else ad = addr
+        If (PTZLive = True) Then ad = LiveAddr Else ad = Addr
         If ad > 5 Then Exit Sub
         SendCamCmdAddr(ad, "D11")
         CamFocusManual(ad) = 0
@@ -1973,7 +1927,7 @@ Public Class MainForm
     Private Sub BtnFocusSetLock()
         Dim ad As Integer
         Dim op As String
-        If (PTZLive = True) Then ad = liveaddr Else ad = addr
+        If (PTZLive = True) Then ad = LiveAddr Else ad = Addr
         If ad > 5 Then Exit Sub
         SendCamCmdAddr(ad, "D10")
         CamFocusManual(ad) = 1
@@ -1994,7 +1948,7 @@ Public Class MainForm
 
     Private Sub BtnFocusUp_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles BtnFocusUp.Click
         Dim ad As Integer
-        If (PTZLive = True) Then ad = liveaddr Else ad = addr
+        If (PTZLive = True) Then ad = LiveAddr Else ad = Addr
         If ad > 5 Then Exit Sub
         CamFocus(ad) = CamFocus(ad) + 10
         SetFocus(ad, CamFocus(ad))
@@ -2002,7 +1956,7 @@ Public Class MainForm
 
     Private Sub BtnFocusDn_Click(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles BtnFocusDn.Click
         Dim ad As Integer
-        If (PTZLive = True) Then ad = liveaddr Else ad = addr
+        If (PTZLive = True) Then ad = LiveAddr Else ad = Addr
         If ad > 5 Then Exit Sub
         CamFocus(ad) = CamFocus(ad) - 10
         SetFocus(ad, CamFocus(ad))
@@ -2024,14 +1978,14 @@ Public Class MainForm
     '--------------------------------------------------------------------------------------------------------------
     Private Sub CamFullTele_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyButtonFullTele.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         mLog.Text = SendCamCmdAddr(ad, "Z99") 'max speed zoom tele
     End Sub
 
     Private Sub CamFullWide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyButtonFullWide.Click
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         mLog.Text = SendCamCmdAddr(ad, "Z01") 'max speed zoom wide
     End Sub
@@ -2039,7 +1993,7 @@ Public Class MainForm
 
     Private Sub CamTele_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MyButtonCamTele.MouseDown
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         If BtnFast.BackColor = Color.Green Then
             mLog.Text = SendCamCmdAddr(ad, "Z95") 'zoom med tele
@@ -2049,14 +2003,14 @@ Public Class MainForm
     End Sub
     Private Sub CamTele_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MyButtonCamTele.MouseUp
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         mLog.Text = SendCamCmdAddr(ad, "Z50") 'zoom stop
     End Sub
 
     Private Sub CamWide_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MyButtonCamWide.MouseDown
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         If BtnFast.BackColor = Color.Green Then
             mLog.Text = SendCamCmdAddr(ad, "Z05") 'zoom med wide
@@ -2066,7 +2020,7 @@ Public Class MainForm
     End Sub
     Private Sub CamWide_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MyButtonCamWide.MouseUp
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         mLog.Text = SendCamCmdAddr(ad, "Z50") 'zoom stop
     End Sub
@@ -2074,7 +2028,7 @@ Public Class MainForm
     Private Sub MyButtonCamUL_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MyButtonCamUL.MouseDown, MyButtonCamU.MouseDown, MyButtonCamUR.MouseDown, MyButtonCamL.MouseDown, MyButtonCamR.MouseDown, MyButtonCamDL.MouseDown, MyButtonCamD.MouseDown, MyButtonCamDR.MouseDown
         Dim index As String
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         index = (Mid(sender.name, 12))
         Dim xsp As String, ysp As String, xpos As Integer, ypos As Integer, spd As Integer
@@ -2086,7 +2040,7 @@ Public Class MainForm
         If index = "DL" Then xpos = -1 : ypos = 1
         If index = "D" Then xpos = 0 : ypos = 1
         If index = "DR" Then xpos = 1 : ypos = 1
-        If Globals.CamInvert(ad) Then xpos = -xpos : ypos = -ypos
+        If CamInvert(ad) Then xpos = -xpos : ypos = -ypos
         xsp = "50" : ysp = "50"
         If BtnFast.BackColor = Color.Green Then spd = 25 Else spd = 10
         If (xpos < 0) Then xsp = Val(xsp) - spd
@@ -2100,7 +2054,7 @@ Public Class MainForm
 
     Private Sub MyButtonCamUL_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MyButtonCamUL.MouseUp, MyButtonCamU.MouseUp, MyButtonCamUR.MouseUp, MyButtonCamL.MouseUp, MyButtonCamR.MouseUp, MyButtonCamDL.MouseUp, MyButtonCamD.MouseUp, MyButtonCamDR.MouseUp
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         mLog.Text = SendCamCmdAddr(ad, "PTS5050") 'pt stop
     End Sub
@@ -2158,7 +2112,6 @@ Public Class MainForm
             SetLiveMoveIndicators()
             UpdatePresets()
         End If
-        AutoPreset = 0
     End Sub
 
 
@@ -2312,9 +2265,6 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub Button8_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button8.Click
-        Form4.Show() 'the sd card file download form
-    End Sub
 
 
     '---Broadcast button---------------------
@@ -2363,7 +2313,6 @@ Public Class MainForm
         Dim RecState As String = ""
         Dim StreamState As String = ""
         Dim SceneState As String = ""
-        Dim p As Integer, q As Integer, ct As Integer
 
 
         If (Len(VmixResponse) > 20) Then
@@ -2457,7 +2406,7 @@ Public Class MainForm
             End If
         End While
 
-        If newserial = 1 And startuptimer > 50 Then
+        If newserial = 1 And StartupTimer > 50 Then
             ControlKeyState = SerialInBuf(0) + (SerialInBuf(1) * 128) + (SerialInBuf(2) * 512)
             EncoderA = SerialInBuf(3) + (SerialInBuf(4) * 128) + (SerialInBuf(5) * 512)
             If EncoderA > 32767 Then EncoderA = EncoderA - 65536
@@ -2531,14 +2480,14 @@ Public Class MainForm
             'If JoyX < (128 - JoyDB) Or JoyX > (128 + JoyDB) Or JoyY < (128 - JoyDB) Or JoyY > (128 + JoyDB) Or JoyZ < (128 - JoyDB) Or JoyZ > (128 + JoyDB) Then
 
             Dim xpos As Integer, ypos As Integer, zpos As Integer, zoom As Boolean = False
-            If PTZLive = False Then ad = addr Else ad = liveaddr
+            If PTZLive = False Then ad = Addr Else ad = LiveAddr
             If (CamOverride > 0) Then ad = CamOverride 'override the selected camera from the buttons
             If (ad <= 5) Then
                 xpos = 255 - JoyX
                 ypos = JoyY
                 zpos = JoyZ
 
-                If Globals.CamInvert(ad) Then xpos = 255 - xpos : ypos = 255 - ypos
+                If CamInvert(ad) Then xpos = 255 - xpos : ypos = 255 - ypos
                 'JoyZ = zpos - JoyDB : JoyX = xpos - JoyDB : JoyY = ypos - JoyDB
                 'JoyZ = 1 + Int(JoyZ * 99 / (255 - JoyDB * 2))
                 If (zpos >= 128) Then JoyZ = 100 - zoomconvert(255 - zpos) Else JoyZ = zoomconvert(zpos)
@@ -2584,10 +2533,10 @@ Public Class MainForm
         If (alreadysending > 0) Then alreadysending = alreadysending - 1 'timer for sending to cameras
 
         'timer to autoconnect on startup
-        If (startuptimer < 100) Then startuptimer = startuptimer + 1
-        If startuptimer = 69 Then GroupBox1.Hide()
-        If startuptimer = 99 Then MsgBoxPanel.Visible = False
-        If (startuptimer = 5) Then 'open com ports
+        If (StartupTimer < 100) Then StartupTimer = StartupTimer + 1
+        If StartupTimer = 69 Then GroupBox1.Hide()
+        If StartupTimer = 99 Then MsgBoxPanel.Visible = False
+        If (StartupTimer = 5) Then 'open com ports
             Timer1.Enabled = False
             If GetSetting("CCNCamControl", "Set", "Askprofile", True) = True Then
                 SelectPresetFile()
@@ -2596,8 +2545,8 @@ Public Class MainForm
             GroupBox1.Left = 100 : GroupBox1.Top = 100
 
             'if ctrl key held on boot - emergency startup mode
-            If ctrlkey Then Label22.Text = "EMERGENCY STARTUP MODE" & vbCrLf Else Label22.Text = ""
-            Label22.Text = Label22.Text & "Profile: " & Globals.PresetFileName & vbCrLf
+            If CtrlKey Then Label22.Text = "EMERGENCY STARTUP MODE" & vbCrLf Else Label22.Text = ""
+            Label22.Text = Label22.Text & "Profile: " & PresetFileName & vbCrLf
             Label22.Text = Label22.Text & "Opening com port..."
             ComportOpen()
             If (SerialPort1.IsOpen) Then
@@ -2609,14 +2558,14 @@ Public Class MainForm
 
             Timer1.Enabled = True
         End If
-        If (startuptimer = 10) Then 'connect to vmix
+        If (StartupTimer = 10) Then 'connect to vmix
             SendVmixCmd("?Function=PreviewInput&Input=" & VMixSourceName(2))
-            nextpreview = 2
-            transitionwait = 2 'will set preview to 2
+            NextPreview = 2
+            TransitionWait = 2 'will set preview to 2
             SetCaptionText()
             SetCurrentMediaItem()
         End If
-        If (startuptimer = 15) Then
+        If (StartupTimer = 15) Then
             Timer1.Enabled = False
             For ta = 1 To 4
                 SendCamCmdAddr(ta, "O1") 'power on command
@@ -2624,7 +2573,7 @@ Public Class MainForm
             Timer1.Enabled = True
 
         End If
-        If (startuptimer = 30) Then 'get/set camera defaults
+        If (StartupTimer = 30) Then 'get/set camera defaults
             Timer1.Enabled = False
             For ta = 1 To 4
 
@@ -2632,7 +2581,7 @@ Public Class MainForm
                 GroupBox1.Refresh()
                 ReadbackCameraStates(ta)
                 If (CamIgnore(ta) = False) Then Label22.Text = Label22.Text & "Done" & vbCrLf Else Label22.Text = Label22.Text & "Fail" & vbCrLf
-                If (ctrlkey = False) Then
+                If (CtrlKey = False) Then
                     'temporarily don't move the cameras on power up
                     'SendCamCmdAddr(ta, "APC80008000")
                     'SendCamCmdAddr(ta, "AXZ555")
@@ -2640,7 +2589,7 @@ Public Class MainForm
             Next
             Label22.Text = Label22.Text & "Initialise Camera 5..." 'send power on command to he2 and check we get a response
             GroupBox1.Refresh()
-            If Globals.Cam5Dis = False Then
+            If Cam5Dis = False Then
                 If SendCamQuery(5, "aw_ptz?cmd=%23O1&res=1") <> "" Then CamIgnore(5) = False Else CamIgnore(5) = True
                 If CamIgnore(5) = False Then Label22.Text = Label22.Text & "Done" & vbCrLf Else Label22.Text = Label22.Text & "Fail" & vbCrLf
             Else
@@ -2662,7 +2611,7 @@ Public Class MainForm
         ComCheckTimer = ComCheckTimer + 1
         If (ComCheckTimer > 20) Then
             ComCheckTimer = 0
-            If Globals.Cam1Dis Then 'user disabled
+            If Cam1Dis Then 'user disabled
                 CamIgnore(1) = True
                 'BtnCam1.Enabled = False 'lock out the button
                 BtnCam1.Text = "CAM1 Disabled"
@@ -2670,7 +2619,7 @@ Public Class MainForm
                 If CamIgnore(1) Then BtnCam1.Text = "CAM1 com-fail" Else BtnCam1.Text = "CAM1"
             End If
 
-            If Globals.Cam2Dis Then 'user disabled
+            If Cam2Dis Then 'user disabled
                 CamIgnore(2) = True
                 'BtnCam2.Enabled = False 'lock out the button
                 BtnCam2.Text = "CAM2 Disabled"
@@ -2678,7 +2627,7 @@ Public Class MainForm
                 If CamIgnore(2) Then BtnCam2.Text = "CAM2 com-fail" Else BtnCam2.Text = "CAM2"
             End If
 
-            If Globals.Cam3Dis Then 'user disabled
+            If Cam3Dis Then 'user disabled
                 CamIgnore(3) = True
                 'BtnCam3.Enabled = False 'lock out the button
                 BtnCam3.Text = "CAM3 Disabled"
@@ -2686,7 +2635,7 @@ Public Class MainForm
                 If CamIgnore(3) Then BtnCam3.Text = "CAM3 com-fail" Else BtnCam3.Text = "CAM3"
             End If
 
-            If Globals.Cam4Dis Then 'user disabled
+            If Cam4Dis Then 'user disabled
                 CamIgnore(4) = True
                 'BtnCam4.Enabled = False 'lock out the button
                 BtnCam4.Text = "CAM4 Disabled"
@@ -2694,7 +2643,7 @@ Public Class MainForm
                 If CamIgnore(4) Then BtnCam4.Text = "CAM4 com-fail" Else BtnCam4.Text = "CAM4"
             End If
 
-            If Globals.Cam5Dis Then 'user disabled
+            If Cam5Dis Then 'user disabled
                 CamIgnore(5) = True
                 'BtnCam5.Enabled = False 'lock out the button
                 BtnCam5.Text = "CAM5 Disabled"
@@ -2708,19 +2657,19 @@ Public Class MainForm
         If DelayStop > 0 Then
             DelayStop = DelayStop - 1
             If DelayStop = 0 Then 'we will stop everything except the live cam, just in case
-                If liveaddr <> 1 And addr <> 1 Then
+                If LiveAddr <> 1 And Addr <> 1 Then
                     SendCamCmdAddr(1, "PTS5050")
                     SendCamCmdAddr(1, "Z50")
                 End If
-                If liveaddr <> 2 And addr <> 2 Then
+                If LiveAddr <> 2 And Addr <> 2 Then
                     SendCamCmdAddr(2, "PTS5050")
                     SendCamCmdAddr(2, "Z50")
                 End If
-                If liveaddr <> 3 And addr <> 3 Then
+                If LiveAddr <> 3 And Addr <> 3 Then
                     SendCamCmdAddr(3, "PTS5050")
                     SendCamCmdAddr(3, "Z50")
                 End If
-                If liveaddr <> 4 And addr <> 4 Then
+                If LiveAddr <> 4 And Addr <> 4 Then
                     SendCamCmdAddr(4, "PTS5050")
                     SendCamCmdAddr(4, "Z50")
                 End If
@@ -2729,20 +2678,16 @@ Public Class MainForm
         End If
 
         'timer to change preview after transition
-        If transitionwait > 0 Then
-            transitionwait = transitionwait - 1
-            If transitionwait = 0 Then
-                addr = nextpreview
+        If TransitionWait > 0 Then
+            TransitionWait = TransitionWait - 1
+            If TransitionWait = 0 Then
+                Addr = NextPreview
                 setactive()
                 If MediaPlayerWasActive Then 'if we just transitioned away from media player, go to the next clip
                     MediaPlayerWasActive = False
                     BtnMNext.PerformClick()
                 End If
-                End If
-        End If
-
-        If WebsocketReinitTimer > 0 Then
-            WebsocketReinitTimer = WebsocketReinitTimer - 1
+            End If
         End If
 
         'timer to check for double presses of cut and fade, and also check that the live/prev cams match what we think they are
@@ -2752,7 +2697,7 @@ Public Class MainForm
 
         'pending zoom - check if reached desired pos or no longer live
         If PendingZoom <> 0 Or PendingPan <> 0 Or PendingTilt <> 0 Then
-            If (liveaddr <> PzAddr) And DelayStop = 0 Then
+            If (LiveAddr <> PzAddr) And DelayStop = 0 Then
                 SendCamCmdAddr(PzAddr, "Z50")
                 SendCamCmdAddr(PzAddr, "PTS5050")
                 PendingZoom = 0 'cam is no longer live, we can stop
@@ -2870,7 +2815,7 @@ Public Class MainForm
             ProgCloseTimer = ProgCloseTimer - 1
             If (ProgCloseTimer = 0) Then Button1.ForeColor = Color.Black
         End If
-        LabelProfile.Text = Globals.PresetFileName
+        LabelProfile.Text = PresetFileName
 
         'cam shutdown timer on prog close
         If (ShutDownTimer > 0) Then
@@ -3032,7 +2977,7 @@ Public Class MainForm
     End Sub
     Sub ShowEncoderValues()
         Dim ad
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If (ad < 6) Then LabelEncStatus.Text = "CAM" & ad Else LabelEncStatus.Text = "---"
         Select Case EncoderAllocation(1)
             Case 0 : TextEncAStatus.Text = TextBoxFocus.Text
@@ -3071,7 +3016,7 @@ Public Class MainForm
     End Sub
     Sub SetEncoderValue(enc As Integer, v As Integer, sp As Integer)
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         'Label30.Text = sp & ">" & v
         If (EncoderAllocation(enc) < 2) Then 'for focus and iris, use the speed of the encoder to jump larger amounts for higher speeds
@@ -3092,7 +3037,7 @@ Public Class MainForm
     End Sub
     Sub EncoderClick(enc As Integer)
         Dim ad As Integer
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         Select Case EncoderAllocation(enc)
             Case 0 : If (BtnFocusAuto.BackColor = Color.White) Then BtnFocusSetAuto() Else BtnFocusSetLock()
@@ -3141,17 +3086,17 @@ Public Class MainForm
     '----------------------------------------------------------
 
     Sub UpdateCameraLinkStatus()
-        Globals.CamStatus(1) = CamIgnore(1)
-        Globals.CamStatus(2) = CamIgnore(2)
-        Globals.CamStatus(3) = CamIgnore(3)
-        Globals.CamStatus(4) = CamIgnore(4)
-        Globals.CamStatus(5) = CamIgnore(5)
+        CamStatus(1) = CamIgnore(1)
+        CamStatus(2) = CamIgnore(2)
+        CamStatus(3) = CamIgnore(3)
+        CamStatus(4) = CamIgnore(4)
+        CamStatus(5) = CamIgnore(5)
 
-        If Globals.CamStatus(1) = True Then LblCamStatus1.Text = "FAIL" Else LblCamStatus1.Text = "OK"
-        If Globals.CamStatus(2) = True Then LblCamStatus2.Text = "FAIL" Else LblCamStatus2.Text = "OK"
-        If Globals.CamStatus(3) = True Then LblCamStatus3.Text = "FAIL" Else LblCamStatus3.Text = "OK"
-        If Globals.CamStatus(4) = True Then LblCamStatus4.Text = "FAIL" Else LblCamStatus4.Text = "OK"
-        If Globals.CamStatus(5) = True Then LblCamStatus5.Text = "FAIL" Else LblCamStatus5.Text = "OK"
+        If CamStatus(1) = True Then LblCamStatus1.Text = "FAIL" Else LblCamStatus1.Text = "OK"
+        If CamStatus(2) = True Then LblCamStatus2.Text = "FAIL" Else LblCamStatus2.Text = "OK"
+        If CamStatus(3) = True Then LblCamStatus3.Text = "FAIL" Else LblCamStatus3.Text = "OK"
+        If CamStatus(4) = True Then LblCamStatus4.Text = "FAIL" Else LblCamStatus4.Text = "OK"
+        If CamStatus(5) = True Then LblCamStatus5.Text = "FAIL" Else LblCamStatus5.Text = "OK"
     End Sub
 
     '---Populate setup screen with current values
@@ -3167,13 +3112,13 @@ Public Class MainForm
         TextBoxIPCam4.Text = (GetSetting("CCNCamControl", "CamIP", "4", "192.168.1.94"))
         TextBoxIPCam5.Text = (GetSetting("CCNCamControl", "CamIP", "5", "192.168.1.95"))
 
-        TextBoxPresetFilename.Text = Globals.PresetFileName
-        TextBoxPresetFolder.Text = Globals.PresetFilePath
+        TextBoxPresetFilename.Text = PresetFileName
+        TextBoxPresetFolder.Text = PresetFilePath
         i = ComboBoxSetupComport.FindString(GetSetting("CCNCamControl", "Comm", "2", "COM2"))
         ComboBoxSetupComport.SelectedIndex = i
 
-        If Globals.TallyMode Then CheckBoxTally.Checked = True
-        If Globals.AutoSwap Then CheckBoxAutoSwap.Checked = True
+        If TallyMode Then CheckBoxTally.Checked = True
+        If AutoSwap Then CheckBoxAutoSwap.Checked = True
         If GetSetting("CCNCamControl", "Set", "Askprofile", True) = True Then CheckBoxProfile.Checked = True
         If GetSetting("CCNCamControl", "Set", "CamStandby", True) = True Then CheckBoxStandby.Checked = True
 
@@ -3187,10 +3132,10 @@ Public Class MainForm
         If GetSetting("CCNCamControl", "Set", "SaveIris", False) = True Then CheckBoxSaveIris.Checked = True Else CheckBoxSaveIris.Checked = False
         If GetSetting("CCNCamControl", "Set", "SaveAE", False) = True Then CheckBoxSaveAE.Checked = True Else CheckBoxSaveAE.Checked = False
 
-        If Globals.CamInvert(1) Then CheckBoxInvert1.Checked = True
-        If Globals.CamInvert(2) Then CheckBoxInvert2.Checked = True
-        If Globals.CamInvert(3) Then CheckBoxInvert3.Checked = True
-        If Globals.CamInvert(4) Then CheckBoxInvert4.Checked = True
+        If CamInvert(1) Then CheckBoxInvert1.Checked = True
+        If CamInvert(2) Then CheckBoxInvert2.Checked = True
+        If CamInvert(3) Then CheckBoxInvert3.Checked = True
+        If CamInvert(4) Then CheckBoxInvert4.Checked = True
 
         Media1TextBox.Text = MediaFiles(0)
         Media2TextBox.Text = MediaFiles(1)
@@ -3240,19 +3185,19 @@ Public Class MainForm
         SaveSetting("CCNCamControl", "Set", "Cam4Dis", CheckBoxCam4Dis.Checked)
         SaveSetting("CCNCamControl", "Set", "Cam5Dis", CheckBoxCam5Dis.Checked)
 
-        Globals.PresetFileName = TextBoxPresetFilename.Text
-        Globals.CamIP(1) = TextBoxIPCam1.Text
-        Globals.CamIP(2) = TextBoxIPCam2.Text
-        Globals.CamIP(3) = TextBoxIPCam3.Text
-        Globals.CamIP(4) = TextBoxIPCam4.Text
-        Globals.CamIP(5) = TextBoxIPCam5.Text
+        PresetFileName = TextBoxPresetFilename.Text
+        CamIP(1) = TextBoxIPCam1.Text
+        CamIP(2) = TextBoxIPCam2.Text
+        CamIP(3) = TextBoxIPCam3.Text
+        CamIP(4) = TextBoxIPCam4.Text
+        CamIP(5) = TextBoxIPCam5.Text
 
         'ReadPresetFile()
-        If CheckBoxCam1Dis.Checked Then Globals.Cam1Dis = True Else Globals.Cam1Dis = False
-        If CheckBoxCam2Dis.Checked Then Globals.Cam2Dis = True Else Globals.Cam2Dis = False
-        If CheckBoxCam3Dis.Checked Then Globals.Cam3Dis = True Else Globals.Cam3Dis = False
-        If CheckBoxCam4Dis.Checked Then Globals.Cam4Dis = True Else Globals.Cam4Dis = False
-        If CheckBoxCam5Dis.Checked Then Globals.Cam5Dis = True Else Globals.Cam5Dis = False
+        If CheckBoxCam1Dis.Checked Then Cam1Dis = True Else Cam1Dis = False
+        If CheckBoxCam2Dis.Checked Then Cam2Dis = True Else Cam2Dis = False
+        If CheckBoxCam3Dis.Checked Then Cam3Dis = True Else Cam3Dis = False
+        If CheckBoxCam4Dis.Checked Then Cam4Dis = True Else Cam4Dis = False
+        If CheckBoxCam5Dis.Checked Then Cam5Dis = True Else Cam5Dis = False
 
         MediaFiles(0) = Media1TextBox.Text
         MediaFiles(1) = Media2TextBox.Text
@@ -3294,7 +3239,7 @@ Public Class MainForm
     '----Camera OSD buttons
     Sub SendOsdCmd(cmd As String)
         Dim ad
-        If PTZLive = False Then ad = addr Else ad = liveaddr
+        If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If ad > 5 Then Exit Sub
         SendCamQueryNoResponse(ad, "aw_cam?cmd=" & cmd & "&res=1")
     End Sub
@@ -3323,14 +3268,14 @@ Public Class MainForm
         Dim fd As OpenFileDialog = New OpenFileDialog()
 
         fd.Title = "Select presets file"
-        fd.InitialDirectory = Globals.PresetFilePath
+        fd.InitialDirectory = PresetFilePath
         fd.Filter = "Presets files (*.aps)|*.aps|All files (*.*)|*.*"
         fd.FilterIndex = 1
         fd.RestoreDirectory = True
 
         If fd.ShowDialog() = DialogResult.OK Then
-            Globals.PresetFileName = fd.SafeFileName 'this is the filename without the path
-            TextBoxPresetFilename.Text = Globals.PresetFileName
+            PresetFileName = fd.SafeFileName 'this is the filename without the path
+            TextBoxPresetFilename.Text = PresetFileName
             ReadPresetFile()
         End If
     End Sub
@@ -3339,11 +3284,11 @@ Public Class MainForm
 
         Dim dialog As New FolderBrowserDialog()
         dialog.RootFolder = Environment.SpecialFolder.MyComputer
-        dialog.SelectedPath = Globals.PresetFilePath
+        dialog.SelectedPath = PresetFilePath
         dialog.Description = "Select folder for presets file"
         If dialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
-            Globals.PresetFilePath = dialog.SelectedPath & "\"
-            TextBoxPresetFolder.Text = Globals.PresetFilePath
+            PresetFilePath = dialog.SelectedPath & "\"
+            TextBoxPresetFolder.Text = PresetFilePath
         End If
     End Sub
 
@@ -3353,7 +3298,7 @@ Public Class MainForm
         If Not InStr(TextBoxPresetNewFile.Text, ".apr") Then
             TextBoxPresetNewFile.Text = TextBoxPresetNewFile.Text & ".apr"
         End If
-        Globals.PresetFileName = TextBoxPresetNewFile.Text
+        PresetFileName = TextBoxPresetNewFile.Text
         WritePresetFile()
     End Sub
 
@@ -3368,15 +3313,15 @@ Public Class MainForm
         Next
         UpdateCameraLinkStatus()
         CamCmdPending = False
-        If Globals.Cam1Dis = False Then ReadbackCameraStates(1)
+        If Cam1Dis = False Then ReadbackCameraStates(1)
         UpdateCameraLinkStatus()
-        If Globals.Cam2Dis = False Then ReadbackCameraStates(2)
+        If Cam2Dis = False Then ReadbackCameraStates(2)
         UpdateCameraLinkStatus()
-        If Globals.Cam3Dis = False Then ReadbackCameraStates(3)
+        If Cam3Dis = False Then ReadbackCameraStates(3)
         UpdateCameraLinkStatus()
-        If Globals.Cam4Dis = False Then ReadbackCameraStates(4)
+        If Cam4Dis = False Then ReadbackCameraStates(4)
         UpdateCameraLinkStatus()
-        If Globals.Cam5Dis = False Then
+        If Cam5Dis = False Then
             If SendCamQuery(5, "aw_ptz?cmd=%23O1&res=1") <> "" Then CamIgnore(5) = False Else CamIgnore(5) = True
         End If
         UpdateCameraLinkStatus()
@@ -3421,16 +3366,6 @@ Public Class MainForm
         If fd.ShowDialog() = DialogResult.OK Then Media5TextBox.Text = fd.FileName
     End Sub
 
-
-    Private Sub ButtonRetryOBS_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonRetryOBS.Click
-        websocket.Close()   'try reconnecting to OBS
-        WebsocketTimeout = False
-        'OpenWebSocket()
-        While WebsocketReinitTimer > 0
-            Application.DoEvents()
-        End While
-        'ReadMediaSources()
-    End Sub
 
 
 End Class

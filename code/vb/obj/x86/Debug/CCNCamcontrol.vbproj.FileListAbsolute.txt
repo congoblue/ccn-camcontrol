@@ -25,3 +25,14 @@ F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Form2.
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Form4.resources
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Resources.resources
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbproj.GenerateResource.Cache
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.exe
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.xml
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.pdb
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.exe
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.pdb
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.xml
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbprojResolveAssemblyReference.cache
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.MainForm.resources
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Resources.resources
+C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbproj.GenerateResource.Cache
