@@ -62,5 +62,5 @@ test,,,,0,0,0
 14,8000,8000,555,0,0,0
 15,8000,8000,555,0,0,0
 16,8000,8000,555,0,0,0
-Encoder,0,4
+Encoder,1,4
 CamSettingStore,False,False,False

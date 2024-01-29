@@ -27,6 +27,7 @@ Public Class MainForm
     Dim VmixStreamState As Boolean
     Dim VmixRecTime As String
     Dim VmixStreamTime As String
+    Dim VmixInit As Integer = 0
     Dim Gain(8) As Integer
     Dim WbLock(8) As Integer
     Dim DelayStop As Integer
@@ -429,7 +430,7 @@ Public Class MainForm
     '--------------------------------------------------------------------------------------------------------------
     '---Getwebrequest, used to communicate with cameras and with vmix
     Private Function GetWebRequest(ByVal url As String)
-        Debug.Print(url)
+        'Debug.Print(url)
         Dim request As WebRequest = WebRequest.Create(url)
         request.Timeout = 200  'timeout 200msec
         Dim resp As WebResponse = request.GetResponse()
@@ -2316,6 +2317,9 @@ Public Class MainForm
 
 
         If (Len(VmixResponse) > 20) Then
+            If VmixInit = 0 Then  '--flag that we have seen vmix response. This is used on first start to check vmix is in a valid state (audio on etc)
+                VmixInit = 1
+            End If
             RecState = xmlValue(VmixResponse, "recording")
             If RecState = "" Or RecState = "false" Then VmixRecState = False Else VmixRecState = True
             If VmixRecState = True And BtnOBSRecord.BackColor <> Color.Red Then BtnOBSRecord.BackColor = Color.Red
@@ -2353,6 +2357,7 @@ Public Class MainForm
             End If
             TextBoxOBSBroadcastTime.Text = VmixStreamTime
         End If
+
 
     End Sub
 
@@ -2846,9 +2851,15 @@ Public Class MainForm
         Dim stat = SendVmixCmd("")
         ProcessStatus(stat)
 
-        If StreamPending Then
+        If StreamPending Then 'timer to holdoff streaming button presses while vmix is getting the stream going
             StreamPendingTime = StreamPendingTime + 1
             If (StreamPendingTime > 15) Then StreamPending = False : BtnOBSBroadcast.BackColor = Color.White
+        End If
+
+        If VmixInit = 1 Then 'flag for first startup with vmix. This is initially 0 then gets set to 1 when we get a valid response from vmix
+            SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=100,1000") 'ensure audio is turned up
+            SendVmixCmd("?Function=AudioOn&Input=Mix%20Audio%20Input") 'ensure audio is not muted
+            VmixInit = 2 'set this so we don't do this again
         End If
 
         'check if cameras recording
@@ -2979,22 +2990,70 @@ Public Class MainForm
         Dim ad
         If PTZLive = False Then ad = Addr Else ad = LiveAddr
         If (ad < 6) Then LabelEncStatus.Text = "CAM" & ad Else LabelEncStatus.Text = "---"
+        Dim v As Double = 0
         Select Case EncoderAllocation(1)
-            Case 0 : TextEncAStatus.Text = TextBoxFocus.Text
-            Case 1 : TextEncAStatus.Text = TextBoxIris.Text
-            Case 2 : TextEncAStatus.Text = TextBoxAgc.Text
-            Case 3 : TextEncAStatus.Text = TextBoxAgcLimit.Text
-            Case 4 : TextEncAStatus.Text = TextBoxAeShift.Text
+            Case 0 : TextEncAStatus.Text = TextBoxFocus.Text : v = (EncoderValue(TextEncAStatus.Text) - 1365) / 2730 'min focus is 0x555 (1365) max is 0xFFF (4095)
+            Case 1 : TextEncAStatus.Text = TextBoxIris.Text : v = (EncoderValue(TextEncAStatus.Text) - 1365) / 2730
+            Case 2 : TextEncAStatus.Text = TextBoxAgc.Text : v = EncoderValue(TextEncAStatus.Text) / 48 'agc is 0 to 48db
+            Case 3 : TextEncAStatus.Text = TextBoxAgcLimit.Text : v = (EncoderValue(TextEncAStatus.Text) - 6) / 48 'agc limit is 6 to 48db
+            Case 4 : TextEncAStatus.Text = TextBoxAeShift.Text : v = (EncoderValue(TextEncAStatus.Text) + 10) / 20
         End Select
+        If v < 0 Then v = 0 : If v > 1 Then v = 1
+        If TextEncAStatus.Text = "Auto" Then DrawEncoderKnob(1, -1) Else DrawEncoderKnob(1, v)
         Select Case EncoderAllocation(2)
-            Case 0 : TextEncBStatus.Text = TextBoxFocus.Text
-            Case 1 : TextEncBStatus.Text = TextBoxIris.Text
-            Case 2 : TextEncBStatus.Text = TextBoxAgc.Text
-            Case 3 : TextEncBStatus.Text = TextBoxAgcLimit.Text
-            Case 4 : TextEncBStatus.Text = TextBoxAeShift.Text
+            Case 0 : TextEncBStatus.Text = TextBoxFocus.Text : v = (EncoderValue(TextEncBStatus.Text) - 1365) / 2730
+            Case 1 : TextEncBStatus.Text = TextBoxIris.Text : v = (EncoderValue(TextEncBStatus.Text) - 1365) / 2730
+            Case 2 : TextEncBStatus.Text = TextBoxAgc.Text : v = EncoderValue(TextEncBStatus.Text) / 48 'agc is 0 to 48db
+            Case 3 : TextEncBStatus.Text = TextBoxAgcLimit.Text : v = (EncoderValue(TextEncBStatus.Text) - 6) / 48 'agc limit is 6 to 48db
+            Case 4 : TextEncBStatus.Text = TextBoxAeShift.Text : v = (EncoderValue(TextEncBStatus.Text) + 10) / 20
         End Select
+        If v < 0 Then v = 0 : If v > 1 Then v = 1
+        If TextEncBStatus.Text = "Auto" Then DrawEncoderKnob(2, -1) Else DrawEncoderKnob(2, v)
         If TextEncAStatus.Text = "Auto" Then ControllerLedState(14) = ControllerLedState(14) Or 1 Else ControllerLedState(14) = ControllerLedState(14) And 254
         If TextEncBStatus.Text = "Auto" Then ControllerLedState(14) = ControllerLedState(14) Or 2 Else ControllerLedState(14) = ControllerLedState(14) And 253
+    End Sub
+    Function EncoderValue(txt) 'return 0 if the text field is not numeric (will be 'Auto')
+        If IsNumeric(txt) Then
+            EncoderValue = CInt(txt)
+        Else
+            If InStr(txt, "dB") <> 0 Then
+                EncoderValue = CInt(Strings.Left(txt, InStr(txt, "dB") - 1))
+            Else
+                EncoderValue = 0
+            End If
+        End If
+    End Function
+    Private Sub DrawEncoderKnob(num, v)
+        Dim g As Graphics
+        Dim px As Single = PictureBox1.Width
+        Dim py As Single = PictureBox1.Height
+        If num = 1 Then
+            g = PictureBox1.CreateGraphics
+        Else
+            g = PictureBox2.CreateGraphics
+        End If
+        g.SmoothingMode = Drawing2D.SmoothingMode.AntiAlias
+        g.FillEllipse(Brushes.Black, New Rectangle(1, 1, px - 3, py - 3))
+        Dim p As New Pen(Brushes.White)
+        p.Width = 1
+        g.DrawEllipse(p, New Rectangle(1, 1, px - 3, py - 3))
+        'now draw the tick based on 0-1 value
+        Dim ang As Double
+        If v <> -1 Then '-1 is auto. if not auto, show typical volume knob with 0 down to the left and max down to the right
+            ang = -v * 340
+            ang = ang - 10
+        Else 'if auto just show straight down
+            ang = 0
+        End If
+        ang = ang * Math.PI / 180
+        Dim mx As Single = px / 2 - 1
+        Dim my As Single = py / 2 - 1
+        Dim ex As Single = mx + (mx - 3) * Math.Sin(ang)
+        Dim ey As Single = my + (my - 3) * Math.Cos(ang)
+        p.Width = 4
+        g.DrawLine(p, mx, my, ex, ey)
+
+        'g.DrawEllipse(Brushes.White, New Rectangle(0, 0, 40, 40))
     End Sub
     Sub SetEncoderAllocation(num)
         PanelEncSelect.Left = 740 'move onto the screen
@@ -3079,6 +3138,7 @@ Public Class MainForm
         ShowEncoderValues()
         WritePresetFile()
     End Sub
+
 
     '----------------------------------------------------------
     ' Setup screen functions
@@ -3244,7 +3304,7 @@ Public Class MainForm
         SendCamQueryNoResponse(ad, "aw_cam?cmd=" & cmd & "&res=1")
     End Sub
     Private Sub ButtonOsdMenu_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSetupMenu.Click
-        SendOsdCmd("DUS:0")
+        SendOsdCmd("DUS: 0")
     End Sub
 
     Private Sub ButtonOSD_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnSetupOsd.Click
@@ -3302,6 +3362,7 @@ Public Class MainForm
         WritePresetFile()
     End Sub
 
+    '--- Retry cams. If cam is not detected, it is set to ignore, to avoid delays when waiting for response
     Private Sub ButtonRetryCam_Click(sender As Object, e As EventArgs) Handles ButtonRetryCam.Click
         CamIgnore(1) = False
         CamIgnore(2) = False
@@ -3327,10 +3388,12 @@ Public Class MainForm
         UpdateCameraLinkStatus()
     End Sub
 
+    '-- Open the Windows Touch Screen utility (if touch is detected on the wrong monitor)
     Private Sub ButtonTouchscreen_Click(sender As Object, e As EventArgs) Handles ButtonTouchscreen.Click
         Shell("explorer.exe shell:::{80F3F1D5-FECA-45F3-BC32-752C152E456E}")
     End Sub
 
+    '--- Show / hide the media setup dialog
     Private Sub BtnMediaSetup_Click(sender As Object, e As EventArgs) Handles BtnMediaSetup.Click
         MediaFilePanel.Left = 120
         MediaFilePanel.Top = 60
@@ -3345,6 +3408,7 @@ Public Class MainForm
         SetCurrentMediaItem()
     End Sub
 
+    '--- Browse for mediaplayer files
     Private Sub BtnMedia1Browse_Click(sender As Object, e As EventArgs) Handles BtnMedia1Browse.Click
         Dim fd As OpenFileDialog = New OpenFileDialog()
         If fd.ShowDialog() = DialogResult.OK Then Media1TextBox.Text = fd.FileName
