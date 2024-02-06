@@ -232,6 +232,7 @@ Partial Class MainForm
         Me.ComboBoxSetupComport = New System.Windows.Forms.ComboBox()
         Me.Label37 = New System.Windows.Forms.Label()
         Me.StatPanel = New System.Windows.Forms.Panel()
+        Me.Label42 = New System.Windows.Forms.Label()
         Me.TextBoxOBSRecTime = New System.Windows.Forms.TextBox()
         Me.BtnOBSRecord = New CCNCamcontrol.MyButton()
         Me.BtnOBSBroadcast = New CCNCamcontrol.MyButton()
@@ -901,7 +902,7 @@ Partial Class MainForm
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(38, 16)
         Me.Label13.TabIndex = 215
-        Me.Label13.Text = "v1.0.4"
+        Me.Label13.Text = "v1.0.5"
         '
         'LabelProfile
         '
@@ -2763,6 +2764,7 @@ Partial Class MainForm
         '
         'StatPanel
         '
+        Me.StatPanel.Controls.Add(Me.Label42)
         Me.StatPanel.Controls.Add(Me.TextBoxOBSRecTime)
         Me.StatPanel.Controls.Add(Me.BtnOBSRecord)
         Me.StatPanel.Controls.Add(Me.BtnOBSBroadcast)
@@ -2779,6 +2781,17 @@ Partial Class MainForm
         Me.StatPanel.Name = "StatPanel"
         Me.StatPanel.Size = New System.Drawing.Size(120, 600)
         Me.StatPanel.TabIndex = 324
+        '
+        'Label42
+        '
+        Me.Label42.AutoSize = True
+        Me.Label42.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label42.ForeColor = System.Drawing.Color.Yellow
+        Me.Label42.Location = New System.Drawing.Point(30, 295)
+        Me.Label42.Name = "Label42"
+        Me.Label42.Size = New System.Drawing.Size(74, 16)
+        Me.Label42.TabIndex = 301
+        Me.Label42.Text = "Hold to stop"
         '
         'TextBoxOBSRecTime
         '
@@ -4270,4 +4283,5 @@ Partial Class MainForm
     Friend WithEvents Media1TextBox As TextBox
     Friend WithEvents Label38 As Label
     Private WithEvents ShapeContainer3 As PowerPacks.ShapeContainer
+    Friend WithEvents Label42 As Label
 End Class

@@ -27,6 +27,11 @@ CCNCamcontrol
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:CCNCamcontrol.My.Resources.Resources.purplebtnrnd">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:CCNCamcontrol.My.Resources.Resources.redbtnrnd">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.

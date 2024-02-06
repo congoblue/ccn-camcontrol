@@ -18,6 +18,8 @@ Partial Public Class MyButton
                 e.Graphics.DrawImage(My.Resources.RedGrnBtn, ClientRectangle.Top, ClientRectangle.Left, ClientRectangle.Width, ClientRectangle.Height + 3)
             ElseIf Me.BackColor = Color.Orange Then
                 e.Graphics.DrawImage(My.Resources.yellowbtnrnd, ClientRectangle.Top, ClientRectangle.Left, ClientRectangle.Width, ClientRectangle.Height + 3)
+            ElseIf Me.BackColor = Color.Purple Then
+                e.Graphics.DrawImage(My.Resources.purplebtnrnd, ClientRectangle.Top, ClientRectangle.Left, ClientRectangle.Width, ClientRectangle.Height + 3)
             Else
                 e.Graphics.DrawImage(My.Resources.whitebtnrnd, ClientRectangle.Top, ClientRectangle.Left, ClientRectangle.Width, ClientRectangle.Height + 3)
             End If
@@ -31,6 +33,8 @@ Partial Public Class MyButton
                 e.Graphics.DrawImage(My.Resources.RedGrnBtn, ClientRectangle.Top + 2, ClientRectangle.Left + 2, ClientRectangle.Width - 4, ClientRectangle.Height + 3 - 4)
             ElseIf Me.BackColor = Color.Orange Then
                 e.Graphics.DrawImage(My.Resources.yellowbtnrnd, ClientRectangle.Top + 2, ClientRectangle.Left + 2, ClientRectangle.Width - 4, ClientRectangle.Height + 3 - 4)
+            ElseIf Me.BackColor = Color.Purple Then
+                e.Graphics.DrawImage(My.Resources.purplebtnrnd, ClientRectangle.Top + 2, ClientRectangle.Left + 2, ClientRectangle.Width - 4, ClientRectangle.Height + 3 - 4)
             Else
                 e.Graphics.DrawImage(My.Resources.whitebtnrnd, ClientRectangle.Top + 2, ClientRectangle.Left + 2, ClientRectangle.Width - 4, ClientRectangle.Height + 3 - 4)
             End If

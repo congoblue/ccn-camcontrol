@@ -169,6 +169,7 @@
     <None Include="Resources\WhiteBtnRnd.bmp" />
     <None Include="greenbtnrnd.png" />
     <None Include="redbtnrnd.png" />
+    <None Include="purplebtnrnd.png" />
     <Content Include="whitebtnrnd.png" />
   </ItemGroup>
   <ItemGroup>
