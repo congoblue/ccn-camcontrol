@@ -1380,8 +1380,8 @@ Public Class MainForm
     '---Click the slow pan left button
     Private Sub BtnSlowPanL_Click(ByVal sender As Object, ByVal e As EventArgs) Handles BtnSlowPanL.Click
         If PresetLive = False Then
-            CDir = CDir Xor &H2
-            If (CDir And &H2) Then CDir = CDir And Not &H4 'cancel zoom out if zoom in set
+            CDir = CDir Xor &H2 'invert state of left move flag
+            If (CDir And &H2) Then CDir = CDir And Not &H4 'cancel pan R if pan L is now set
             SetLiveMoveIndicators()
             If CDir <> 0 Then
                 BtnPreload.BackColor = Color.Orange : PreloadPreset = 99
@@ -1405,7 +1405,7 @@ Public Class MainForm
     Private Sub BtnSlowPanR_Click(ByVal sender As Object, ByVal e As EventArgs) Handles BtnSlowPanR.Click
         If PresetLive = False Then
             CDir = CDir Xor &H4
-            If (CDir And &H4) Then CDir = CDir And Not &H2 'cancel zoom out if zoom in set
+            If (CDir And &H4) Then CDir = CDir And Not &H2 'cancel pan L if pan L is now set
             SetLiveMoveIndicators()
             If CDir <> 0 Then
                 BtnPreload.BackColor = Color.Orange : PreloadPreset = 99
@@ -1492,10 +1492,10 @@ Public Class MainForm
             CDir = ncdir
         End If
         ps = "50" : ts = "50"
-        If (CDir And 2) <> 0 Then ps = "55"
-        If (CDir And 4) <> 0 Then ps = "45"
-        If (CDir And 8) <> 0 Then ts = "55"
-        If (CDir And 16) <> 0 Then ts = "45"
+        If (CDir And 2) <> 0 Then ps = "46"
+        If (CDir And 4) <> 0 Then ps = "56"
+        If (CDir And 8) <> 0 Then ts = "46"
+        If (CDir And 16) <> 0 Then ts = "56"
         SendCamCmd("PTS" & ps & ts)
 
         CDir = 0
@@ -2090,7 +2090,7 @@ Public Class MainForm
         UpdatePresets()
     End Sub
 
-    '---Joystick live button. Lock joystick to live cam 
+    '---Joystick live button. Lock joystick to current live cam 
     Private Sub BtnLivePTZ_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnLivePTZ.Click
         If PTZLive = False And LiveAddr <= 4 Then
             BtnLivePTZ.BackColor = Color.Purple
@@ -2099,7 +2099,9 @@ Public Class MainForm
         Else
             BtnLivePTZ.BackColor = Color.White
             PTZLive = False
+            PTZLiveAddr = 0
         End If
+        setactive()
         ShowCamValues()
     End Sub
 
@@ -2282,27 +2284,38 @@ Public Class MainForm
                 BtnOBSBroadcast.BackColor = Color.Orange 'show orange/yellow button while the stream is starting. Once VMix status shows stream is active, timer will change it to red
                 SendVmixCmd("?Function=StartStopStreaming")
             Else
-                StreamEndTimer = 1
+                If (StreamEndTimer = 0) Then 'want to stop stream - show orange for 2nd press for 5sec
+                    StreamEndTimer = 1
+                    BtnOBSBroadcast.BackColor = Color.Orange
+                Else
+                    If (StreamEndTimer > 8) Then 'if pressed again
+                        SendVmixCmd("?Function=StartStopStreaming")
+                        StreamEndTimer = 0
+                    End If
+                End If
             End If
         End If
 
     End Sub
-    Private Sub BtnOBSBroadcast_MouseUp(sender As Object, e As MouseEventArgs) Handles BtnOBSBroadcast.MouseUp
-        StreamEndTimer = 0
-    End Sub
 
 
     '---Record button
-    Private Sub BtnOBSRecord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnOBSRecord.MouseDown
+    Private Sub BtnOBSRecord_Click(ByVal sender As System.Object, ByVal e As MouseEventArgs) Handles BtnOBSRecord.Click
         If VmixRecState = False Then
             RecStartTime = Now.TimeOfDay.TotalSeconds
+            BtnOBSRecord.BackColor = Color.Orange
             SendVmixCmd("?Function=StartStopRecording") 'timer will change button colour when vmix status changes
         Else
-            RecEndTimer = 1
+            If (RecEndTimer = 0) Then 'want to stop record - show orange for 2nd press for 5sec
+                RecEndTimer = 1
+                BtnOBSRecord.BackColor = Color.Orange
+            Else
+                If (RecEndTimer > 8) Then 'if pressed again
+                    SendVmixCmd("?Function=StartStopRecording")
+                    RecEndTimer = 0
+                End If
+            End If
         End If
-    End Sub
-    Private Sub BtnOBSRecord_MouseUp(sender As Object, e As MouseEventArgs) Handles BtnOBSRecord.MouseUp
-        RecEndTimer = 0
     End Sub
 
 
@@ -2344,8 +2357,8 @@ Public Class MainForm
             End If
             RecState = xmlValue(VmixResponse, "recording")
             If RecState = "" Or RecState = "false" Then VmixRecState = False Else VmixRecState = True
-            If VmixRecState = True And BtnOBSRecord.BackColor <> Color.Red Then BtnOBSRecord.BackColor = Color.Red
-            If VmixRecState = False And BtnOBSRecord.BackColor = Color.Red Then BtnOBSRecord.BackColor = Color.White
+            If VmixRecState = True And RecEndTimer = 0 And BtnOBSRecord.BackColor <> Color.Red Then BtnOBSRecord.BackColor = Color.Red
+            If VmixRecState = False And BtnOBSRecord.BackColor <> Color.White Then BtnOBSRecord.BackColor = Color.White
             If VmixRecState = True Then
                 Dim t As Integer = Now.TimeOfDay.TotalSeconds - RecStartTime
                 Dim hr As Integer = Math.Floor(t / 3600)
@@ -2365,8 +2378,8 @@ Public Class MainForm
                 End If
                 VmixStreamState = True
             End If
-            If VmixStreamState = True And BtnOBSBroadcast.BackColor <> Color.Red Then BtnOBSBroadcast.BackColor = Color.Red
-            If VmixStreamState = False And BtnOBSBroadcast.BackColor = Color.Red Then BtnOBSBroadcast.BackColor = Color.White
+            If VmixStreamState = True And StreamEndTimer = 0 And BtnOBSBroadcast.BackColor <> Color.Red Then BtnOBSBroadcast.BackColor = Color.Red
+            If VmixStreamState = False And BtnOBSBroadcast.BackColor <> Color.White Then BtnOBSBroadcast.BackColor = Color.White
             If StreamState = True Then
                 Dim t As Integer
                 t = Now.TimeOfDay.TotalSeconds - StreamStartTime
@@ -2684,19 +2697,19 @@ Public Class MainForm
         If DelayStop > 0 Then
             DelayStop = DelayStop - 1
             If DelayStop = 0 Then 'we will stop everything except the live cam, just in case
-                If LiveAddr <> 1 And Addr <> 1 Then
+                If LiveAddr <> 1 Then
                     SendCamCmdAddr(1, "PTS5050")
                     SendCamCmdAddr(1, "Z50")
                 End If
-                If LiveAddr <> 2 And Addr <> 2 Then
+                If LiveAddr <> 2 Then
                     SendCamCmdAddr(2, "PTS5050")
                     SendCamCmdAddr(2, "Z50")
                 End If
-                If LiveAddr <> 3 And Addr <> 3 Then
+                If LiveAddr <> 3 Then
                     SendCamCmdAddr(3, "PTS5050")
                     SendCamCmdAddr(3, "Z50")
                 End If
-                If LiveAddr <> 4 And Addr <> 4 Then
+                If LiveAddr <> 4 Then
                     SendCamCmdAddr(4, "PTS5050")
                     SendCamCmdAddr(4, "Z50")
                 End If
@@ -2836,15 +2849,15 @@ Public Class MainForm
         'rec/stream stop timers
         If StreamEndTimer > 0 Then
             StreamEndTimer = StreamEndTimer + 1
-            If (StreamEndTimer >= 20) Then
-                SendVmixCmd("?Function=StartStopStreaming")
+            If (StreamEndTimer >= 40) Then 'if pressed once then not pressed again within 4sec
+                BtnOBSBroadcast.BackColor = Color.Red
                 StreamEndTimer = 0
             End If
         End If
         If RecEndTimer > 0 Then
             RecEndTimer = RecEndTimer + 1
-            If (RecEndTimer >= 20) Then
-                SendVmixCmd("?Function=StartStopRecording")
+            If (RecEndTimer >= 40) Then
+                BtnOBSRecord.BackColor = Color.Red
                 RecEndTimer = 0
             End If
         End If
@@ -3469,4 +3482,5 @@ Public Class MainForm
     End Sub
 
 
+   
 End Class

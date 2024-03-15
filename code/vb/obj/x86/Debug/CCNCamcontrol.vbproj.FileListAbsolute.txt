@@ -18,11 +18,7 @@ F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.pdb
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.exe
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.pdb
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.xml
-F:\My Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
-F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbprojResolveAssemblyReference.cache
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.MainForm.resources
-F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Form2.resources
-F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Form4.resources
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Resources.resources
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbproj.GenerateResource.Cache
 C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.exe

@@ -556,7 +556,7 @@ Partial Class MainForm
         Me.ShapeContainer1.Margin = New System.Windows.Forms.Padding(0)
         Me.ShapeContainer1.Name = "ShapeContainer1"
         Me.ShapeContainer1.Shapes.AddRange(New Microsoft.VisualBasic.PowerPacks.Shape() {Me.LineShape11, Me.LineShape10, Me.LineShape9, Me.LineShape3, Me.LineShape8, Me.LineShape5, Me.LineShape4})
-        Me.ShapeContainer1.Size = New System.Drawing.Size(1626, 1100)
+        Me.ShapeContainer1.Size = New System.Drawing.Size(1300, 1100)
         Me.ShapeContainer1.TabIndex = 184
         Me.ShapeContainer1.TabStop = False
         '
@@ -902,7 +902,7 @@ Partial Class MainForm
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(38, 16)
         Me.Label13.TabIndex = 215
-        Me.Label13.Text = "v1.0.5"
+        Me.Label13.Text = "v1.0.6"
         '
         'LabelProfile
         '
@@ -2787,11 +2787,11 @@ Partial Class MainForm
         Me.Label42.AutoSize = True
         Me.Label42.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label42.ForeColor = System.Drawing.Color.Yellow
-        Me.Label42.Location = New System.Drawing.Point(30, 295)
+        Me.Label42.Location = New System.Drawing.Point(19, 301)
         Me.Label42.Name = "Label42"
-        Me.Label42.Size = New System.Drawing.Size(74, 16)
+        Me.Label42.Size = New System.Drawing.Size(93, 16)
         Me.Label42.TabIndex = 301
-        Me.Label42.Text = "Hold to stop"
+        Me.Label42.Text = "Press x2 to stop"
         '
         'TextBoxOBSRecTime
         '
@@ -3886,7 +3886,7 @@ Partial Class MainForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1626, 1100)
+        Me.ClientSize = New System.Drawing.Size(1300, 1100)
         Me.Controls.Add(Me.MediaFilePanel)
         Me.Controls.Add(Me.PanelEncSelect)
         Me.Controls.Add(Me.PresetPanel)
