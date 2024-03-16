@@ -2291,6 +2291,7 @@ Public Class MainForm
                     If (StreamEndTimer > 8) Then 'if pressed again
                         SendVmixCmd("?Function=StartStopStreaming")
                         StreamEndTimer = 0
+                        BtnOBSBroadcast.BackColor = Color.White
                     End If
                 End If
             End If
@@ -2313,6 +2314,8 @@ Public Class MainForm
                 If (RecEndTimer > 8) Then 'if pressed again
                     SendVmixCmd("?Function=StartStopRecording")
                     RecEndTimer = 0
+                    BtnOBSRecord.BackColor = Color.White 'the status readback may make this red again till it stops
+
                 End If
             End If
         End If
