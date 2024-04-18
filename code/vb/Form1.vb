@@ -1208,6 +1208,15 @@ Public Class MainForm
 
     End Sub
 
+    '---If shift held while pressing an input button, switch the fullscreen output
+    Sub FullScreenOut(inp As Integer)
+        Dim opmode As String
+        If inp = 14 Then opmode = "Output" : Else opmode = "Input"
+        SendVmixCmd("?Function=SetOutputFullscreen&Input=" & VMixSourceName(inp) & "&Value=" & opmode)
+    End Sub
+
+
+
     '---Handle click on one of the cam1-5 buttons. These touchbuttons aren't used but we call this function when the controller buttons are pressed
     Private Sub BtnCam1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles BtnCam1.Click, BtnCam2.Click, BtnCam3.Click, BtnCam4.Click, BtnCam5.Click
         Dim index As Integer
@@ -2473,17 +2482,22 @@ Public Class MainForm
                 PrevControlKeyState = ControlKeyState
 
                 If KeyHit Then 'handle button presses
-                    If LastKey = 1 Then BtnCam1.PerformClick()
-                    If LastKey = 2 Then BtnCam2.PerformClick()
-                    If LastKey = 3 Then BtnCam3.PerformClick()
-                    If LastKey = 4 Then BtnCam4.PerformClick()
-                    If LastKey = 5 Then BtnCam5.PerformClick() 'cam5
+                    If (Control.ModifierKeys And Keys.Shift) = Keys.Shift Then
+                        If LastKey < 11 Then FullScreenOut(LastKey)
+                        If LastKey = 14 Then FullScreenOut(LastKey) : LastKey = 0
+                    Else
+                        If LastKey = 1 Then BtnCam1.PerformClick()
+                        If LastKey = 2 Then BtnCam2.PerformClick()
+                        If LastKey = 3 Then BtnCam3.PerformClick()
+                        If LastKey = 4 Then BtnCam4.PerformClick()
+                        If LastKey = 5 Then BtnCam5.PerformClick() 'cam5
 
-                    If LastKey = 6 Then BtnInp1.PerformClick() 'words
-                    If LastKey = 7 Then BtnInp2.PerformClick() 'media
-                    If LastKey = 8 Then BtnInp3.PerformClick() 'aux
-                    If LastKey = 9 Then BtnInp4.PerformClick() 'pip
-                    If LastKey = 10 Then BtnInp5.PerformClick() 'black
+                        If LastKey = 6 Then BtnInp1.PerformClick() 'words
+                        If LastKey = 7 Then BtnInp2.PerformClick() 'media
+                        If LastKey = 8 Then BtnInp3.PerformClick() 'aux
+                        If LastKey = 9 Then BtnInp4.PerformClick() 'pip
+                        If LastKey = 10 Then BtnInp5.PerformClick() 'black
+                    End If
 
                     If LastKey = 11 Then BtnOverlay.PerformClick()
                     If LastKey = 12 Then BtnMediaOverlay.PerformClick()
@@ -2492,9 +2506,9 @@ Public Class MainForm
                     If LastKey = 15 Then EncoderClick(1)
                     If LastKey = 16 Then EncoderClick(2)
                     KeyHit = False
-                End If
+                    End If
 
-            End If
+                End If
 
             'handle encoder rotation
             If EncoderA <> PrevEncoderA And EncoderAReset = 0 Then
