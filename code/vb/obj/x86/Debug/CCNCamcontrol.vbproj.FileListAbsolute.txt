@@ -31,3 +31,4 @@ C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamc
 C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Resources.resources
 C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbproj.GenerateResource.Cache
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbprojResolveAssemblyReference.cache
+F:\My Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml

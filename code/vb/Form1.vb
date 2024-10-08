@@ -3320,6 +3320,11 @@ Public Class MainForm
         CamIP(4) = TextBoxIPCam4.Text
         CamIP(5) = TextBoxIPCam5.Text
 
+        CamInvert(1) = CheckBoxInvert1.Checked
+        CamInvert(2) = CheckBoxInvert2.Checked
+        CamInvert(3) = CheckBoxInvert3.Checked
+        CamInvert(4) = CheckBoxInvert4.Checked
+
         'ReadPresetFile()
         If CheckBoxCam1Dis.Checked Then Cam1Dis = True Else Cam1Dis = False
         If CheckBoxCam2Dis.Checked Then Cam2Dis = True Else Cam2Dis = False
