@@ -1,4 +1,5 @@
 ﻿Imports System.Net
+Imports System.Net.Sockets
 Imports System.Text
 Imports System.IO
 Imports System.IO.Ports
@@ -148,6 +149,13 @@ Public Class MainForm
     Dim PresetIris(64) As Integer
     Dim PresetAE(64) As Integer
 
+    'for visca comms
+    Dim udpClient1 As System.Net.Sockets.UdpClient
+    Dim udpListen As System.Net.Sockets.UdpClient
+    Dim iepRemoteEndPoint As IPEndPoint
+    Dim sendBytes As [Byte]()
+    Dim receiveBytes As [Byte]()
+    Private receivingThread As Thread                            'Create a separate thread to listen for incoming data, helps to prevent the form from freezing up
 
     Dim StreamStartTime, RecStartTime As Integer
     Dim StreamEndTimer, RecEndTimer As Integer
@@ -486,6 +494,41 @@ Public Class MainForm
         If Addr = 0 Or Addr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
         If CamIgnore(Addr) = True Then Return ""
+        If Addr = 5 And CheckBox5Visca.Checked Then 'translate the pana command to visca mode
+            'we will only process wb and AE
+            If (Mid(cmd, 1, 3) = "OAW") Then 'wb
+                Dim v = Val(Mid(cmd, 5, 1))
+                If v = 0 Or v = 3 Then
+                    SendViscaBytes(6, &H81, &H1, &H4, &H35, 0, &HFF, 0, 0, 0) 'set auto wb mode
+                Else
+                    If (v = 1) Then SendViscaBytes(6, &H81, &H1, &H4, &H35, &H1, &HFF, 0, 0, 0) 'set indoor mode
+                    If (v = 2) Then SendViscaBytes(6, &H81, &H1, &H4, &H35, &H2, &HFF, 0, 0, 0) 'set outdoor mode
+                    If (v > 3) Then SendViscaBytes(6, &H81, &H1, &H4, &H35, &H20, &HFF, 0, 0, 0) 'set manual wb (color temp) mode for these others
+                    If (v = 4) Then SendViscaBytes(7, &H81, &H1, &H4, &H20, &H0, &H7, &HFF, 0, 0) 'set 3200=0x07
+                    If (v = 5) Then SendViscaBytes(7, &H81, &H1, &H4, &H20, &H1, &HF, &HFF, 0, 0) 'set 5600=0x1F
+                    If (v = 6) Then SendViscaBytes(7, &H81, &H1, &H4, &H20, &H1, &H4, &HFF, 0, 0) 'set 4500=0x14
+                    If (v = 7) Then SendViscaBytes(7, &H81, &H1, &H4, &H20, &H2, &H3, &HFF, 0, 0) 'set 6000=0x23
+                    If (v = 8) Then SendViscaBytes(7, &H81, &H1, &H4, &H20, &H0, &H3, &HFF, 0, 0) 'set 2800=0x03
+                End If
+
+            End If
+            If (Mid(cmd, 1, 6) = "OSD:48") Then 'AE shift
+                Dim v = Val(Mid(cmd, 8)) '32=zero, 0=-10, 64=+10
+                SendViscaBytes(6, &H81, &H1, &H4, &H3E, &H2, &HFF, 0, 0, 0) 'enable AE comp mode
+                If (v = 32) Then
+                    SendViscaBytes(6, &H81, &H1, &H4, &HE, &H0, &HFF, 0, 0, 0) 'reset AE to default
+                Else
+                    v = v / 4 : If v > 14 Then v = 14
+                    SendViscaBytes(9, &H81, &H1, &H4, &H4E, 0, 0, 0, v, &HFF) 'set ae comp 0-14
+                End If
+
+            End If
+
+            Return ""
+
+        End If
+
+        'not visca send panasonic cmd
         If (typ = "") Then typ = "aw_ptz" 'aw_ptz for position, aw_cam for cam settings
         url = "http://" & CamIP(Addr) & "/cgi-bin/" & typ & "?cmd=" & cmd & "&res=1"
         result = ""
@@ -506,6 +549,36 @@ Public Class MainForm
         If caddr = 0 Or caddr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
         If CamIgnore(caddr) = True Then Return ""
+        If caddr = 5 And CheckBox5Visca.Checked Then 'translate the pana command to visca mode
+            If (Mid(cmd, 1, 1) = "Z") Then 'this is a zoom command (Zxx where xx=50 for stop, 01 for max tele, 99 for max wide
+                Dim v = Val(Mid(cmd, 2))
+                Dim s As Integer = 0 'the speed
+                If v < 50 Then
+                    s = (50 - v) / 7 : If s > 7 Then s = 7
+                    s = s Or &H30
+                End If
+                If v > 50 Then
+                    s = (v - 50) / 7 : If s > 7 Then s = 7
+                    s = s Or &H20
+                End If
+
+                SendViscaBytes(6, &H81, &H1, &H4, &H7, s, &HFF, 0, 0, 0) 'b4=zoom b5=spd
+            End If
+            If (Mid(cmd, 1, 1) = "P") Then 'this is a pantilt command (PTSpptt)
+                Dim ps As Integer = Val(Mid(cmd, 4, 2))
+                Dim pd = 3
+                Dim ts As Integer = Val(Mid(cmd, 6, 2))
+                Dim td = 3
+                If ps < 50 Then pd = 1 : ps = (50 - ps) / 2 : If ps > 24 Then ps = 24
+                If ps > 50 Then pd = 2 : ps = (ps - 50) / 2 : If ps > 24 Then ps = 24
+                If ts < 50 Then td = 2 : ts = (50 - ts) / 2 : If ts > 24 Then ts = 24
+                If ts > 50 Then td = 1 : ts = (ts - 50) / 2 : If ts > 24 Then ts = 24
+                SendViscaBytes(9, &H81, &H1, &H6, &H1, ps, ts, pd, td, &HFF) 'pd=1< 2> 3stop td=1u 2d 3stop
+            End If
+
+            Return ""
+        End If
+        'not visca, send panasonic cmd
         url = "http://" & CamIP(caddr) & "/cgi-bin/aw_ptz?cmd=%23" & cmd & "&res=1"
         result = ""
         Try
@@ -525,6 +598,7 @@ Public Class MainForm
         If caddr = 0 Or caddr > 5 Then Return ""
         'If CamCmdPending = True Then Return ""
         If CamIgnore(caddr) = True Then Return ""
+        If caddr = 5 And CheckBox5Visca.Checked Then SendCamCmdNoHash(cmd, typ) : Return ""
         If (typ = "") Then typ = "aw_ptz" 'aw_ptz for position, aw_cam for cam settings
         url = "http://" & CamIP(caddr) & "/cgi-bin/" & typ & "?cmd=" & cmd & "&res=1"
         result = ""
@@ -564,6 +638,73 @@ Public Class MainForm
         Dim url As String
         url = "http://" & CamIP(caddr) & "/cgi-bin/" & cmd
         webClient.DownloadString(url)
+    End Sub
+
+    '------------------------VISCA commands for eptz cams----------------------------------------------------------
+    '---open a UDP port for visca
+    Sub ViscaCamInit()
+        udpClient1 = New System.Net.Sockets.UdpClient()
+        udpClient1.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, True)
+        udpClient1.Connect(CamIP(5), 1259)
+        udpListen = New System.Net.Sockets.UdpClient()
+        udpListen.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, True)
+        udpListen.Client.Bind(New IPEndPoint(IPAddress.Any, 1260))
+        iepRemoteEndPoint = New IPEndPoint(IPAddress.Any, 1260)
+
+        ReDim sendBytes(20)
+        ReDim receiveBytes(20)
+        Dim start As ThreadStart = New ThreadStart(AddressOf Receiver)
+        receivingThread = New Thread(start)
+        receivingThread.IsBackground = True
+        receivingThread.Start()
+    End Sub
+
+    Private Sub Receiver()
+        'Dim endPoint As IPEndPoint = New IPEndPoint(IPAddress.Any, port) 'Listen for incoming data from any IP address on the specified port (I personally select 9653)
+        While (True)                                                     'Setup an infinite loop
+            Dim data() As Byte                                           'Buffer for storing incoming bytes
+            data = udpListen.Receive(iepRemoteEndPoint)                     'Receive incoming bytes 
+            Dim message As String = Encoding.ASCII.GetString(data)       'Convert bytes back to string
+            'If Closing = True Then                                       'Exit sub if form is closing
+            'Exit Sub
+            'End If
+        End While
+    End Sub
+
+    Sub ViscaSend(cmd As Byte(), len As Integer)
+        'Dim sendArr As Byte()
+        'ack = 0
+        'ReDim sendArr(8 + cmd.Length)
+        'sendArr(0) = &H1
+        'sendArr(1) = &H0
+        'sendArr(2) = &H0
+        'sendArr(3) = &H9
+        'sendArr(4) = &H0
+        'sendArr(5) = &H0
+        'sendArr(6) = &H0
+        'sendArr(7) = &H0
+        'receiveBytes(0) = 0 : receiveBytes(1) = 0 : receiveBytes(2) = 0
+        'For i = 0 To cmd.Length - 1 : sendArr(8 + i) = cmd(i) : Next
+        'udpClient.Send(sendArr, sendArr.Length)
+        udpClient1.Send(cmd, len)
+
+        'Do While ack = 0
+
+        'Loop
+        'Loop
+
+    End Sub
+    Sub SendViscaBytes(n, b1, b2, b3, b4, b5, b6, b7, b8, b9)
+        sendBytes(0) = b1
+        sendBytes(1) = b2
+        sendBytes(2) = b3
+        sendBytes(3) = b4
+        sendBytes(4) = b5
+        sendBytes(5) = b6
+        sendBytes(6) = b7
+        sendBytes(7) = b8
+        sendBytes(8) = b9
+        ViscaSend(sendBytes, n)
     End Sub
 
     '--------------------------------------------------------------------------------------------------------------
@@ -658,7 +799,7 @@ Public Class MainForm
                     End If
 
                 End If
-            Catch ex As _
+            Catch ex As  _
             Microsoft.VisualBasic.FileIO.MalformedLineException
                 MsgBox("Line " & ex.Message &
                 "is not valid and will be skipped.")
@@ -844,13 +985,18 @@ Public Class MainForm
                     '---Recall a preset either live or preview
                     If (Addr = 5) Then
                         If index < 11 Then
-                            SendCamCmd("R0" & index - 1) 'recall preset on camera for cam5
+                            If (CheckBox5Visca.Checked) Then 'visca mode
+                                SendViscaBytes(7, &H81, &H1, &H4, &H3F, &H2, index - 1, &HFF, 0, 0) 'recall cam preset
+                            Else 'pana mode
+                                SendCamCmd("R0" & index - 1) 'recall preset on camera for cam5
+                            End If
                             PresetState(Addr) = 2 ^ (index - 1)
                             UpdatePresets() 'show presets for new cam
                         End If
                     End If
                     If ((PresetLive = False) And (Addr < 5)) Or ((PresetLive = True) And (LiveAddr < 5)) Then 'recall preset
                         'SendCamCmd("UPVS250")
+                        'we should recall the focus state here, if one is stored
                         If (Addr = LiveAddr) Or PresetLive = True Then 'live preset recall. attempt to go there slowly
                             ad = LiveAddr
                             cu = SendCamCmdAddr(ad, "GZ") 'get current zoom pos
@@ -973,8 +1119,9 @@ Public Class MainForm
                 op = Mid(op, 3)
                 If (op = "0") Then
                     op = SendCamCmd("GF") 'get current focus position
-                    op = Mid(op, 3)
-                    PresetFocus((Addr - 1) * 16 + index - 1) = op
+                    op = Mid(op, 3) 'this comes back as a hex value we need to convert to dec
+                    Dim v As Integer = Val("&h" & op)
+                    PresetFocus((Addr - 1) * 16 + index - 1) = v
                 Else
                     PresetFocus((Addr - 1) * 16 + index - 1) = 9999
                 End If
@@ -991,14 +1138,18 @@ Public Class MainForm
                 setactive()
             ElseIf Addr = 5 Then
                 If index < 11 Then
-                    SendCamCmd("M0" & index - 1) 'store preset on camera for cam5
+                    If (CheckBox5Visca.Checked) Then 'visca mode
+                        SendViscaBytes(7, &H81, &H1, &H4, &H3F, &H1, index - 1, &HFF, 0, 0) 'store cam preset
+                    Else 'pana mode
+                        SendCamCmd("M0" & index - 1) 'store preset on camera for cam5
+                    End If
                     If PresetCaption((Addr - 1) * 16 + index - 1) = Convert.ToString(index) Then 'automatically ask for legend if the legend is just the initial number
                         StartEditPresetDetails(index)
                     End If
                     PresetState(Addr) = 2 ^ (index - 1)
                     setactive()
                 End If
-            End If
+                End If
             SaveMode = 0
             WritePresetFile()
             BtnPresetSave.BackColor = Color.White
@@ -1211,7 +1362,7 @@ Public Class MainForm
     '---If shift held while pressing an input button, switch the fullscreen output
     Sub FullScreenOut(inp As Integer)
         Dim opmode As String
-        If inp = 14 Then opmode = "Output" : Else opmode = "Input"
+        If inp = 14 Then opmode = "Output" Else opmode = "Input"
         SendVmixCmd("?Function=SetOutputFullscreen&Input=" & VMixSourceName(inp) & "&Value=" & opmode)
     End Sub
 
@@ -1282,7 +1433,7 @@ Public Class MainForm
         StartLiveMove()
         Dim ft As Double
         Double.TryParse(TextBox1.Text, ft) 'fade time textbox
-        If (ft <> 0) Then ft = ft * 1000 : Else ft = 500
+        If (ft <> 0) Then ft = ft * 1000 Else ft = 500
         SendVmixCmd("?Function=Fade&Duration=" & ft)
         If AutoSwap Then TransitionWait = 5 + Val(TextBox1.Text) * 10
 
@@ -1611,7 +1762,7 @@ Public Class MainForm
         'vmix can't set a single video item by API so we use a list input with single item which can be set
         SendVmixCmd("?Function=ListRemoveAll&Input=" & VMixSourceName(7))
         SendVmixCmd("?Function=ListAdd&Input=" & VMixSourceName(7) & "&Value=" & MediaFiles(MediaItem))
-        If MediaLoop(MediaItem) Then SendVmixCmd("?Function=LoopOn&Input=" & VMixSourceName(7)) : Else SendVmixCmd("?Function=LoopOff&Input=" & VMixSourceName(7))
+        If MediaLoop(MediaItem) Then SendVmixCmd("?Function=LoopOn&Input=" & VMixSourceName(7)) Else SendVmixCmd("?Function=LoopOff&Input=" & VMixSourceName(7))
     End Sub
 
     '---Select previous mediaplayer item
@@ -2506,9 +2657,9 @@ Public Class MainForm
                     If LastKey = 15 Then EncoderClick(1)
                     If LastKey = 16 Then EncoderClick(2)
                     KeyHit = False
-                    End If
-
                 End If
+
+            End If
 
             'handle encoder rotation
             If EncoderA <> PrevEncoderA And EncoderAReset = 0 Then
@@ -2647,7 +2798,21 @@ Public Class MainForm
             Label22.Text = Label22.Text & "Initialise Camera 5..." 'send power on command to he2 and check we get a response
             GroupBox1.Refresh()
             If Cam5Dis = False Then
-                If SendCamQuery(5, "aw_ptz?cmd=%23O1&res=1") <> "" Then CamIgnore(5) = False Else CamIgnore(5) = True
+                If SendCamQuery(5, "aw_ptz?cmd=%23O1&res=1") <> "" Then
+                    CamIgnore(5) = False
+                Else  'if cam5 does not respond to the panasonic commands it may be a visca eptz cam
+                    ViscaCamInit()
+                    sendBytes(0) = &H81 'ask for software version by visca
+                    sendBytes(1) = &H9
+                    sendBytes(2) = &H0
+                    sendBytes(3) = &H2
+                    sendBytes(4) = &HFF
+                    ViscaSend(sendBytes, 5)
+                    CheckBox5Visca.Checked = True
+                    'CamIgnore(5) = True
+                    CamIgnore(5) = False
+                End If
+
                 If CamIgnore(5) = False Then Label22.Text = Label22.Text & "Done" & vbCrLf Else Label22.Text = Label22.Text & "Fail" & vbCrLf
             Else
                 Label22.Text = Label22.Text & "Ignore" & vbCrLf
@@ -3148,7 +3313,7 @@ Public Class MainForm
         'Label30.Text = sp & ">" & v
         If (EncoderAllocation(enc) < 2) Then 'for focus and iris, use the speed of the encoder to jump larger amounts for higher speeds
             If (sp <= 1) Then 'fastest
-                If (v < 4) Then v = v * 5 : Else v = v * 10
+                If (v < 4) Then v = v * 5 Else v = v * 10
             ElseIf (sp = 2) Then
                 v = v * 2
             End If
@@ -3504,5 +3669,8 @@ Public Class MainForm
     End Sub
 
 
-   
+
+    Private Sub SetupLostFocus(sender As Object, e As EventArgs) Handles TextBoxPresetFolder.LostFocus, TextBoxPresetFilename.LostFocus, TextBoxIPCam5.LostFocus, TextBoxIPCam4.LostFocus, TextBoxIPCam3.LostFocus, TextBoxIPCam2.LostFocus, TextBoxIPCam1.LostFocus, CheckBoxTally.Click, CheckBoxStandby.Click, CheckBoxSaveIris.Click, CheckBoxSaveFocus.Click, CheckBoxSaveAE.Click, CheckBoxProfile.Click, CheckBoxInvert4.Click, CheckBoxInvert3.Click, CheckBoxInvert2.Click, CheckBoxInvert1.Click, CheckBoxCam5Dis.Click, CheckBoxCam4Dis.Click, CheckBoxCam3Dis.Click, CheckBoxCam2Dis.Click, CheckBoxCam1Dis.Click, CheckBoxAutoSwap.Click
+
+    End Sub
 End Class

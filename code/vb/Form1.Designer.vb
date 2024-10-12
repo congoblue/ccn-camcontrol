@@ -224,6 +224,7 @@ Partial Class MainForm
         Me.Media1LoopCheckBox = New System.Windows.Forms.CheckBox()
         Me.Media1TextBox = New System.Windows.Forms.TextBox()
         Me.Label38 = New System.Windows.Forms.Label()
+        Me.CheckBox5Visca = New System.Windows.Forms.CheckBox()
         Me.BtnCNxt = New CCNCamcontrol.MyButton()
         Me.BtnCPrev = New CCNCamcontrol.MyButton()
         Me.BtnSlowPanL = New CCNCamcontrol.MyButton()
@@ -902,7 +903,7 @@ Partial Class MainForm
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(38, 16)
         Me.Label13.TabIndex = 215
-        Me.Label13.Text = "v1.0.7"
+        Me.Label13.Text = "v1.0.8"
         '
         'LabelProfile
         '
@@ -1421,6 +1422,7 @@ Partial Class MainForm
         '
         'SettingsPanel
         '
+        Me.SettingsPanel.Controls.Add(Me.CheckBox5Visca)
         Me.SettingsPanel.Controls.Add(Me.BtnMediaSetup)
         Me.SettingsPanel.Controls.Add(Me.Label30)
         Me.SettingsPanel.Controls.Add(Me.ButtonTouchscreen)
@@ -1479,7 +1481,7 @@ Partial Class MainForm
         Me.SettingsPanel.Controls.Add(Me.TextBox1)
         Me.SettingsPanel.Controls.Add(Me.Label37)
         Me.SettingsPanel.Controls.Add(Me.Label13)
-        Me.SettingsPanel.Location = New System.Drawing.Point(820, 690)
+        Me.SettingsPanel.Location = New System.Drawing.Point(797, 692)
         Me.SettingsPanel.Name = "SettingsPanel"
         Me.SettingsPanel.Size = New System.Drawing.Size(784, 600)
         Me.SettingsPanel.TabIndex = 323
@@ -2732,6 +2734,18 @@ Partial Class MainForm
         Me.Label38.Size = New System.Drawing.Size(115, 22)
         Me.Label38.TabIndex = 3
         Me.Label38.Text = "Media Files"
+        '
+        'CheckBox5Visca
+        '
+        Me.CheckBox5Visca.AutoSize = True
+        Me.CheckBox5Visca.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBox5Visca.ForeColor = System.Drawing.Color.Yellow
+        Me.CheckBox5Visca.Location = New System.Drawing.Point(428, 185)
+        Me.CheckBox5Visca.Name = "CheckBox5Visca"
+        Me.CheckBox5Visca.Size = New System.Drawing.Size(152, 20)
+        Me.CheckBox5Visca.TabIndex = 322
+        Me.CheckBox5Visca.Text = "Cam5 Visca mode"
+        Me.CheckBox5Visca.UseVisualStyleBackColor = True
         '
         'BtnCNxt
         '
@@ -4284,4 +4298,5 @@ Partial Class MainForm
     Friend WithEvents Label38 As Label
     Private WithEvents ShapeContainer3 As PowerPacks.ShapeContainer
     Friend WithEvents Label42 As Label
+    Friend WithEvents CheckBox5Visca As System.Windows.Forms.CheckBox
 End Class
