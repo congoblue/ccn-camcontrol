@@ -481,7 +481,7 @@ Public Class MainForm
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            CamIgnore(Addr) = True
+            If Addr <> 5 Then CamIgnore(Addr) = True
             ShowMsgBox("Error sending to camera " & Addr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
@@ -536,7 +536,7 @@ Public Class MainForm
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            CamIgnore(Addr) = True
+            If Addr <> 5 Then CamIgnore(Addr) = True
             ShowMsgBox("Error sending to camera " & Addr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
@@ -585,7 +585,7 @@ Public Class MainForm
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            CamIgnore(caddr) = True
+            If caddr <> 5 Then CamIgnore(caddr) = True
             ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
@@ -606,7 +606,7 @@ Public Class MainForm
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            CamIgnore(caddr) = True
+            If caddr <> 5 Then CamIgnore(caddr) = True
             ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
@@ -625,7 +625,7 @@ Public Class MainForm
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            CamIgnore(caddr) = True
+            If caddr <> 5 Then CamIgnore(caddr) = True
             ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
@@ -808,7 +808,7 @@ Public Class MainForm
         TextFileReader.Dispose()
         'read preset names for cam5. these are stored in the registry as the presets are fixed in the camera
         For i = 0 To 15
-            PresetCaption(16 * 6 + i) = GetSetting("CCNCamControl", "Preset5", i, i + 1)
+            PresetCaption(16 * 5 + i) = GetSetting("CCNCamControl", "Preset5", i, i + 1)
         Next
         UpdatePresets()
     End Sub
@@ -849,7 +849,7 @@ Public Class MainForm
 
         'also save cam5 legends to registry
         For i = 0 To 15
-            SaveSetting("CCNCamControl", "Preset5", i, PresetCaption(6 * 16 + i))
+            SaveSetting("CCNCamControl", "Preset5", i, PresetCaption(5 * 16 + i))
         Next
     End Sub
 
@@ -1552,9 +1552,9 @@ Public Class MainForm
             UpdatePresets()
         Else
             If LiveMoveSpeed = 0 Then
-                SendCamCmdAddr(LiveAddr, "PTS4800")
+                SendCamCmdAddr(LiveAddr, "PTS4400")
             Else
-                SendCamCmdAddr(LiveAddr, "PTS4500")
+                SendCamCmdAddr(LiveAddr, "PTS3800")
             End If
             BtnLive.BackColor = Color.White
             PresetLive = False
@@ -1576,9 +1576,9 @@ Public Class MainForm
             UpdatePresets()
         Else
             If LiveMoveSpeed = 0 Then
-                SendCamCmdAddr(LiveAddr, "PTS5200")
+                SendCamCmdAddr(LiveAddr, "PTS5600")
             Else
-                SendCamCmdAddr(LiveAddr, "PTS5500")
+                SendCamCmdAddr(LiveAddr, "PTS6200")
             End If
             BtnLive.BackColor = Color.White
             PresetLive = False
@@ -3606,6 +3606,7 @@ Public Class MainForm
         CamIgnore(2) = False
         CamIgnore(3) = False
         CamIgnore(4) = False
+        CamIgnore(5) = False
         Dim ta As Integer
         For ta = 1 To 4
             SendCamCmdAddr(ta, "O1") 'power on command
@@ -3620,9 +3621,9 @@ Public Class MainForm
         UpdateCameraLinkStatus()
         If Cam4Dis = False Then ReadbackCameraStates(4)
         UpdateCameraLinkStatus()
-        If Cam5Dis = False Then
-            If SendCamQuery(5, "aw_ptz?cmd=%23O1&res=1") <> "" Then CamIgnore(5) = False Else CamIgnore(5) = True
-        End If
+        'If Cam5Dis = False Then
+        'If SendCamQuery(5, "aw_ptz?cmd=%23O1&res=1") <> "" Then CamIgnore(5) = False Else CamIgnore(5) = True
+        'End If
         UpdateCameraLinkStatus()
     End Sub
 
@@ -3671,6 +3672,14 @@ Public Class MainForm
 
 
     Private Sub SetupLostFocus(sender As Object, e As EventArgs) Handles TextBoxPresetFolder.LostFocus, TextBoxPresetFilename.LostFocus, TextBoxIPCam5.LostFocus, TextBoxIPCam4.LostFocus, TextBoxIPCam3.LostFocus, TextBoxIPCam2.LostFocus, TextBoxIPCam1.LostFocus, CheckBoxTally.Click, CheckBoxStandby.Click, CheckBoxSaveIris.Click, CheckBoxSaveFocus.Click, CheckBoxSaveAE.Click, CheckBoxProfile.Click, CheckBoxInvert4.Click, CheckBoxInvert3.Click, CheckBoxInvert2.Click, CheckBoxInvert1.Click, CheckBoxCam5Dis.Click, CheckBoxCam4Dis.Click, CheckBoxCam3Dis.Click, CheckBoxCam2Dis.Click, CheckBoxCam1Dis.Click, CheckBoxAutoSwap.Click
+
+    End Sub
+
+    Private Sub BtnOBSBroadcast_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles BtnOBSBroadcast.MouseDown
+
+    End Sub
+
+    Private Sub BtnOBSRecord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnOBSRecord.Click
 
     End Sub
 End Class
