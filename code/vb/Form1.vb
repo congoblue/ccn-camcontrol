@@ -148,6 +148,7 @@ Public Class MainForm
     Dim PresetFocus(64) As Integer
     Dim PresetIris(64) As Integer
     Dim PresetAE(64) As Integer
+    Dim PresetAgc(64) As Integer
 
     'for visca comms
     Dim udpClient1 As System.Net.Sockets.UdpClient
@@ -182,9 +183,9 @@ Public Class MainForm
 
         'hold down ctrl key on boot to skip camera connections 
         If My.Computer.Keyboard.CtrlKeyDown Then 'Or My.Computer.Keyboard.ShiftKeyDown Then
-            ctrlkey = True
+            CtrlKey = True
         Else
-            ctrlkey = False
+            CtrlKey = False
         End If
 
         'attempt to open app on the 1024x600 usb touch screen. If not found, open on the main screen as a sizeable window
@@ -203,9 +204,9 @@ Public Class MainForm
             Me.FormBorderStyle = FormBorderStyle.Sizable 'if no 2nd monitor, open sizeable on main monitor
         End If
 
-        gain(1) = 4 : gain(2) = 4 : gain(3) = 4 : gain(4) = 4
-        wblock(1) = 0 : wblock(2) = 0 : wblock(3) = 0 : wblock(4) = 0
-        addr = 2 : liveaddr = 1 : nextpreview = 2
+        Gain(1) = 4 : Gain(2) = 4 : Gain(3) = 4 : Gain(4) = 4
+        WbLock(1) = 0 : WbLock(2) = 0 : WbLock(3) = 0 : WbLock(4) = 0
+        Addr = 2 : LiveAddr = 1 : NextPreview = 2
 
         For i = 1 To 4 'these will be loaded from the camera settings eventually
             CamIris(i) = 0
@@ -759,10 +760,13 @@ Public Class MainForm
                         PresetXPos(i) = CurrentRow(1).ToString
                         PresetYPos(i) = CurrentRow(2).ToString
                         PresetZPos(i) = CurrentRow(3).ToString
-                        If UBound(CurrentRow) = 6 Then 'new format preset data
+                        If UBound(CurrentRow) >= 6 Then 'new format preset data with focus/iris
                             PresetFocus(i) = Convert.ToInt32(CurrentRow(4).ToString)
                             PresetIris(i) = Convert.ToInt32(CurrentRow(5).ToString)
-                            PresetAE(i) = Convert.ToInt32(CurrentRow(4).ToString)
+                            PresetAE(i) = Convert.ToInt32(CurrentRow(6).ToString)
+                        End If
+                        If UBound(CurrentRow) = 7 Then 'newest format preset data with gain
+                            PresetAgc(i) = Convert.ToInt32(CurrentRow(7).ToString)
                         End If
                         If CurrentRow.GetUpperBound(0) > 3 Then 'check if we have these params or not
                             PresetContent(i) = Convert.ToInt32(CurrentRow(4).ToString)
@@ -795,20 +799,24 @@ Public Class MainForm
                             If (CurrentRow(1) = "True") Then CheckBoxSaveFocus.Checked = True Else CheckBoxSaveFocus.Checked = False
                             If (CurrentRow(2) = "True") Then CheckBoxSaveIris.Checked = True Else CheckBoxSaveIris.Checked = False
                             If (CurrentRow(3) = "True") Then CheckBoxSaveAE.Checked = True Else CheckBoxSaveAE.Checked = False
+                            If (UBound(CurrentRow) = 4) Then
+                                If (CurrentRow(4) = "True") Then CheckBoxSaveAgc.Checked = True Else CheckBoxSaveAgc.Checked = False
+                            End If
                         End If
                     End If
 
                 End If
-            Catch ex As  _
+            Catch ex As _
             Microsoft.VisualBasic.FileIO.MalformedLineException
                 MsgBox("Line " & ex.Message &
                 "is not valid and will be skipped.")
             End Try
         End While
         TextFileReader.Dispose()
-        'read preset names for cam5. these are stored in the registry as the presets are fixed in the camera
+        'read preset names for cam5. these are stored in the registry as the presets are held in the camera
+        'so there is no point storing the labels in the user file as the presets aren't stored in the user file.
         For i = 0 To 15
-            PresetCaption(16 * 5 + i) = GetSetting("CCNCamControl", "Preset5", i, i + 1)
+            PresetCaption(4 * 16 + i) = GetSetting("CCNCamControl", "Preset5", i, i + 1)
         Next
         UpdatePresets()
     End Sub
@@ -830,7 +838,7 @@ Public Class MainForm
         For j = 0 To 3
             For i = 0 To 15
                 ln = PresetCaption(i + j * 16) & "," & PresetXPos(i + j * 16) & "," & PresetYPos(i + j * 16) & "," & PresetZPos(i + j * 16)
-                ln = ln & "," & PresetFocus(i + j * 16) & "," & PresetIris(i + j * 16) & "," & PresetAE(i + j * 16)
+                ln = ln & "," & PresetFocus(i + j * 16) & "," & PresetIris(i + j * 16) & "," & PresetAE(i + j * 16) & "," & PresetAgc(i + j * 16)
                 'ln = ln & "," & PresetContent(i + j * 16) & "," & PresetSize(i + j * 16) & "," & PresetAuto(i + j * 16)
                 'ln = ln & "," & PresetFocus(i + j * 16) & "," & PresetFocusAuto(i + j * 16)
                 file.WriteLine(ln)
@@ -841,7 +849,7 @@ Public Class MainForm
         ln = "Encoder" & "," & EncoderAllocation(1) & "," & EncoderAllocation(2)
         file.WriteLine(ln)
 
-        ln = "CamSettingStore" & "," & CheckBoxSaveFocus.Checked & "," & CheckBoxSaveIris.Checked & "," & CheckBoxSaveAE.Checked
+        ln = "CamSettingStore" & "," & CheckBoxSaveFocus.Checked & "," & CheckBoxSaveIris.Checked & "," & CheckBoxSaveAE.Checked & "," & CheckBoxSaveAgc.Checked
         file.WriteLine(ln)
 
         file.Close()
@@ -849,7 +857,7 @@ Public Class MainForm
 
         'also save cam5 legends to registry
         For i = 0 To 15
-            SaveSetting("CCNCamControl", "Preset5", i, PresetCaption(5 * 16 + i))
+            SaveSetting("CCNCamControl", "Preset5", i, PresetCaption(4 * 16 + i))
         Next
     End Sub
 
@@ -996,7 +1004,11 @@ Public Class MainForm
                     End If
                     If ((PresetLive = False) And (Addr < 5)) Or ((PresetLive = True) And (LiveAddr < 5)) Then 'recall preset
                         'SendCamCmd("UPVS250")
-                        'we should recall the focus state here, if one is stored
+                        'recall the camera parameters if enabled
+                        If CheckBoxSaveFocus.Checked Then SetFocus(Addr, PresetFocus((Addr - 1) * 16 + index - 1))
+                        If CheckBoxSaveIris.Checked Then SetIris(Addr, PresetIris((Addr - 1) * 16 + index - 1))
+                        If CheckBoxSaveAE.Checked Then SetAEShift(Addr, PresetAE((Addr - 1) * 16 + index - 1))
+                        If CheckBoxSaveAGC.Checked Then SetAGC(Addr, PresetAgc((Addr - 1) * 16 + index - 1))
                         If (Addr = LiveAddr) Or PresetLive = True Then 'live preset recall. attempt to go there slowly
                             ad = LiveAddr
                             cu = SendCamCmdAddr(ad, "GZ") 'get current zoom pos
@@ -1125,10 +1137,15 @@ Public Class MainForm
                 Else
                     PresetFocus((Addr - 1) * 16 + index - 1) = 9999
                 End If
-                op = SendCamCmdAddrNoHash(Addr, "QSD:48", "aw_cam") 'get "contrast" setting
-                PresetAE((Addr - 1) * 16 + index - 1) = (Val(Mid(op, 8)) - 32) * 20 / 64
-                op = SendCamCmdAddrNoHash(Addr, "QRV", "aw_cam") 'get iris setting
-                PresetIris((Addr - 1) * 16 + index - 1) = Val("&H" & Mid(op, 5))
+                'op = SendCamCmdAddrNoHash(Addr, "QSD:48", "aw_cam") 'get "contrast" setting
+                'PresetAE((Addr - 1) * 16 + index - 1) = (Val(Mid(op, 8)) - 32) * 20 / 64
+                PresetAE((Addr - 1) * 16 + index - 1) = CamAEShift(Addr)
+                'op = SendCamCmdAddrNoHash(Addr, "QRV", "aw_cam") 'get iris setting
+                'PresetIris((Addr - 1) * 16 + index - 1) = Val("&H" & Mid(op, 5))
+                PresetIris((Addr - 1) * 16 + index - 1) = CamIris(Addr)
+                'op = SendCamCmdAddrNoHash(Addr, "QGU", "aw_cam") 'get gain setting
+                'PresetAgc((Addr - 1) * 16 + index - 1) = Val("&H" & Mid(op, 5))
+                PresetAgc((Addr - 1) * 16 + index - 1) = CamAgc(Addr)
 
                 If PresetCaption((Addr - 1) * 16 + index - 1) = Convert.ToString(index) Then 'automatically ask for legend if the legend is just the initial number
                     PresetLegendMode = index
@@ -3424,6 +3441,7 @@ Public Class MainForm
         If GetSetting("CCNCamControl", "Set", "SaveFocus", False) = True Then CheckBoxSaveFocus.Checked = True Else CheckBoxSaveFocus.Checked = False
         If GetSetting("CCNCamControl", "Set", "SaveIris", False) = True Then CheckBoxSaveIris.Checked = True Else CheckBoxSaveIris.Checked = False
         If GetSetting("CCNCamControl", "Set", "SaveAE", False) = True Then CheckBoxSaveAE.Checked = True Else CheckBoxSaveAE.Checked = False
+        If GetSetting("CCNCamControl", "Set", "SaveAgc", False) = True Then CheckBoxSaveAgc.Checked = True Else CheckBoxSaveAgc.Checked = False
 
         If CamInvert(1) Then CheckBoxInvert1.Checked = True
         If CamInvert(2) Then CheckBoxInvert2.Checked = True
@@ -3471,6 +3489,7 @@ Public Class MainForm
         SaveSetting("CCNCamControl", "Set", "SaveFocus", CheckBoxSaveFocus.Checked)
         SaveSetting("CCNCamControl", "Set", "SaveIris", CheckBoxSaveIris.Checked)
         SaveSetting("CCNCamControl", "Set", "SaveAE", CheckBoxSaveAE.Checked)
+        SaveSetting("CCNCamControl", "Set", "SaveAgc", CheckBoxSaveAgc.Checked)
 
         SaveSetting("CCNCamControl", "Set", "Cam1Dis", CheckBoxCam1Dis.Checked)
         SaveSetting("CCNCamControl", "Set", "Cam2Dis", CheckBoxCam2Dis.Checked)
@@ -3525,7 +3544,7 @@ Public Class MainForm
     Sub SetupLostFocus() Handles TextBoxIPCam1.LostFocus, TextBoxIPCam2.LostFocus, TextBoxIPCam3.LostFocus, TextBoxIPCam4.LostFocus,
         TextBoxIPCam5.LostFocus, CheckBoxCam1Dis.Click, CheckBoxCam2Dis.Click, CheckBoxCam3Dis.Click, CheckBoxCam4Dis.Click, CheckBoxCam5Dis.Click,
         CheckBoxTally.Click, CheckBoxAutoSwap.Click, CheckBoxStandby.Click, CheckBoxProfile.Click, CheckBoxInvert1.Click, CheckBoxInvert2.Click, CheckBoxInvert3.Click, CheckBoxInvert4.Click,
-        CheckBoxSaveFocus.Click, CheckBoxSaveIris.Click, CheckBoxSaveAE.Click, TextBoxPresetFilename.LostFocus, TextBoxPresetFolder.LostFocus
+        CheckBoxSaveFocus.Click, CheckBoxSaveIris.Click, CheckBoxSaveAE.Click, CheckBoxSaveAgc.Click, TextBoxPresetFilename.LostFocus, TextBoxPresetFolder.LostFocus
 
         StoreSetupScreen()
     End Sub

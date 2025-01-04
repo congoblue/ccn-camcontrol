@@ -327,6 +327,8 @@ Partial Class MainForm
         Me.Aux3Btn4 = New CCNCamcontrol.MyButton()
         Me.Aux3Btn5 = New CCNCamcontrol.MyButton()
         Me.Aux3Btn6 = New CCNCamcontrol.MyButton()
+        Me.Label43 = New System.Windows.Forms.Label()
+        Me.CheckBoxSaveAgc = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.PresetPanel.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -901,9 +903,9 @@ Partial Class MainForm
         Me.Label13.ForeColor = System.Drawing.Color.Yellow
         Me.Label13.Location = New System.Drawing.Point(4, 3)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(38, 16)
+        Me.Label13.Size = New System.Drawing.Size(44, 16)
         Me.Label13.TabIndex = 215
-        Me.Label13.Text = "v1.0.9"
+        Me.Label13.Text = "v1.0.10"
         '
         'LabelProfile
         '
@@ -1422,6 +1424,8 @@ Partial Class MainForm
         '
         'SettingsPanel
         '
+        Me.SettingsPanel.Controls.Add(Me.CheckBoxSaveAgc)
+        Me.SettingsPanel.Controls.Add(Me.Label43)
         Me.SettingsPanel.Controls.Add(Me.CheckBox5Visca)
         Me.SettingsPanel.Controls.Add(Me.BtnMediaSetup)
         Me.SettingsPanel.Controls.Add(Me.Label30)
@@ -1481,7 +1485,7 @@ Partial Class MainForm
         Me.SettingsPanel.Controls.Add(Me.TextBox1)
         Me.SettingsPanel.Controls.Add(Me.Label37)
         Me.SettingsPanel.Controls.Add(Me.Label13)
-        Me.SettingsPanel.Location = New System.Drawing.Point(797, 692)
+        Me.SettingsPanel.Location = New System.Drawing.Point(820, 657)
         Me.SettingsPanel.Name = "SettingsPanel"
         Me.SettingsPanel.Size = New System.Drawing.Size(784, 600)
         Me.SettingsPanel.TabIndex = 323
@@ -1536,11 +1540,11 @@ Partial Class MainForm
         Me.CheckBoxSaveAE.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxSaveAE.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckBoxSaveAE.ForeColor = System.Drawing.Color.Yellow
-        Me.CheckBoxSaveAE.Location = New System.Drawing.Point(401, 543)
+        Me.CheckBoxSaveAE.Location = New System.Drawing.Point(158, 547)
         Me.CheckBoxSaveAE.Name = "CheckBoxSaveAE"
-        Me.CheckBoxSaveAE.Size = New System.Drawing.Size(193, 20)
+        Me.CheckBoxSaveAE.Size = New System.Drawing.Size(81, 20)
         Me.CheckBoxSaveAE.TabIndex = 318
-        Me.CheckBoxSaveAE.Text = "Save AE Shift in presets"
+        Me.CheckBoxSaveAE.Text = "AE Shift"
         Me.CheckBoxSaveAE.UseVisualStyleBackColor = True
         '
         'CheckBoxSaveIris
@@ -1550,11 +1554,11 @@ Partial Class MainForm
         Me.CheckBoxSaveIris.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxSaveIris.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckBoxSaveIris.ForeColor = System.Drawing.Color.Yellow
-        Me.CheckBoxSaveIris.Location = New System.Drawing.Point(236, 543)
+        Me.CheckBoxSaveIris.Location = New System.Drawing.Point(98, 547)
         Me.CheckBoxSaveIris.Name = "CheckBoxSaveIris"
-        Me.CheckBoxSaveIris.Size = New System.Drawing.Size(160, 20)
+        Me.CheckBoxSaveIris.Size = New System.Drawing.Size(48, 20)
         Me.CheckBoxSaveIris.TabIndex = 317
-        Me.CheckBoxSaveIris.Text = "Save iris in presets"
+        Me.CheckBoxSaveIris.Text = "Iris"
         Me.CheckBoxSaveIris.UseVisualStyleBackColor = True
         '
         'CheckBoxSaveFocus
@@ -1564,11 +1568,11 @@ Partial Class MainForm
         Me.CheckBoxSaveFocus.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxSaveFocus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckBoxSaveFocus.ForeColor = System.Drawing.Color.Yellow
-        Me.CheckBoxSaveFocus.Location = New System.Drawing.Point(54, 543)
+        Me.CheckBoxSaveFocus.Location = New System.Drawing.Point(23, 547)
         Me.CheckBoxSaveFocus.Name = "CheckBoxSaveFocus"
-        Me.CheckBoxSaveFocus.Size = New System.Drawing.Size(176, 20)
+        Me.CheckBoxSaveFocus.Size = New System.Drawing.Size(69, 20)
         Me.CheckBoxSaveFocus.TabIndex = 316
-        Me.CheckBoxSaveFocus.Text = "Save focus in presets"
+        Me.CheckBoxSaveFocus.Text = "Focus"
         Me.CheckBoxSaveFocus.UseVisualStyleBackColor = True
         '
         'ButtonRetryCam
@@ -3895,6 +3899,31 @@ Partial Class MainForm
         Me.Aux3Btn6.UseVisualStyleBackColor = True
         Me.Aux3Btn6.Visible = False
         '
+        'Label43
+        '
+        Me.Label43.AutoSize = True
+        Me.Label43.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label43.ForeColor = System.Drawing.Color.Yellow
+        Me.Label43.Location = New System.Drawing.Point(24, 528)
+        Me.Label43.Name = "Label43"
+        Me.Label43.Size = New System.Drawing.Size(257, 16)
+        Me.Label43.TabIndex = 323
+        Me.Label43.Text = "Recall camera settings from presets"
+        '
+        'CheckBoxSaveAgc
+        '
+        Me.CheckBoxSaveAgc.AutoSize = True
+        Me.CheckBoxSaveAgc.Checked = True
+        Me.CheckBoxSaveAgc.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxSaveAgc.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBoxSaveAgc.ForeColor = System.Drawing.Color.Yellow
+        Me.CheckBoxSaveAgc.Location = New System.Drawing.Point(245, 547)
+        Me.CheckBoxSaveAgc.Name = "CheckBoxSaveAgc"
+        Me.CheckBoxSaveAgc.Size = New System.Drawing.Size(58, 20)
+        Me.CheckBoxSaveAgc.TabIndex = 324
+        Me.CheckBoxSaveAgc.Text = "AGC"
+        Me.CheckBoxSaveAgc.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4299,4 +4328,6 @@ Partial Class MainForm
     Private WithEvents ShapeContainer3 As PowerPacks.ShapeContainer
     Friend WithEvents Label42 As Label
     Friend WithEvents CheckBox5Visca As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBoxSaveAgc As CheckBox
+    Friend WithEvents Label43 As Label
 End Class
