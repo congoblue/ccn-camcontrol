@@ -116,6 +116,8 @@ Partial Class MainForm
         Me.TextBoxFocus = New System.Windows.Forms.TextBox()
         Me.Label29 = New System.Windows.Forms.Label()
         Me.SettingsPanel = New System.Windows.Forms.Panel()
+        Me.CheckBoxSaveAgc = New System.Windows.Forms.CheckBox()
+        Me.Label43 = New System.Windows.Forms.Label()
         Me.CheckBox5Visca = New System.Windows.Forms.CheckBox()
         Me.BtnMediaSetup = New System.Windows.Forms.Button()
         Me.Label30 = New System.Windows.Forms.Label()
@@ -327,8 +329,6 @@ Partial Class MainForm
         Me.Aux3Btn4 = New CCNCamcontrol.MyButton()
         Me.Aux3Btn5 = New CCNCamcontrol.MyButton()
         Me.Aux3Btn6 = New CCNCamcontrol.MyButton()
-        Me.Label43 = New System.Windows.Forms.Label()
-        Me.CheckBoxSaveAgc = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.PresetPanel.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -905,7 +905,7 @@ Partial Class MainForm
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(44, 16)
         Me.Label13.TabIndex = 215
-        Me.Label13.Text = "v1.0.10"
+        Me.Label13.Text = "v1.0.11"
         '
         'LabelProfile
         '
@@ -1489,6 +1489,31 @@ Partial Class MainForm
         Me.SettingsPanel.Name = "SettingsPanel"
         Me.SettingsPanel.Size = New System.Drawing.Size(784, 600)
         Me.SettingsPanel.TabIndex = 323
+        '
+        'CheckBoxSaveAgc
+        '
+        Me.CheckBoxSaveAgc.AutoSize = True
+        Me.CheckBoxSaveAgc.Checked = True
+        Me.CheckBoxSaveAgc.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxSaveAgc.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBoxSaveAgc.ForeColor = System.Drawing.Color.Yellow
+        Me.CheckBoxSaveAgc.Location = New System.Drawing.Point(245, 547)
+        Me.CheckBoxSaveAgc.Name = "CheckBoxSaveAgc"
+        Me.CheckBoxSaveAgc.Size = New System.Drawing.Size(58, 20)
+        Me.CheckBoxSaveAgc.TabIndex = 324
+        Me.CheckBoxSaveAgc.Text = "AGC"
+        Me.CheckBoxSaveAgc.UseVisualStyleBackColor = True
+        '
+        'Label43
+        '
+        Me.Label43.AutoSize = True
+        Me.Label43.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label43.ForeColor = System.Drawing.Color.Yellow
+        Me.Label43.Location = New System.Drawing.Point(24, 528)
+        Me.Label43.Name = "Label43"
+        Me.Label43.Size = New System.Drawing.Size(257, 16)
+        Me.Label43.TabIndex = 323
+        Me.Label43.Text = "Recall camera settings from presets"
         '
         'CheckBox5Visca
         '
@@ -3898,31 +3923,6 @@ Partial Class MainForm
         Me.Aux3Btn6.Text = "CAM2"
         Me.Aux3Btn6.UseVisualStyleBackColor = True
         Me.Aux3Btn6.Visible = False
-        '
-        'Label43
-        '
-        Me.Label43.AutoSize = True
-        Me.Label43.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label43.ForeColor = System.Drawing.Color.Yellow
-        Me.Label43.Location = New System.Drawing.Point(24, 528)
-        Me.Label43.Name = "Label43"
-        Me.Label43.Size = New System.Drawing.Size(257, 16)
-        Me.Label43.TabIndex = 323
-        Me.Label43.Text = "Recall camera settings from presets"
-        '
-        'CheckBoxSaveAgc
-        '
-        Me.CheckBoxSaveAgc.AutoSize = True
-        Me.CheckBoxSaveAgc.Checked = True
-        Me.CheckBoxSaveAgc.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxSaveAgc.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CheckBoxSaveAgc.ForeColor = System.Drawing.Color.Yellow
-        Me.CheckBoxSaveAgc.Location = New System.Drawing.Point(245, 547)
-        Me.CheckBoxSaveAgc.Name = "CheckBoxSaveAgc"
-        Me.CheckBoxSaveAgc.Size = New System.Drawing.Size(58, 20)
-        Me.CheckBoxSaveAgc.TabIndex = 324
-        Me.CheckBoxSaveAgc.Text = "AGC"
-        Me.CheckBoxSaveAgc.UseVisualStyleBackColor = True
         '
         'MainForm
         '

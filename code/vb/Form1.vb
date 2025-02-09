@@ -755,7 +755,7 @@ Public Class MainForm
             Try
                 CurrentRow = TextFileReader.ReadFields() 'fields:0=name,1=x,2=y,3=z,4=Focus,5=Iris,6=AEshift
                 If Not CurrentRow Is Nothing Then
-                    If UBound(CurrentRow) >= 4 Then 'preset data
+                    If UBound(CurrentRow) >= 6 Then 'preset data
                         PresetCaption(i) = CurrentRow(0).ToString
                         PresetXPos(i) = CurrentRow(1).ToString
                         PresetYPos(i) = CurrentRow(2).ToString
@@ -2080,6 +2080,13 @@ Public Class MainForm
     End Sub
     Sub SetFocus(ad As Integer, v As Integer)
         If ad > 5 Then Exit Sub
+        If v = 0 Or v = 9999 Then 'this is auto mode
+            SendCamCmdAddr(ad, "D11")
+            CamFocusManual(ad) = 0
+            BtnFocusAuto.BackColor = Color.Red : BtnFocusLock.BackColor = Color.White
+            ShowEncoderValues()
+            Exit Sub
+        End If
         If (v < &H555) Then v = &H555
         If (v > &HFFF) Then v = &HFFF
         If CamFocusManual(ad) = 0 Then 'if was in auto mode set to manual
@@ -3690,7 +3697,7 @@ Public Class MainForm
 
 
 
-    Private Sub SetupLostFocus(sender As Object, e As EventArgs) Handles TextBoxPresetFolder.LostFocus, TextBoxPresetFilename.LostFocus, TextBoxIPCam5.LostFocus, TextBoxIPCam4.LostFocus, TextBoxIPCam3.LostFocus, TextBoxIPCam2.LostFocus, TextBoxIPCam1.LostFocus, CheckBoxTally.Click, CheckBoxStandby.Click, CheckBoxSaveIris.Click, CheckBoxSaveFocus.Click, CheckBoxSaveAE.Click, CheckBoxProfile.Click, CheckBoxInvert4.Click, CheckBoxInvert3.Click, CheckBoxInvert2.Click, CheckBoxInvert1.Click, CheckBoxCam5Dis.Click, CheckBoxCam4Dis.Click, CheckBoxCam3Dis.Click, CheckBoxCam2Dis.Click, CheckBoxCam1Dis.Click, CheckBoxAutoSwap.Click
+    Private Sub SetupLostFocus(ByVal sender As Object, ByVal e As EventArgs) Handles TextBoxPresetFolder.LostFocus, TextBoxPresetFilename.LostFocus, TextBoxIPCam5.LostFocus, TextBoxIPCam4.LostFocus, TextBoxIPCam3.LostFocus, TextBoxIPCam2.LostFocus, TextBoxIPCam1.LostFocus, CheckBoxTally.Click, CheckBoxStandby.Click, CheckBoxSaveIris.Click, CheckBoxSaveFocus.Click, CheckBoxSaveAE.Click, CheckBoxProfile.Click, CheckBoxInvert4.Click, CheckBoxInvert3.Click, CheckBoxInvert2.Click, CheckBoxInvert1.Click, CheckBoxCam5Dis.Click, CheckBoxCam4Dis.Click, CheckBoxCam3Dis.Click, CheckBoxCam2Dis.Click, CheckBoxCam1Dis.Click, CheckBoxAutoSwap.Click, CheckBoxSaveAgc.Click
 
     End Sub
 
