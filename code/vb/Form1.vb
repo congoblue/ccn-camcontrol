@@ -42,7 +42,6 @@ Public Class MainForm
     Dim CamAGCLimit(8) As Integer
     Dim CamWBRed(8) As Integer
     Dim CamWBBlue(8) As Integer
-    Dim CamFocusManual(8) As Integer
     Dim CamFocus(8) As Integer
     Dim ProgCloseTimer As Integer = 0
     Dim CamIgnore(8) As Boolean
@@ -141,10 +140,6 @@ Public Class MainForm
     Dim PresetXPos(64) As String
     Dim PresetYPos(64) As String
     Dim PresetZPos(64) As String
-    Dim PresetContent(128) As Integer
-    Dim PresetSize(128) As Integer
-    Dim PresetAuto(128) As Integer
-    Dim PresetFocusAuto(64) As Boolean
     Dim PresetFocus(64) As Integer
     Dim PresetIris(64) As Integer
     Dim PresetAE(64) As Integer
@@ -209,13 +204,13 @@ Public Class MainForm
         Addr = 2 : LiveAddr = 1 : NextPreview = 2
 
         For i = 1 To 4 'these will be loaded from the camera settings eventually
-            CamIris(i) = 0
-            CamAgc(i) = 0
+            CamIris(i) = 9999
+            CamAgc(i) = 9999
             CamAEShift(i) = 0
             CamAGCLimit(i) = 0
             CamWBRed(i) = 0
             CamWBBlue(i) = 20
-            CamFocusManual(i) = 0
+            CamFocus(i) = 9999
         Next i
 
         'For i = 0 To 128
@@ -716,24 +711,41 @@ Public Class MainForm
         SendCamCmdAddrNoHash(ta, "XSF:1", "aw_cam") 'set scene file "MANUAL 1"
         op = SendCamCmdAddrNoHash(ta, "QSD:B1", "aw_cam") 'get WB setting
         CamWBBlue(ta) = Val("&H" & Mid(op, 8))
-        op = SendCamCmdAddrNoHash(ta, "QGU", "aw_cam") 'get AGC setting
-        CamAgc(ta) = (Val("&H" & Mid(op, 5)) - 8) / 3
         op = SendCamCmdAddrNoHash(ta, "QSD:69", "aw_cam") 'get AGC gain limit setting
         CamAGCLimit(ta) = Val("&H" & Mid(op, 8))
-        op = SendCamCmdAddrNoHash(ta, "QSD:48", "aw_cam") 'get "contrast" setting
+        op = SendCamCmdAddrNoHash(ta, "QSD:48", "aw_cam") 'get "contrast" setting (AE shift)
         CamAEShift(ta) = (Val(Mid(op, 8)) - 32) * 20 / 64
-        op = SendCamCmdAddrNoHash(ta, "QRV", "aw_cam") 'get iris setting
-        CamIris(ta) = Val("&H" & Mid(op, 5))
         op = SendCamCmdAddrNoHash(ta, "QRS", "aw_cam") 'get iris auto/man
-        If Val("&H" & Mid(op, 5)) = 1 Then CamIris(ta) = 9999 'flag auto mode
+        If Val("&H" & Mid(op, 5)) = 1 Then
+            CamIris(ta) = 9999 'flag auto mode
+        Else
+            op = SendCamCmdAddrNoHash(ta, "QRV", "aw_cam") 'get iris setting
+            CamIris(ta) = Val("&H" & Mid(op, 5))
+        End If
         op = SendCamCmdAddr(ta, "D1") 'get focus auto/man
-        If Val("&H" & Mid(op, 3)) = 1 Then CamFocusManual(ta) = 0 Else CamFocusManual(ta) = 1 'flag auto mode if return=1
-        op = SendCamCmdAddr(ta, "GF")
-        CamFocus(ta) = Val("&H" & Mid(op, 3))
+        If Val("&H" & Mid(op, 3)) = 1 Then
+            CamFocus(ta) = 9999
+        Else
+            op = SendCamCmdAddr(ta, "GF")
+            CamFocus(ta) = Val("&H" & Mid(op, 3))
+        End If
+        op = SendCamCmdAddrNoHash(ta, "QGU", "aw_cam") 'get AGC setting
+        If Val("&H" & Mid(op, 5)) = 128 Then 'cam returns 128 (0x80) for auto agc mode
+            CamAgc(ta) = 9999
+        Else
+            CamAgc(ta) = (Val("&H" & Mid(op, 5)) - 8) / 3
+        End If
+
     End Sub
 
     '--------------------------------------------------------------------------------------------------------------
     ' Read user presets out of file into internal array store
+    ' preset file format: csv, 16 lines for each cam 1-5
+    ' each line: if>=6 elements [0]=presetname, [1]=xpos, [2]=ypos, [3]=zpos, [4]=focus, [5]=iris, [6]=aeshift, [7]=gain
+    '  settings stored as "9999" for auto mode
+    '  old versions of sw did not write [4] onwards so need to handle that
+    ' if <6 elements - if [0]=="Encoder" then [1]=encoder1 allocation, [2]=encoder2 allocation
+    ' if [0]=="CamSettingStore" then [1..4]=whether to save/recall cam parameters with presets
     '--------------------------------------------------------------------------------------------------------------
     Sub ReadPresetFile()
         Dim TextFileReader As Microsoft.VisualBasic.FileIO.TextFieldParser
@@ -753,39 +765,26 @@ Public Class MainForm
         i = 0
         While Not TextFileReader.EndOfData
             Try
-                CurrentRow = TextFileReader.ReadFields() 'fields:0=name,1=x,2=y,3=z,4=Focus,5=Iris,6=AEshift
+                CurrentRow = TextFileReader.ReadFields() 'fields:0=name,1=x,2=y,3=z,4=Focus,5=Iris,6=AEshift,7=AGC
                 If Not CurrentRow Is Nothing Then
                     If UBound(CurrentRow) >= 6 Then 'preset data
                         PresetCaption(i) = CurrentRow(0).ToString
                         PresetXPos(i) = CurrentRow(1).ToString
                         PresetYPos(i) = CurrentRow(2).ToString
                         PresetZPos(i) = CurrentRow(3).ToString
-                        If UBound(CurrentRow) >= 6 Then 'new format preset data with focus/iris
+                        If UBound(CurrentRow) >= 4 Then 'new format preset data with focus/iris
                             PresetFocus(i) = Convert.ToInt32(CurrentRow(4).ToString)
                             PresetIris(i) = Convert.ToInt32(CurrentRow(5).ToString)
                             PresetAE(i) = Convert.ToInt32(CurrentRow(6).ToString)
+                        Else
+                            PresetFocus(i) = 9999 'set auto if not stored
+                            PresetIris(i) = 9999 'set auto if not stored
+                            PresetAE(i) = 9999 'set auto if not stored
                         End If
-                        If UBound(CurrentRow) = 7 Then 'newest format preset data with gain
+                        If UBound(CurrentRow) >= 7 Then 'newest format preset data with gain
                             PresetAgc(i) = Convert.ToInt32(CurrentRow(7).ToString)
-                        End If
-                        If CurrentRow.GetUpperBound(0) > 3 Then 'check if we have these params or not
-                            PresetContent(i) = Convert.ToInt32(CurrentRow(4).ToString)
-                            PresetSize(i) = Convert.ToInt32(CurrentRow(5).ToString)
-                            a = CurrentRow(6).ToString
-                            If (a = "0" Or a = "False") Then PresetAuto(i) = False Else PresetAuto(i) = True
-                            'PresetAuto(i) = Convert.ToBoolean(CurrentRow(6).ToString)
                         Else
-                            PresetContent(i) = 0
-                            PresetSize(i) = 0
-                            PresetAuto(i) = False
-                        End If
-                        If CurrentRow.GetUpperBound(0) > 6 Then 'check if we have these params or not
-                            PresetFocus(i) = Convert.ToInt32(CurrentRow(7).ToString)
-                            a = CurrentRow(8).ToString
-                            If (a = "0" Or a = "False") Then PresetFocusAuto(i) = False Else PresetFocusAuto(i) = True
-                        Else
-                            PresetFocus(i) = 0
-                            PresetFocusAuto(i) = True
+                            PresetAgc(i) = 9999 'set auto if not stored
                         End If
                         i = i + 1
                     Else  'short row - other data
@@ -806,7 +805,7 @@ Public Class MainForm
                     End If
 
                 End If
-            Catch ex As _
+            Catch ex As  _
             Microsoft.VisualBasic.FileIO.MalformedLineException
                 MsgBox("Line " & ex.Message &
                 "is not valid and will be skipped.")
@@ -839,8 +838,6 @@ Public Class MainForm
             For i = 0 To 15
                 ln = PresetCaption(i + j * 16) & "," & PresetXPos(i + j * 16) & "," & PresetYPos(i + j * 16) & "," & PresetZPos(i + j * 16)
                 ln = ln & "," & PresetFocus(i + j * 16) & "," & PresetIris(i + j * 16) & "," & PresetAE(i + j * 16) & "," & PresetAgc(i + j * 16)
-                'ln = ln & "," & PresetContent(i + j * 16) & "," & PresetSize(i + j * 16) & "," & PresetAuto(i + j * 16)
-                'ln = ln & "," & PresetFocus(i + j * 16) & "," & PresetFocusAuto(i + j * 16)
                 file.WriteLine(ln)
             Next i
         Next j
@@ -855,7 +852,7 @@ Public Class MainForm
         file.Close()
 
 
-        'also save cam5 legends to registry
+        'also save cam5 legends to registry. Cam5 positions stored in-camera so no point saving in the presetfile
         For i = 0 To 15
             SaveSetting("CCNCamControl", "Preset5", i, PresetCaption(4 * 16 + i))
         Next
@@ -966,14 +963,14 @@ Public Class MainForm
                 'swap caption
                 Dim tmp
                 tmp = PresetCaption((ad - 1) * 16 + (MovePresetFrom - 1)) : PresetCaption((ad - 1) * 16 + (MovePresetFrom - 1)) = PresetCaption((ad - 1) * 16 + (index - 1)) : PresetCaption((ad - 1) * 16 + (index - 1)) = tmp
-                tmp = PresetContent((ad - 1) * 16 + MovePresetFrom - 1) : PresetContent((ad - 1) * 16 + MovePresetFrom - 1) = PresetContent((ad - 1) * 16 + index - 1) : PresetContent((ad - 1) * 16 + index - 1) = tmp
-                tmp = PresetSize((ad - 1) * 16 + MovePresetFrom - 1) : PresetSize((ad - 1) * 16 + MovePresetFrom - 1) = PresetSize((ad - 1) * 16 + index - 1) : PresetSize((ad - 1) * 16 + index - 1) = tmp
-                tmp = PresetAuto((ad - 1) * 16 + MovePresetFrom - 1) : PresetAuto((ad - 1) * 16 + MovePresetFrom - 1) = PresetAuto((ad - 1) * 16 + index - 1) : PresetAuto((ad - 1) * 16 + index - 1) = tmp
                 'swap positions
                 tmp = PresetZPos((ad - 1) * 16 + MovePresetFrom - 1) : PresetZPos((ad - 1) * 16 + MovePresetFrom - 1) = PresetZPos((ad - 1) * 16 + index - 1) : PresetZPos((ad - 1) * 16 + index - 1) = tmp
                 tmp = PresetXPos((ad - 1) * 16 + MovePresetFrom - 1) : PresetXPos((ad - 1) * 16 + MovePresetFrom - 1) = PresetXPos((ad - 1) * 16 + index - 1) : PresetXPos((ad - 1) * 16 + index - 1) = tmp
                 tmp = PresetYPos((ad - 1) * 16 + MovePresetFrom - 1) : PresetYPos((ad - 1) * 16 + MovePresetFrom - 1) = PresetYPos((ad - 1) * 16 + index - 1) : PresetYPos((ad - 1) * 16 + index - 1) = tmp
-                tmp = PresetFocusAuto((ad - 1) * 16 + MovePresetFrom - 1) : PresetFocusAuto((ad - 1) * 16 + MovePresetFrom - 1) = PresetFocusAuto((ad - 1) * 16 + index - 1) : PresetFocusAuto((ad - 1) * 16 + index - 1) = tmp
+                tmp = PresetFocus((ad - 1) * 16 + MovePresetFrom - 1) : PresetFocus((ad - 1) * 16 + MovePresetFrom - 1) = PresetFocus((ad - 1) * 16 + index - 1) : PresetFocus((ad - 1) * 16 + index - 1) = tmp
+                tmp = PresetIris((ad - 1) * 16 + MovePresetFrom - 1) : PresetIris((ad - 1) * 16 + MovePresetFrom - 1) = PresetIris((ad - 1) * 16 + index - 1) : PresetIris((ad - 1) * 16 + index - 1) = tmp
+                tmp = PresetAE((ad - 1) * 16 + MovePresetFrom - 1) : PresetAE((ad - 1) * 16 + MovePresetFrom - 1) = PresetAE((ad - 1) * 16 + index - 1) : PresetAE((ad - 1) * 16 + index - 1) = tmp
+                tmp = PresetAgc((ad - 1) * 16 + MovePresetFrom - 1) : PresetAgc((ad - 1) * 16 + MovePresetFrom - 1) = PresetAgc((ad - 1) * 16 + index - 1) : PresetAgc((ad - 1) * 16 + index - 1) = tmp
                 WritePresetFile()
                 MovePresetMode = 0
                 BtnMovePreset.ForeColor = Color.Black
@@ -1118,7 +1115,7 @@ Public Class MainForm
                 StartEditPresetDetails(index)
             End If
         Else
-            'save current preset position
+            '------------------save current preset position
             If (Addr <= 4) Then
                 op = SendCamCmd("GZ") 'get current zoom position
                 op = Mid(op, 3)
@@ -1127,7 +1124,7 @@ Public Class MainForm
                 op = Mid(op, 4)
                 PresetXPos((Addr - 1) * 16 + index - 1) = Mid(op, 1, 4)
                 PresetYPos((Addr - 1) * 16 + index - 1) = Mid(op, 5, 4)
-                op = SendCamCmd("D1") 'get current autofocus state
+                op = SendCamCmd("D1") 'get current autofocus state (return D0=man or D1=auto)
                 op = Mid(op, 3)
                 If (op = "0") Then
                     op = SendCamCmd("GF") 'get current focus position
@@ -1135,11 +1132,11 @@ Public Class MainForm
                     Dim v As Integer = Val("&h" & op)
                     PresetFocus((Addr - 1) * 16 + index - 1) = v
                 Else
-                    PresetFocus((Addr - 1) * 16 + index - 1) = 9999
+                    PresetFocus((Addr - 1) * 16 + index - 1) = 9999 'flag auto
                 End If
                 'op = SendCamCmdAddrNoHash(Addr, "QSD:48", "aw_cam") 'get "contrast" setting
                 'PresetAE((Addr - 1) * 16 + index - 1) = (Val(Mid(op, 8)) - 32) * 20 / 64
-                PresetAE((Addr - 1) * 16 + index - 1) = CamAEShift(Addr)
+                PresetAE((Addr - 1) * 16 + index - 1) = CamAEShift(Addr) 'just use the parameter in our local store
                 'op = SendCamCmdAddrNoHash(Addr, "QRV", "aw_cam") 'get iris setting
                 'PresetIris((Addr - 1) * 16 + index - 1) = Val("&H" & Mid(op, 5))
                 PresetIris((Addr - 1) * 16 + index - 1) = CamIris(Addr)
@@ -1179,19 +1176,31 @@ Public Class MainForm
         Dim ad As Integer
         ad = Addr
         If ad > 5 Then Exit Sub
-        If CamIris(ad) <> 9999 Then TextBoxIris.Text = CamIris(ad) Else TextBoxIris.Text = "Auto"
-        If (CamAgc(ad) <= &H38) Then TextBoxAgc.Text = CamAgc(ad) * 3 & "dB" Else TextBoxAgc.Text = "Auto"
+        If CamIris(ad) <> 9999 Then
+            MyButtonAutoIris.BackColor = Color.White
+            TextBoxIris.Text = CamIris(ad)
+        Else
+            MyButtonAutoIris.BackColor = Color.Red
+            TextBoxIris.Text = "Auto"
+        End If
+        If CamAgc(ad) <> 9999 Then
+            MyButtonAutoAgc.BackColor = Color.White
+            TextBoxAgc.Text = CamAgc(ad) * 3 & "dB"
+        Else
+            MyButtonAutoAgc.BackColor = Color.Red
+            TextBoxAgc.Text = "Auto"
+        End If
         TextBoxAeShift.Text = CamAEShift(ad)
         TextBoxAgcLimit.Text = CamAGCLimit(ad) * 6 & "dB"
         TextBox8.Text = CamWBRed(ad)
         TextBoxWB.Text = 2400 + CamWBBlue(ad) * 100
 
-        If CamFocusManual(ad) = 0 Then
-            BtnFocusAuto.BackColor = Color.Red : BtnFocusLock.BackColor = Color.White
-            TextBoxFocus.Text = "Auto"
-        Else
+        If CamFocus(ad) <> 9999 Then
             BtnFocusAuto.BackColor = Color.White : BtnFocusLock.BackColor = Color.Red
             TextBoxFocus.Text = CamFocus(ad)
+        Else
+            BtnFocusAuto.BackColor = Color.Red : BtnFocusLock.BackColor = Color.White
+            TextBoxFocus.Text = "Auto"
         End If
         EncoderAReset = 1 : EncoderBReset = 1
         PrevEncoderA = 0
@@ -1898,7 +1907,7 @@ Public Class MainForm
         If ad > 5 Then Exit Sub
 
         If v <> 9999 Then 'not auto mode
-            If CamAgc(ad) = 128 Then 'if was auto previously
+            If CamAgc(ad) = 9999 Then 'if was auto previously
                 MyButtonAutoAgc.BackColor = Color.White
                 v = 16
             End If
@@ -1906,7 +1915,7 @@ Public Class MainForm
             If v < 0 Then v = 0
             CamAgc(ad) = v
         Else
-            CamAgc(ad) = 128 'flag auto
+            CamAgc(ad) = 9999 'flag auto
             MyButtonAutoAgc.BackColor = Color.Red
         End If
 
@@ -1948,11 +1957,11 @@ Public Class MainForm
         ad = Addr
         If ad = 5 Then Return 'not provided on this camera
         If ad > 5 Then Exit Sub
-        If CamAgc(ad) = 128 Then
+        If CamAgc(ad) = 9999 Then
             CamAgc(ad) = 16
             SetAGC(ad, CamAgc(ad))
         Else
-            CamAgc(ad) = 128
+            CamAgc(ad) = 9999
             SetAGC(ad, CamAgc(ad))
         End If
     End Sub
@@ -2082,18 +2091,15 @@ Public Class MainForm
         If ad > 5 Then Exit Sub
         If v = 0 Or v = 9999 Then 'this is auto mode
             SendCamCmdAddr(ad, "D11")
-            CamFocusManual(ad) = 0
+            CamFocus(ad) = 9999
             BtnFocusAuto.BackColor = Color.Red : BtnFocusLock.BackColor = Color.White
             ShowEncoderValues()
             Exit Sub
         End If
         If (v < &H555) Then v = &H555
         If (v > &HFFF) Then v = &HFFF
-        If CamFocusManual(ad) = 0 Then 'if was in auto mode set to manual
-            SendCamCmdAddr(ad, "D10")
-            CamFocusManual(ad) = 1
-            BtnFocusAuto.BackColor = Color.White : BtnFocusLock.BackColor = Color.Red
-        End If
+        SendCamCmdAddr(ad, "D10")
+        BtnFocusAuto.BackColor = Color.White : BtnFocusLock.BackColor = Color.Red
         CamFocus(ad) = v
         'axf sets absolute focus position 555-FFF
         mLog.Text = SendCamCmdAddr(ad, "AXF" & String.Format("{0:X2}", CamFocus(ad))) '&h555-&hFFF
@@ -2102,28 +2108,14 @@ Public Class MainForm
     End Sub
 
     Private Sub BtnFocusSetAuto()
-        Dim ad As Integer
-        ad = Addr
-        If ad > 5 Then Exit Sub
-        SendCamCmdAddr(ad, "D11")
-        CamFocusManual(ad) = 0
-        TextBoxFocus.Text = "Auto"
-        BtnFocusAuto.BackColor = Color.Red : BtnFocusLock.BackColor = Color.White
-        ShowEncoderValues()
+        SetFocus(Addr, 9999)
     End Sub
 
     Private Sub BtnFocusSetLock()
-        Dim ad As Integer
         Dim op As String
-        ad = Addr
-        If ad > 5 Then Exit Sub
-        SendCamCmdAddr(ad, "D10")
-        CamFocusManual(ad) = 1
-        op = SendCamCmdAddr(ad, "GF")
-        CamFocus(ad) = Val("&H" & Mid(op, 3))
-        TextBoxFocus.Text = CamFocus(ad)
-        BtnFocusAuto.BackColor = Color.White : BtnFocusLock.BackColor = Color.Red
-        ShowEncoderValues()
+        If Addr > 5 Then Exit Sub
+        op = SendCamCmdAddr(Addr, "GF")
+        SetFocus(Addr, Val("&H" & Mid(op, 3)))
     End Sub
 
     Private Sub BtnFocusAuto_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnFocusAuto.Click
@@ -3695,17 +3687,13 @@ Public Class MainForm
         If fd.ShowDialog() = DialogResult.OK Then Media5TextBox.Text = fd.FileName
     End Sub
 
-
-
-    Private Sub SetupLostFocus(ByVal sender As Object, ByVal e As EventArgs) Handles TextBoxPresetFolder.LostFocus, TextBoxPresetFilename.LostFocus, TextBoxIPCam5.LostFocus, TextBoxIPCam4.LostFocus, TextBoxIPCam3.LostFocus, TextBoxIPCam2.LostFocus, TextBoxIPCam1.LostFocus, CheckBoxTally.Click, CheckBoxStandby.Click, CheckBoxSaveIris.Click, CheckBoxSaveFocus.Click, CheckBoxSaveAE.Click, CheckBoxProfile.Click, CheckBoxInvert4.Click, CheckBoxInvert3.Click, CheckBoxInvert2.Click, CheckBoxInvert1.Click, CheckBoxCam5Dis.Click, CheckBoxCam4Dis.Click, CheckBoxCam3Dis.Click, CheckBoxCam2Dis.Click, CheckBoxCam1Dis.Click, CheckBoxAutoSwap.Click, CheckBoxSaveAgc.Click
-
-    End Sub
-
-    Private Sub BtnOBSBroadcast_Click(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles BtnOBSBroadcast.MouseDown
-
-    End Sub
-
-    Private Sub BtnOBSRecord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BtnOBSRecord.Click
-
+    '--- Set camera settings to auto in all presets
+    Private Sub BtnCamPresetAuto_Click(sender As System.Object, e As System.EventArgs) Handles BtnCamPresetAuto.Click
+        For i = 0 To 4 * 16
+            PresetFocus(i) = 9999 'set auto
+            PresetIris(i) = 9999 'set auto
+            PresetAE(i) = 9999 'set auto
+            PresetAgc(i) = 9999 'set auto
+        Next
     End Sub
 End Class
