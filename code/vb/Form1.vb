@@ -3611,8 +3611,8 @@ Public Class MainForm
     Private Sub BtnSetupSaveNew_Click(sender As Object, e As EventArgs) Handles BtnSetupSaveNew.Click
         If TextBoxPresetNewFile.Text = "" Then ShowMsgBox("Enter a filename for the new preset file.")
         TextBoxPresetNewFile.Text = StrConv(TextBoxPresetNewFile.Text, VbStrConv.Lowercase)
-        If Not InStr(TextBoxPresetNewFile.Text, ".apr") Then
-            TextBoxPresetNewFile.Text = TextBoxPresetNewFile.Text & ".apr"
+        If Not InStr(TextBoxPresetNewFile.Text, ".aps") Then
+            TextBoxPresetNewFile.Text = TextBoxPresetNewFile.Text & ".aps"
         End If
         PresetFileName = TextBoxPresetNewFile.Text
         WritePresetFile()
