@@ -906,7 +906,7 @@ Partial Class MainForm
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(44, 16)
         Me.Label13.TabIndex = 215
-        Me.Label13.Text = "v1.0.11"
+        Me.Label13.Text = "v1.0.12"
         '
         'LabelProfile
         '

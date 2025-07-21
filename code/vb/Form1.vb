@@ -477,7 +477,7 @@ Public Class MainForm
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            If Addr <> 5 Then CamIgnore(Addr) = True
+            'If Addr <> 5 Then CamIgnore(Addr) = True
             ShowMsgBox("Error sending to camera " & Addr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
@@ -532,7 +532,7 @@ Public Class MainForm
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            If Addr <> 5 Then CamIgnore(Addr) = True
+            'If Addr <> 5 Then CamIgnore(Addr) = True
             ShowMsgBox("Error sending to camera " & Addr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
@@ -581,7 +581,7 @@ Public Class MainForm
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            If caddr <> 5 Then CamIgnore(caddr) = True
+            'If caddr <> 5 Then CamIgnore(caddr) = True
             ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
@@ -602,7 +602,7 @@ Public Class MainForm
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            If caddr <> 5 Then CamIgnore(caddr) = True
+            'If caddr <> 5 Then CamIgnore(caddr) = True
             ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
@@ -621,7 +621,7 @@ Public Class MainForm
             'CamCmdPending = True
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
-            If caddr <> 5 Then CamIgnore(caddr) = True
+            'If caddr <> 5 Then CamIgnore(caddr) = True
             ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
         End Try
         'CamCmdPending = False
@@ -2459,6 +2459,7 @@ Public Class MainForm
                 StreamPendingTime = 0
                 BtnOBSBroadcast.BackColor = Color.Orange 'show orange/yellow button while the stream is starting. Once VMix status shows stream is active, timer will change it to red
                 SendVmixCmd("?Function=StartStopStreaming")
+                SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=100,1000") 'ensure main audio is not muted, when starting the stream
             Else
                 If (StreamEndTimer = 0) Then 'want to stop stream - show orange for 2nd press for 5sec
                     StreamEndTimer = 1
