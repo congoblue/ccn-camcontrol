@@ -45,6 +45,7 @@ Public Class MainForm
     Dim CamFocus(8) As Integer
     Dim ProgCloseTimer As Integer = 0
     Dim CamIgnore(8) As Boolean
+    Dim CamErr(8) As Boolean
     Dim PendingZoom As Integer = 0
     Dim PendingPan As Integer = 0
     Dim PendingTilt As Integer = 0
@@ -478,8 +479,12 @@ Public Class MainForm
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
             'If Addr <> 5 Then CamIgnore(Addr) = True
-            ShowMsgBox("Error sending to camera " & Addr & " (" & ex.Message & ")")
+            If Not CamErr(Addr) Then
+                ShowMsgBox("Error sending to camera " & Addr & " (" & ex.Message & ")")
+                CamErr(Addr) = True
+            End If
         End Try
+        If result <> "" Then CamErr(Addr) = False
         'CamCmdPending = False
         Return result
     End Function
@@ -533,8 +538,12 @@ Public Class MainForm
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
             'If Addr <> 5 Then CamIgnore(Addr) = True
-            ShowMsgBox("Error sending to camera " & Addr & " (" & ex.Message & ")")
+            If Not CamErr(Addr) Then
+                ShowMsgBox("Error sending to camera " & Addr & " (" & ex.Message & ")")
+                CamErr(Addr) = True
+            End If
         End Try
+        If result <> "" Then CamErr(Addr) = False
         'CamCmdPending = False
         Return result
     End Function
@@ -582,8 +591,12 @@ Public Class MainForm
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
             'If caddr <> 5 Then CamIgnore(caddr) = True
-            ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
+            If Not CamErr(caddr) Then
+                ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
+                CamErr(caddr) = True
+            End If
         End Try
+        If result <> "" Then CamErr(caddr) = False
         'CamCmdPending = False
         Return result
     End Function
@@ -603,8 +616,12 @@ Public Class MainForm
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
             'If caddr <> 5 Then CamIgnore(caddr) = True
-            ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
+            If Not CamErr(caddr) Then
+                ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
+                CamErr(caddr) = True
+            End If
         End Try
+        If result <> "" Then CamErr(caddr) = False
         'CamCmdPending = False
         Return result
     End Function
@@ -622,8 +639,12 @@ Public Class MainForm
             result = GetWebRequest(url)
         Catch ex As System.Net.WebException
             'If caddr <> 5 Then CamIgnore(caddr) = True
-            ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
+            If Not CamErr(caddr) Then
+                ShowMsgBox("Error sending to camera " & caddr & " (" & ex.Message & ")")
+                CamErr(caddr) = True
+            End If
         End Try
+        If result <> "" Then CamErr(caddr) = False
         'CamCmdPending = False
         Return result
     End Function
@@ -3098,7 +3119,8 @@ Public Class MainForm
     Private Sub Timer2_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Timer2.Tick
         'ticks every 1 sec
         'check vmix status 
-        Dim stat = SendVmixCmd("")
+        Dim stat
+        If Not VMixError Then stat = SendVmixCmd("")
         ProcessStatus(stat)
 
         If StreamPending Then 'timer to holdoff streaming button presses while vmix is getting the stream going
@@ -3396,11 +3418,11 @@ Public Class MainForm
     '----------------------------------------------------------
 
     Sub UpdateCameraLinkStatus()
-        CamStatus(1) = CamIgnore(1)
-        CamStatus(2) = CamIgnore(2)
-        CamStatus(3) = CamIgnore(3)
-        CamStatus(4) = CamIgnore(4)
-        CamStatus(5) = CamIgnore(5)
+        CamStatus(1) = CamErr(1)
+        CamStatus(2) = CamErr(2)
+        CamStatus(3) = CamErr(3)
+        CamStatus(4) = CamErr(4)
+        CamStatus(5) = CamErr(5)
 
         If CamStatus(1) = True Then LblCamStatus1.Text = "FAIL" Else LblCamStatus1.Text = "OK"
         If CamStatus(2) = True Then LblCamStatus2.Text = "FAIL" Else LblCamStatus2.Text = "OK"
@@ -3697,4 +3719,6 @@ Public Class MainForm
             PresetAgc(i) = 9999 'set auto
         Next
     End Sub
+
+
 End Class
