@@ -32,3 +32,16 @@ C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamc
 C:\Users\Tim.SABRE\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbproj.GenerateResource.Cache
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbprojResolveAssemblyReference.cache
 F:\My Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.exe
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.pdb
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\CCNCamcontrol.xml
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\bin\Debug\Microsoft.VisualBasic.PowerPacks.xml
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbproj.AssemblyReference.cache
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.MainForm.resources
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.Resources.resources
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbproj.GenerateResource.cache
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbproj.CoreCompileInputs.cache
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.vbproj.CopyComplete
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.exe
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.xml
+C:\Users\video\Documents\GitHub\ccn-camcontrol\code\vb\obj\x86\Debug\CCNCamcontrol.pdb

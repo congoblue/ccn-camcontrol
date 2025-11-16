@@ -444,7 +444,7 @@ Partial Class MainForm
         '
         'BtnIrisDown
         '
-        Me.BtnIrisDown.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnIrisDown.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnIrisDown.Location = New System.Drawing.Point(395, 128)
         Me.BtnIrisDown.Name = "BtnIrisDown"
         Me.BtnIrisDown.Size = New System.Drawing.Size(60, 40)
@@ -521,11 +521,11 @@ Partial Class MainForm
         'Label14
         '
         Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label14.ForeColor = System.Drawing.Color.Yellow
         Me.Label14.Location = New System.Drawing.Point(40, 846)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(107, 16)
+        Me.Label14.Size = New System.Drawing.Size(138, 16)
         Me.Label14.TabIndex = 155
         Me.Label14.Text = "Next Source select"
         '
@@ -545,11 +545,11 @@ Partial Class MainForm
         'Label15
         '
         Me.Label15.AutoSize = True
-        Me.Label15.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label15.ForeColor = System.Drawing.Color.Yellow
         Me.Label15.Location = New System.Drawing.Point(40, 576)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(114, 16)
+        Me.Label15.Size = New System.Drawing.Size(143, 16)
         Me.Label15.TabIndex = 165
         Me.Label15.Text = "Projector out (Aux2)"
         Me.Label15.Visible = False
@@ -631,39 +631,39 @@ Partial Class MainForm
         'Label16
         '
         Me.Label16.AutoSize = True
-        Me.Label16.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label16.ForeColor = System.Drawing.Color.Yellow
         Me.Label16.Location = New System.Drawing.Point(1105, 846)
         Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(47, 16)
+        Me.Label16.Size = New System.Drawing.Size(62, 16)
         Me.Label16.TabIndex = 185
         Me.Label16.Text = "Overlay"
         '
         'Label17
         '
         Me.Label17.AutoSize = True
-        Me.Label17.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label17.ForeColor = System.Drawing.Color.Yellow
         Me.Label17.Location = New System.Drawing.Point(45, 25)
         Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(40, 16)
+        Me.Label17.Size = New System.Drawing.Size(48, 16)
         Me.Label17.TabIndex = 186
         Me.Label17.Text = "Setup"
         '
         'Label18
         '
         Me.Label18.AutoSize = True
-        Me.Label18.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label18.ForeColor = System.Drawing.Color.Yellow
         Me.Label18.Location = New System.Drawing.Point(128, 59)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(94, 16)
+        Me.Label18.Size = New System.Drawing.Size(121, 16)
         Me.Label18.TabIndex = 187
         Me.Label18.Text = "Camera controls"
         '
         'BtnIrisUp
         '
-        Me.BtnIrisUp.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnIrisUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnIrisUp.Location = New System.Drawing.Point(395, 47)
         Me.BtnIrisUp.Name = "BtnIrisUp"
         Me.BtnIrisUp.Size = New System.Drawing.Size(60, 40)
@@ -674,28 +674,28 @@ Partial Class MainForm
         'Label19
         '
         Me.Label19.AutoSize = True
-        Me.Label19.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label19.ForeColor = System.Drawing.Color.Yellow
         Me.Label19.Location = New System.Drawing.Point(407, 23)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(29, 20)
+        Me.Label19.Size = New System.Drawing.Size(34, 20)
         Me.Label19.TabIndex = 189
         Me.Label19.Text = "Iris"
         '
         'Label20
         '
         Me.Label20.AutoSize = True
-        Me.Label20.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label20.ForeColor = System.Drawing.Color.Yellow
         Me.Label20.Location = New System.Drawing.Point(471, 23)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(37, 20)
+        Me.Label20.Size = New System.Drawing.Size(47, 20)
         Me.Label20.TabIndex = 190
         Me.Label20.Text = "AGC"
         '
         'BtnAGCDown
         '
-        Me.BtnAGCDown.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnAGCDown.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnAGCDown.Location = New System.Drawing.Point(461, 128)
         Me.BtnAGCDown.Name = "BtnAGCDown"
         Me.BtnAGCDown.Size = New System.Drawing.Size(60, 40)
@@ -705,7 +705,7 @@ Partial Class MainForm
         '
         'BtnAGCUp
         '
-        Me.BtnAGCUp.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnAGCUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnAGCUp.Location = New System.Drawing.Point(461, 47)
         Me.BtnAGCUp.Name = "BtnAGCUp"
         Me.BtnAGCUp.Size = New System.Drawing.Size(60, 40)
@@ -715,7 +715,7 @@ Partial Class MainForm
         '
         'BtnGainDown
         '
-        Me.BtnGainDown.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnGainDown.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnGainDown.Location = New System.Drawing.Point(527, 128)
         Me.BtnGainDown.Name = "BtnGainDown"
         Me.BtnGainDown.Size = New System.Drawing.Size(60, 40)
@@ -725,7 +725,7 @@ Partial Class MainForm
         '
         'BtnGainUp
         '
-        Me.BtnGainUp.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnGainUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnGainUp.Location = New System.Drawing.Point(527, 47)
         Me.BtnGainUp.Name = "BtnGainUp"
         Me.BtnGainUp.Size = New System.Drawing.Size(60, 40)
@@ -736,17 +736,17 @@ Partial Class MainForm
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.ForeColor = System.Drawing.Color.Yellow
         Me.Label8.Location = New System.Drawing.Point(520, 23)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(73, 20)
+        Me.Label8.Size = New System.Drawing.Size(90, 20)
         Me.Label8.TabIndex = 195
         Me.Label8.Text = "AGC Limit"
         '
         'BtnAEShiftDn
         '
-        Me.BtnAEShiftDn.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnAEShiftDn.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnAEShiftDn.Location = New System.Drawing.Point(593, 128)
         Me.BtnAEShiftDn.Name = "BtnAEShiftDn"
         Me.BtnAEShiftDn.Size = New System.Drawing.Size(60, 40)
@@ -756,7 +756,7 @@ Partial Class MainForm
         '
         'BtnAEShiftUp
         '
-        Me.BtnAEShiftUp.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnAEShiftUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnAEShiftUp.Location = New System.Drawing.Point(593, 47)
         Me.BtnAEShiftUp.Name = "BtnAEShiftUp"
         Me.BtnAEShiftUp.Size = New System.Drawing.Size(60, 40)
@@ -767,28 +767,28 @@ Partial Class MainForm
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.ForeColor = System.Drawing.Color.Yellow
         Me.Label9.Location = New System.Drawing.Point(593, 23)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(60, 20)
+        Me.Label9.Size = New System.Drawing.Size(76, 20)
         Me.Label9.TabIndex = 198
         Me.Label9.Text = "AE Shift"
         '
         'Label21
         '
         Me.Label21.AutoSize = True
-        Me.Label21.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label21.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label21.ForeColor = System.Drawing.Color.Yellow
         Me.Label21.Location = New System.Drawing.Point(592, 177)
         Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(61, 20)
+        Me.Label21.Size = New System.Drawing.Size(81, 20)
         Me.Label21.TabIndex = 202
         Me.Label21.Text = "-10 - +10"
         '
         'BtnWbBlueUp
         '
-        Me.BtnWbBlueUp.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnWbBlueUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnWbBlueUp.Location = New System.Drawing.Point(660, 47)
         Me.BtnWbBlueUp.Name = "BtnWbBlueUp"
         Me.BtnWbBlueUp.Size = New System.Drawing.Size(60, 40)
@@ -798,7 +798,7 @@ Partial Class MainForm
         '
         'BtnWbBlueDn
         '
-        Me.BtnWbBlueDn.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnWbBlueDn.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnWbBlueDn.Location = New System.Drawing.Point(660, 128)
         Me.BtnWbBlueDn.Name = "BtnWbBlueDn"
         Me.BtnWbBlueDn.Size = New System.Drawing.Size(60, 40)
@@ -808,7 +808,7 @@ Partial Class MainForm
         '
         'BtnWbRedUp
         '
-        Me.BtnWbRedUp.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnWbRedUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnWbRedUp.Location = New System.Drawing.Point(702, 466)
         Me.BtnWbRedUp.Name = "BtnWbRedUp"
         Me.BtnWbRedUp.Size = New System.Drawing.Size(50, 35)
@@ -819,7 +819,7 @@ Partial Class MainForm
         '
         'BtnWbRedDn
         '
-        Me.BtnWbRedDn.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnWbRedDn.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnWbRedDn.Location = New System.Drawing.Point(702, 526)
         Me.BtnWbRedDn.Name = "BtnWbRedDn"
         Me.BtnWbRedDn.Size = New System.Drawing.Size(50, 35)
@@ -831,22 +831,22 @@ Partial Class MainForm
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label10.ForeColor = System.Drawing.Color.Yellow
         Me.Label10.Location = New System.Drawing.Point(671, 23)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(29, 20)
+        Me.Label10.Size = New System.Drawing.Size(37, 20)
         Me.Label10.TabIndex = 208
         Me.Label10.Text = "WB"
         '
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label11.ForeColor = System.Drawing.Color.Yellow
         Me.Label11.Location = New System.Drawing.Point(707, 448)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(57, 20)
+        Me.Label11.Size = New System.Drawing.Size(75, 20)
         Me.Label11.TabIndex = 207
         Me.Label11.Text = "WB Red"
         Me.Label11.Visible = False
@@ -854,17 +854,17 @@ Partial Class MainForm
         'Label12
         '
         Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label12.ForeColor = System.Drawing.Color.Yellow
         Me.Label12.Location = New System.Drawing.Point(339, 23)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(47, 20)
+        Me.Label12.Size = New System.Drawing.Size(58, 20)
         Me.Label12.TabIndex = 209
         Me.Label12.Text = "Focus"
         '
         'BtnFocusUp
         '
-        Me.BtnFocusUp.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnFocusUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnFocusUp.Location = New System.Drawing.Point(329, 47)
         Me.BtnFocusUp.Name = "BtnFocusUp"
         Me.BtnFocusUp.Size = New System.Drawing.Size(60, 40)
@@ -874,7 +874,7 @@ Partial Class MainForm
         '
         'BtnFocusDn
         '
-        Me.BtnFocusDn.Font = New System.Drawing.Font("Wingdings 3", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.BtnFocusDn.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
         Me.BtnFocusDn.Location = New System.Drawing.Point(329, 128)
         Me.BtnFocusDn.Name = "BtnFocusDn"
         Me.BtnFocusDn.Size = New System.Drawing.Size(60, 40)
@@ -900,22 +900,22 @@ Partial Class MainForm
         'Label13
         '
         Me.Label13.AutoSize = True
-        Me.Label13.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label13.ForeColor = System.Drawing.Color.Yellow
         Me.Label13.Location = New System.Drawing.Point(4, 3)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(44, 16)
+        Me.Label13.Size = New System.Drawing.Size(56, 16)
         Me.Label13.TabIndex = 215
-        Me.Label13.Text = "v1.0.12"
+        Me.Label13.Text = "v1.0.13"
         '
         'LabelProfile
         '
         Me.LabelProfile.AutoSize = True
-        Me.LabelProfile.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelProfile.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelProfile.ForeColor = System.Drawing.Color.Yellow
         Me.LabelProfile.Location = New System.Drawing.Point(1018, 26)
         Me.LabelProfile.Name = "LabelProfile"
-        Me.LabelProfile.Size = New System.Drawing.Size(42, 16)
+        Me.LabelProfile.Size = New System.Drawing.Size(52, 16)
         Me.LabelProfile.TabIndex = 248
         Me.LabelProfile.Text = "profile"
         Me.LabelProfile.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -923,11 +923,11 @@ Partial Class MainForm
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.ForeColor = System.Drawing.Color.Yellow
         Me.Label4.Location = New System.Drawing.Point(40, 701)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(94, 16)
+        Me.Label4.Size = New System.Drawing.Size(120, 16)
         Me.Label4.TabIndex = 251
         Me.Label4.Text = "Foldback (Aux3)"
         Me.Label4.Visible = False
@@ -1022,11 +1022,11 @@ Partial Class MainForm
         'Label23
         '
         Me.Label23.AutoSize = True
-        Me.Label23.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label23.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label23.ForeColor = System.Drawing.Color.Yellow
         Me.Label23.Location = New System.Drawing.Point(330, 466)
         Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(74, 16)
+        Me.Label23.Size = New System.Drawing.Size(93, 16)
         Me.Label23.TabIndex = 297
         Me.Label23.Text = "Clip time left"
         Me.Label23.Visible = False
@@ -1203,11 +1203,11 @@ Partial Class MainForm
         'LabelCap3
         '
         Me.LabelCap3.AutoSize = True
-        Me.LabelCap3.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelCap3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelCap3.ForeColor = System.Drawing.Color.Yellow
         Me.LabelCap3.Location = New System.Drawing.Point(97, 147)
         Me.LabelCap3.Name = "LabelCap3"
-        Me.LabelCap3.Size = New System.Drawing.Size(37, 16)
+        Me.LabelCap3.Size = New System.Drawing.Size(45, 16)
         Me.LabelCap3.TabIndex = 330
         Me.LabelCap3.Text = "Other"
         '
@@ -1227,33 +1227,33 @@ Partial Class MainForm
         'Label27
         '
         Me.Label27.AutoSize = True
-        Me.Label27.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label27.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label27.ForeColor = System.Drawing.Color.Yellow
         Me.Label27.Location = New System.Drawing.Point(5, 17)
         Me.Label27.Name = "Label27"
-        Me.Label27.Size = New System.Drawing.Size(82, 20)
+        Me.Label27.Size = New System.Drawing.Size(106, 20)
         Me.Label27.TabIndex = 328
         Me.Label27.Text = "Caption text"
         '
         'LabelCap2
         '
         Me.LabelCap2.AutoSize = True
-        Me.LabelCap2.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelCap2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelCap2.ForeColor = System.Drawing.Color.Yellow
         Me.LabelCap2.Location = New System.Drawing.Point(94, 96)
         Me.LabelCap2.Name = "LabelCap2"
-        Me.LabelCap2.Size = New System.Drawing.Size(54, 16)
+        Me.LabelCap2.Size = New System.Drawing.Size(71, 16)
         Me.LabelCap2.TabIndex = 327
         Me.LabelCap2.Text = "Preacher"
         '
         'LabelCap1
         '
         Me.LabelCap1.AutoSize = True
-        Me.LabelCap1.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelCap1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LabelCap1.ForeColor = System.Drawing.Color.Yellow
         Me.LabelCap1.Location = New System.Drawing.Point(94, 45)
         Me.LabelCap1.Name = "LabelCap1"
-        Me.LabelCap1.Size = New System.Drawing.Size(44, 16)
+        Me.LabelCap1.Size = New System.Drawing.Size(57, 16)
         Me.LabelCap1.TabIndex = 326
         Me.LabelCap1.Text = "Leader"
         '
@@ -1300,11 +1300,11 @@ Partial Class MainForm
         'Label28
         '
         Me.Label28.AutoSize = True
-        Me.Label28.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label28.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label28.ForeColor = System.Drawing.Color.Yellow
         Me.Label28.Location = New System.Drawing.Point(6, 211)
         Me.Label28.Name = "Label28"
-        Me.Label28.Size = New System.Drawing.Size(88, 20)
+        Me.Label28.Size = New System.Drawing.Size(110, 20)
         Me.Label28.TabIndex = 322
         Me.Label28.Text = "Media player"
         '
@@ -1887,11 +1887,11 @@ Partial Class MainForm
         'Label29
         '
         Me.Label29.AutoSize = True
-        Me.Label29.Font = New System.Drawing.Font("Arial Narrow", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label29.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label29.ForeColor = System.Drawing.Color.Yellow
         Me.Label29.Location = New System.Drawing.Point(19, 13)
         Me.Label29.Name = "Label29"
-        Me.Label29.Size = New System.Drawing.Size(151, 20)
+        Me.Label29.Size = New System.Drawing.Size(188, 20)
         Me.Label29.TabIndex = 298
         Me.Label29.Text = "Pan Tilt Zoom override"
         Me.Label29.Visible = False
@@ -2840,11 +2840,11 @@ Partial Class MainForm
         'Label42
         '
         Me.Label42.AutoSize = True
-        Me.Label42.Font = New System.Drawing.Font("Arial Narrow", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label42.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label42.ForeColor = System.Drawing.Color.Yellow
         Me.Label42.Location = New System.Drawing.Point(19, 301)
         Me.Label42.Name = "Label42"
-        Me.Label42.Size = New System.Drawing.Size(93, 16)
+        Me.Label42.Size = New System.Drawing.Size(118, 16)
         Me.Label42.TabIndex = 301
         Me.Label42.Text = "Press x2 to stop"
         '

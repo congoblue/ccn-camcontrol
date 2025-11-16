@@ -1806,6 +1806,11 @@ Public Class MainForm
 
     '---Send mediaplayer item to vmix
     Private Sub SetCurrentMediaItem()
+        'check if media output is live. If so then restore audio
+        If LiveAddr = 7 Then
+            SendVmixCmd("?Function=SetVolumeFade&Input=Mix%20Audio%20Input&Value=100,1000") 'ensure audio is turned up
+            SendVmixCmd("?Function=AudioOn&Input=Mix%20Audio%20Input") 'ensure audio is not muted
+        End If
         'vmix can't set a single video item by API so we use a list input with single item which can be set
         SendVmixCmd("?Function=ListRemoveAll&Input=" & VMixSourceName(7))
         SendVmixCmd("?Function=ListAdd&Input=" & VMixSourceName(7) & "&Value=" & MediaFiles(MediaItem))
